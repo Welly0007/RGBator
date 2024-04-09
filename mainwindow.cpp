@@ -597,5 +597,14 @@ void MainWindow::on_widthEditVal_textEdited(const QString &arg1)
 void MainWindow::on_heightEditVal_textEdited(const QString &arg1)
 {
     ui->resizeFilterBtn->show();
+    ui->resizeRatio->show();
+    if(ui->resizeRatio->isChecked()){
+        int height =ui->heightEditVal->text().toInt();
+        float aspectRatio = static_cast<float>(currImg.width) / currImg.height;
+        int newWidth = static_cast<int>(height * aspectRatio);
+
+
+        ui->widthEditVal->setText(QString::number(newWidth));
+    }
 }
 
