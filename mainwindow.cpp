@@ -14,10 +14,18 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->sunFilterApply->hide();
-    ui->textSunSlider->hide();
-    ui->sunSliderValue->hide();
-    ui->sunFilterSlider->hide();
+    ui->filterApply->hide();
+    ui->sliderText->hide();
+    ui->sliderValue->hide();
+    ui->filterSlider->hide();
+    ui->progressLabel->hide();
+    ui->dimnsLabel->hide();
+    ui->widthEditVal->hide();
+    ui->heightEditVal->hide();
+    ui->heightLabel->hide();
+    ui->widthLabel->hide();
+    ui->resizeFilterBtn->hide();
+    ui->resizeRatio->hide();
 
 }
 
@@ -41,21 +49,18 @@ void rotate90(Image &image);
 void rotateI90(Image &image);
 void invert_color(Image& image);
 void sunlight_filter(Image& image, int sunStrength);
+void blur_filter(Image& image, int blurStr);
 void purple_filter(Image& image);
+void oilPainting_filter(Image& image, int strength);
+void resize_image(Image& image, int newHeight);
+void resize_image(Image& image, int newHeight, int newWidth);
 
 //  other functions prototpyes
 void clear_redo_stack();
 void clear_undo_stack();
-void MainWindow::hide_others(string curr){
-    if(curr!="sunLightFilter"){
-        ui->sunLightFilter->setChecked(false);
-        ui->sunFilterApply->hide();
-        ui->textSunSlider->hide();
-        ui->sunSliderValue->hide();
-        ui->sunFilterSlider->hide();
-    }
-}
 
+void hide_others(string curr);
+void show_sliderWidgets(bool);
 
 //  File Events functions
 
@@ -88,6 +93,13 @@ void MainWindow::on_loadImgBtn_clicked()
     orImg.loadNewImage("original"+tempPath);
     currImg = orImg;
     currImg.saveImage(tempPath);
+    ui->widthEditVal->setText(QString::number(orImg.width));
+    ui->heightEditVal->setText(QString::number(orImg.height));
+    ui->dimnsLabel->show();
+    ui->widthEditVal->show();
+    ui->heightEditVal->show();
+    ui->heightLabel->show();
+    ui->widthLabel->show();
     //  clear_redo_stack();
     clear_redo_stack();
     clear_undo_stack();
@@ -122,6 +134,7 @@ void MainWindow::on_clearImg_clicked()
             clear_redo_stack();
             clear_undo_stack();
         }
+        hide_others();
 }
 
 //  Redo
@@ -138,6 +151,7 @@ void MainWindow::on_redoBtn_clicked()
         QPixmap img = QPixmap(QtempPath);
         ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
     }
+    hide_others();
 }
 
 
@@ -155,6 +169,7 @@ void MainWindow::on_undoBtn_clicked()
         QPixmap img = QPixmap(QtempPath);
         ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
     }
+    hide_others();
 }
 
 
@@ -163,25 +178,27 @@ void MainWindow::on_undoBtn_clicked()
 
 void MainWindow::on_rotateRight_clicked()
 {
-    hide_others();
+
     redoStack.push(currImg);
     rotate90(currImg);
     clear_undo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
 }
 
 
 void MainWindow::on_rotateLeft_clicked()
 {
-    hide_others();
+
     redoStack.push(currImg);
     rotateI90(currImg);
     clear_undo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
 }
 
 
@@ -197,39 +214,76 @@ void MainWindow::on_invertFilter_clicked()
 }
 
 
-void MainWindow::on_sunFilterSlider_valueChanged(int value)
+void MainWindow::on_filterSlider_valueChanged(int value)
 {
-    ui -> sunSliderValue -> setText(QString::number(value));
+    ui -> sliderValue -> setText(QString::number(value));
 }
 
-void MainWindow::on_sunFilterApply_clicked()
+void MainWindow::on_filterApply_clicked()
 {
+    ui->progressLabel->setText("In Progress...");
+    ui->progressLabel->show();
+    QApplication::processEvents();
     redoStack.push(currImg);
-    int sunStrength = ui->sunSliderValue->text().toInt();
-    sunlight_filter(currImg, sunStrength);
+    int strength = ui->sliderValue->text().toInt();
+
+
+    if(ui->sunLightFilter->isChecked()){
+        sunlight_filter(currImg, strength);
+    }
+    else if(ui->blurFilter->isChecked()){
+        int imgHeight= currImg.height;
+        if(strength!=0){
+            if(imgHeight>1000){
+                resize_image(currImg, 720);
+            }
+
+            blur_filter(currImg, strength);
+
+            if(imgHeight>1000){
+                resize_image(currImg, imgHeight);
+            }
+        }
+
+    }
+    else if(ui->oilFilter->isChecked()){
+        int imgHeight= currImg.height;
+        if(strength!=0){
+            if(imgHeight>1000){
+                resize_image(currImg, 720);
+            }
+
+            oilPainting_filter(currImg, strength);
+
+            if(imgHeight>1000){
+                resize_image(currImg, imgHeight);
+            }
+        }
+    }
     clear_undo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
-    hide_others();
+    ui->progressLabel->setText("Done !");
 }
 
 void MainWindow::on_sunLightFilter_clicked(bool checked)
 {
     hide_others("sunLightFilter");
-    if(checked){
-        ui->sunFilterApply->show();
-        ui->textSunSlider->show();
-        ui->sunSliderValue->show();
-        ui->sunFilterSlider->show();
-    }else{
-        ui->sunFilterApply->hide();
-        ui->textSunSlider->hide();
-        ui->sunSliderValue->hide();
-        ui->sunFilterSlider->hide();
-    }
+    show_sliderWidgets(checked);
 }
 
+
+void MainWindow::on_blurFilter_clicked(bool checked)
+{
+    hide_others("blurFilter");
+    show_sliderWidgets(checked);
+}
+void MainWindow::on_oilFilter_clicked(bool checked)
+{
+    hide_others("oilFilter");
+    show_sliderWidgets(checked);
+}
 
 void MainWindow::on_purpleFilter_clicked()
 {
@@ -242,8 +296,52 @@ void MainWindow::on_purpleFilter_clicked()
     ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
 }
 
+//  Other Functions Declaration
+void clear_redo_stack(){
+    while(!redoStack.empty()){
+        redoStack.pop();
+    }
+}
+void clear_undo_stack(){
+    while(!undoStack.empty()){
+        undoStack.pop();
+    }
+}
+void MainWindow::hide_others(string curr){
+    if(curr!="sunLightFilter"){
+        ui->sunLightFilter->setChecked(false);
+    }
+    if(curr!="blurFilter"){
+        ui->blurFilter->setChecked(false);
+    }
+    if(curr!="oilFilter"){
+        ui->oilFilter->setChecked(false);
+    }
+        ui->filterApply->hide();
+        ui->sliderText->hide();
+        ui->sliderValue->hide();
+        ui->filterSlider->hide();
+        ui->progressLabel->hide();
+        ui->heightEditVal->setText(QString::number(currImg.height));
+        ui->widthEditVal->setText(QString::number(currImg.width));
+        ui->resizeFilterBtn->hide();
+        ui->resizeRatio->hide();
+        ui->resizeRatio->setChecked(true);
+}
 
-
+void MainWindow::show_sliderWidgets(bool checked){
+    if(checked){
+        ui->filterApply->show();
+        ui->sliderText->show();
+        ui->sliderValue->show();
+        ui->filterSlider->show();
+    }else{
+        ui->filterApply->hide();
+        ui->sliderText->hide();
+        ui->sliderValue->hide();
+        ui->filterSlider->hide();
+    }
+}
 
 
 
@@ -323,14 +421,181 @@ void sunlight_filter(Image& image, int sunStrength){
     }
 }
 
-//  Other Functions Declaration
-void clear_redo_stack(){
-    while(!redoStack.empty()){
-        redoStack.pop();
+
+void resize_image(Image& image, int newHeight) {
+    float aspectRatio = static_cast<float>(image.width) / image.height;
+    int newWidth = static_cast<int>(newHeight * aspectRatio);
+
+    Image newImage(newWidth, newHeight);
+
+    float xRatio = static_cast<float>(image.width - 1) / newWidth;
+    float yRatio = static_cast<float>(image.height - 1) / newHeight;
+
+    for (int i = 0; i < newWidth; i++) {
+        for (int j = 0; j < newHeight; j++) {
+            int x = static_cast<int>(xRatio * i);
+            int y = static_cast<int>(yRatio * j);
+            newImage(i, j, 0) = image(x, y, 0);
+            newImage(i, j, 1) = image(x, y, 1);
+            newImage(i, j, 2) = image(x, y, 2);
+        }
+    }
+
+    image = newImage;
+}
+
+
+void resize_image(Image& image, int newHeight, int newWidth) {
+
+    Image newImage(newWidth, newHeight);
+
+    float xRatio = static_cast<float>(image.width - 1) / newWidth;
+    float yRatio = static_cast<float>(image.height - 1) / newHeight;
+
+    for (int i = 0; i < newWidth; i++) {
+        for (int j = 0; j < newHeight; j++) {
+            int x = static_cast<int>(xRatio * i);
+            int y = static_cast<int>(yRatio * j);
+            newImage(i, j, 0) = image(x, y, 0);
+            newImage(i, j, 1) = image(x, y, 1);
+            newImage(i, j, 2) = image(x, y, 2);
+        }
+    }
+
+    image = newImage;
+}
+
+
+void blur_filter(Image& image, int blurStr) {
+    Image newImage(image.width, image.height);
+    int kernelSize = 21.0 * blurStr/100.0;
+
+    if (kernelSize < 3){
+        kernelSize = 3;
+    }
+
+    for (int i = 0; i < image.width; i++) {
+        for (int j = 0; j < image.height; j++) {
+            int avgR = 0;
+            int avgG = 0;
+            int avgB = 0;
+            int count = 0;
+
+            // Iterate over the kernel centered at pixel (i, j)
+            for (int a = i - (kernelSize - 1) / 2; a <= i + (kernelSize - 1) / 2; a++) {
+                for (int b = j - (kernelSize - 1) / 2; b <= j + (kernelSize - 1) / 2; b++) {
+                    // Check if the current pixel is within the image boundaries
+                    if (a >= 0 && a < image.width && b >= 0 && b < image.height) {
+                        avgR += image(a, b, 0);
+                        avgG += image(a, b, 1);
+                        avgB += image(a, b, 2);
+                        count++;
+                    }
+                }
+            }
+
+            // Calculate average color values
+            avgR /= count;
+            avgG /= count;
+            avgB /= count;
+
+            // Assign the average color to the corresponding pixel in the new image
+            newImage(i, j, 0) = avgR;
+            newImage(i, j, 1) = avgG;
+            newImage(i, j, 2) = avgB;
+
+        }
+    }
+
+    // Update the original image with the blurred image
+    image = newImage;
+}
+
+void oilPainting_filter(Image& image, int strength){
+    Image newImage(image.width, image.height);
+
+    int KernelSize= 10.0 * static_cast<double>(strength)/100.0;
+    double IntensityLevel= 20.0;
+    if(KernelSize<3){
+        return;
+    }
+
+    for(int i=0; i < image.width ; i++){
+        for(int j=0; j < image.height ; j++){
+
+            vector<int> frequencyLevels(IntensityLevel+1,0);
+            vector<int> r_pixels(IntensityLevel+1,0);
+            vector<int> g_pixels(IntensityLevel+1,0);
+            vector<int> b_pixels(IntensityLevel+1,0);
+
+            //  Kernel loop to find most frequent color
+            for(int a= i - (KernelSize -1)/2; a <= i + (KernelSize+1) / 2 ; a++){
+                for(int b = j -(KernelSize -1)/2 ; b <= j + (KernelSize+1) / 2; b++){
+                    if(a>= 0 && b >=0 && a < image.width && b < image.height){
+                        float avgPixel = 0;
+                        for(int k=0;k<3;k++){
+                            avgPixel+=image(a, b, k);
+                        }
+                        avgPixel/=3.0;
+                        int currIntensity = avgPixel*IntensityLevel/255.0f;
+                        frequencyLevels[currIntensity]++;
+                        r_pixels[currIntensity] += image(a,b,0);
+                        g_pixels[currIntensity] += image(a,b,1);
+                        b_pixels[currIntensity] += image(a,b,2);
+                    }
+                }
+            }
+            int max_index=0;
+            int freq_max= frequencyLevels[0];
+            for(int i=0;i<IntensityLevel+1;i++){
+                if(freq_max<frequencyLevels[i]){
+                    freq_max=frequencyLevels[i];
+                    max_index=i;
+                }
+            }
+            newImage(i,j,0) = r_pixels[max_index]/freq_max;
+            newImage(i,j,1) = g_pixels[max_index]/freq_max;
+            newImage(i,j,2) = b_pixels[max_index]/freq_max;
+        }
+    }
+    image =newImage;
+}
+
+
+
+
+void MainWindow::on_resizeFilterBtn_clicked()
+{
+    redoStack.push(currImg);
+    int newHeight = ui->heightEditVal->text().toInt();
+    int newWidth = ui->widthEditVal->text().toInt();
+    resize_image(currImg, newHeight, newWidth);
+
+    clear_undo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+}
+
+
+void MainWindow::on_widthEditVal_textEdited(const QString &arg1)
+{
+    ui->resizeFilterBtn->show();
+    ui->resizeRatio->show();
+    if(ui->resizeRatio->isChecked()){
+        int width =ui->widthEditVal->text().toInt();
+        float aspectRatio = static_cast<float>(currImg.height) / currImg.width;
+        int newHeight = static_cast<int>(width * aspectRatio);
+
+
+        ui->heightEditVal->setText(QString::number(newHeight));
     }
 }
-void clear_undo_stack(){
-    while(!undoStack.empty()){
-        undoStack.pop();
-    }
+
+
+void MainWindow::on_heightEditVal_textEdited(const QString &arg1)
+{
+    ui->resizeFilterBtn->show();
 }
+

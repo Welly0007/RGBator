@@ -17,6 +17,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void hide_others(std::string curr = "");
+    void show_sliderWidgets(bool checked);
 //s
 private slots:
     void on_loadImgBtn_clicked();
@@ -35,11 +36,21 @@ private slots:
 
     void on_clearImg_clicked();
 
-    void on_sunFilterSlider_valueChanged(int value);
-
-    void on_sunFilterApply_clicked();
+    void on_filterApply_clicked();
 
     void on_sunLightFilter_clicked(bool checked);
+
+    void on_filterSlider_valueChanged(int value);
+
+    void on_blurFilter_clicked(bool checked);
+
+    void on_oilFilter_clicked(bool checked);
+
+    void on_resizeFilterBtn_clicked();
+
+    void on_widthEditVal_textEdited(const QString &arg1);
+
+    void on_heightEditVal_textEdited(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
