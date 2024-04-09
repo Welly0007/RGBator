@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //  setting some widgets to be initially hidden
     ui->filterApply->hide();
     ui->sliderText->hide();
     ui->sliderValue->hide();
@@ -27,8 +28,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->resizeFilterBtn->hide();
     ui->resizeRatio->hide();
 
-}
+    //  Disabling Some pushButtons Before loading Image
+    ui->invertFilter->setEnabled(false);
+    ui->oilFilter->setEnabled(false);
+    ui->blurFilter->setEnabled(false);
+    ui->rotateLeft->setEnabled(false);
+    ui->rotateRight->setEnabled(false);
+    ui->purpleFilter->setEnabled(false);
+    ui->sunLightFilter->setEnabled(false);
+    ui->undoBtn->setEnabled(false);
+    ui->redoBtn->setEnabled(false);
+    ui->saveImgBtn->setEnabled(false);
+    ui->clearImg->setEnabled(false);
 
+}
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -38,7 +51,7 @@ MainWindow::~MainWindow()
 // Some Globals;
 Image orImg;
 Image currImg;
-string tempPath = "-1";
+string tempPath;
 QString QtempPath;
 int labelWidth, labelHeight;
 stack<Image> undoStack, redoStack;
@@ -95,11 +108,24 @@ void MainWindow::on_loadImgBtn_clicked()
     currImg.saveImage(tempPath);
     ui->widthEditVal->setText(QString::number(orImg.width));
     ui->heightEditVal->setText(QString::number(orImg.height));
+    //  Show specific widgets after the Image Has been Loaded
     ui->dimnsLabel->show();
     ui->widthEditVal->show();
     ui->heightEditVal->show();
     ui->heightLabel->show();
     ui->widthLabel->show();
+    //Enabling Filters buttons
+    ui->invertFilter->setEnabled(true);
+    ui->oilFilter->setEnabled(true);
+    ui->blurFilter->setEnabled(true);
+    ui->rotateLeft->setEnabled(true);
+    ui->rotateRight->setEnabled(true);
+    ui->purpleFilter->setEnabled(true);
+    ui->sunLightFilter->setEnabled(true);
+    ui->undoBtn->setEnabled(true);
+    ui->redoBtn->setEnabled(true);
+    ui->saveImgBtn->setEnabled(true);
+    ui->clearImg->setEnabled(true);
     //  clear_redo_stack();
     clear_redo_stack();
     clear_undo_stack();
@@ -111,13 +137,10 @@ void MainWindow::on_loadImgBtn_clicked()
 
 void MainWindow::on_saveImgBtn_clicked()
 {
-    // Check if the file exists before trying to copy it
-    if (QFile::exists(QtempPath)) {
-        QString fileName = QFileDialog::getSaveFileName(this, "Save Image", QDir::homePath(), "*.png ;; *.jpg ;; *.tga ;; *.bmp)");
-        if (!fileName.isEmpty()) {
-            // Copy the file to the chosen location
-            QFile::copy(QtempPath, fileName);
-        }
+    QString fileName = QFileDialog::getSaveFileName(this, "Save Image", QDir::homePath(), "*.png ;; *.jpg ;; *.tga ;; *.bmp)");
+    if (!fileName.isEmpty()) {
+        // Copy the file to the chosen location
+        QFile::copy(QtempPath, fileName);
     }
 }
 
@@ -126,15 +149,13 @@ void MainWindow::on_saveImgBtn_clicked()
 
 void MainWindow::on_clearImg_clicked()
 {
-        if(tempPath!="-1"){
-            currImg = orImg;
-            currImg.saveImage(tempPath);
-            QPixmap img = QPixmap(QtempPath);
-            ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
-            clear_redo_stack();
-            clear_undo_stack();
-        }
-        hide_others();
+    currImg = orImg;
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    clear_redo_stack();
+    clear_undo_stack();
+    hide_others();
 }
 
 //  Redo
