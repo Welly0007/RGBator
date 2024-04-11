@@ -129,6 +129,9 @@ void MainWindow::on_loadImgBtn_clicked()
     //  clear_redo_stack();
     clear_redo_stack();
     clear_undo_stack();
+    ui->undoBtn->setEnabled(false);
+    ui->redoBtn->setEnabled(false);
+
 }
 
 
@@ -225,13 +228,13 @@ void MainWindow::on_rotateLeft_clicked()
 
 void MainWindow::on_invertFilter_clicked()
 {
-    hide_others();
     redoStack.push(currImg);
     invert_color(currImg);
     clear_undo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
 }
 
 
@@ -245,10 +248,14 @@ void MainWindow::on_filterApply_clicked()
     ui->progressLabel->setText("In Progress...");
     ui->progressLabel->show();
     QApplication::processEvents();
+    //  adjusting redo - undo stacks
+
     redoStack.push(currImg);
+    clear_undo_stack();
+    // getting the strength from the slider
     int strength = ui->sliderValue->text().toInt();
 
-
+    // choosing the filter according to the button clicked;
     if(ui->sunLightFilter->isChecked()){
         sunlight_filter(currImg, strength);
     }
@@ -281,16 +288,21 @@ void MainWindow::on_filterApply_clicked()
             }
         }
     }
-    clear_undo_stack();
+    //  Displaying the Image;
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+
     ui->progressLabel->setText("Done !");
+
+    ui->redoBtn->setEnabled(true);
+    ui->undoBtn->setEnabled(false);
 }
 
 void MainWindow::on_sunLightFilter_clicked(bool checked)
 {
     hide_others("sunLightFilter");
+    ui->filterSlider->setValue(20);
     show_sliderWidgets(checked);
 }
 
@@ -298,23 +310,25 @@ void MainWindow::on_sunLightFilter_clicked(bool checked)
 void MainWindow::on_blurFilter_clicked(bool checked)
 {
     hide_others("blurFilter");
+    ui->filterSlider->setValue(20);
     show_sliderWidgets(checked);
 }
 void MainWindow::on_oilFilter_clicked(bool checked)
 {
     hide_others("oilFilter");
+    ui->filterSlider->setValue(20);
     show_sliderWidgets(checked);
 }
 
 void MainWindow::on_purpleFilter_clicked()
 {
-    hide_others();
     redoStack.push(currImg);
     purple_filter(currImg);
     clear_undo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
 }
 
 //  Other Functions Declaration
@@ -348,6 +362,16 @@ void MainWindow::hide_others(string curr){
         ui->resizeFilterBtn->hide();
         ui->resizeRatio->hide();
         ui->resizeRatio->setChecked(true);
+        if(undoStack.empty()){
+            ui->undoBtn->setEnabled(false);
+        }else{
+            ui->undoBtn->setEnabled(true);
+        }
+        if(redoStack.empty()){
+            ui->redoBtn->setEnabled(false);
+        }else{
+            ui->redoBtn->setEnabled(true);
+        }
 }
 
 void MainWindow::show_sliderWidgets(bool checked){
