@@ -4,7 +4,8 @@
 #include <QFileDialog>
 #include <QDir>
 #include "Image_Class.h"
-#include <bits/stdc++.h>
+#include <iostream>
+#include <stack>
 #include <QButtonGroup>
 
 using namespace std;
@@ -33,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->oilFilter->setEnabled(false);
     ui->blurFilter->setEnabled(false);
     ui->rotateLeft->setEnabled(false);
+    ui->grayFilter->setEnabled(false);
     ui->rotateRight->setEnabled(false);
     ui->purpleFilter->setEnabled(false);
     ui->sunLightFilter->setEnabled(false);
@@ -61,6 +63,7 @@ stack<Image> undoStack, redoStack;
 void rotate90(Image &image);
 void rotateI90(Image &image);
 void invert_color(Image& image);
+void grayScale(Image& image);
 void sunlight_filter(Image& image, int sunStrength);
 void blur_filter(Image& image, int blurStr);
 void purple_filter(Image& image);
@@ -117,6 +120,7 @@ void MainWindow::on_loadImgBtn_clicked()
     //Enabling Filters buttons
     ui->invertFilter->setEnabled(true);
     ui->oilFilter->setEnabled(true);
+    ui->grayFilter->setEnabled(true);
     ui->blurFilter->setEnabled(true);
     ui->rotateLeft->setEnabled(true);
     ui->rotateRight->setEnabled(true);
@@ -230,6 +234,17 @@ void MainWindow::on_invertFilter_clicked()
 {
     redoStack.push(currImg);
     invert_color(currImg);
+    clear_undo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui -> outImg ->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+}
+
+void MainWindow::on_grayFilter_clicked()
+{
+    redoStack.push(currImg);
+    grayScale(currImg);
     clear_undo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
@@ -391,6 +406,30 @@ void MainWindow::show_sliderWidgets(bool checked){
 
 
 //  Filter Functions Declaration
+
+void grayScale(Image& image) {
+    Image newImage(image.height, image.width);
+
+    // Filter
+    for (int i = 0; i < image.width; ++i)
+    {
+        for (int j = 0; j < image.height; ++j)
+        {
+            unsigned int avg = 0;
+            for (int k = 0; k < image.channels; ++k)
+            {
+                avg += image(i, j, k);
+            }
+            avg /= 3;
+            for (int l = 0; l < 3; ++l)
+            {
+                image(i, j, l) = avg;
+                newImage(i,j,l) = image(i, j, l);
+            }
+        }
+    }
+   image = newImage;
+}
 
 void rotate90(Image& image){
     Image newImage(image.height, image.width);

@@ -52,6 +52,8 @@ private slots:
 
     void on_heightEditVal_textEdited(const QString &arg1);
 
+    void on_grayFilter_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
