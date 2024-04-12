@@ -2,6 +2,57 @@
 #include "Image_Class.h"
 using namespace std;
 
+
+//====== Black and White ======//
+void Black_and_White(Image &img) {
+
+    Image newImage(img.width, img.height); 
+
+    // Filter
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+
+            unsigned int avg = 0;
+            for (int k = 0; k < img.channels; ++k) {
+                avg += img(i, j, k);
+            }
+            avg = avg / 3;
+            for (int k = 0; k < 3; ++k) {
+                if (avg > 127) {
+                    img(i, j, k) = 255;
+                    newImage(i,j,k) = img(i,j,k);
+                } else {
+                    img(i, j, k) = 0;
+                    newImage(i,j,k) = img(i,j,k);
+                }
+            }
+        }
+    }
+
+    img = newImage;
+}
+
+//====== Merge Images ======//
+void Merge(Image &img, Image &img2) {
+    // Read Image
+    Image newImage(img.width, img.height);
+
+    for (int i = 0; i < img.width; ++i)
+    {
+        for (int j = 0; j < img.height; ++j)
+        {
+            for (int k = 0; k < img.channels; ++k)
+            {
+                img(i, j, k) = (img(i,j, k) + img2(i,j,k) ) / 2;
+                newImage(i, j, k) = img(i, j, k);
+            }
+        }
+    }
+
+    img = newImage; 
+
+}
+
 //====== Dark & Light ======//
 void Dark_and_Light(Image &image)
 {
