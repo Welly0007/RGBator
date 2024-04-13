@@ -18,7 +18,7 @@ public:
     ~MainWindow();
     void hide_others(std::string curr = "");
     void show_sliderWidgets(bool checked);
-//s
+    //s
 private slots:
     void on_loadImgBtn_clicked();
     void on_saveImgBtn_clicked();
@@ -26,11 +26,9 @@ private slots:
     void on_redoBtn_clicked();
     void on_undoBtn_clicked();
 
-
     void on_invertFilter_clicked();
     void on_rotateRight_clicked();
     void on_rotateLeft_clicked();
-
 
     void on_purpleFilter_clicked();
 
@@ -48,9 +46,9 @@ private slots:
 
     void on_resizeFilterBtn_clicked();
 
-    void on_widthEditVal_textEdited(const QString &arg1);
+    void on_widthEditVal_textEdited();
 
-    void on_heightEditVal_textEdited(const QString &arg1);
+    void on_heightEditVal_textEdited();
 
     void on_grayFilter_clicked();
 

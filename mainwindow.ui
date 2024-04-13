@@ -185,12 +185,151 @@
        <height>41</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">#grayFilter:hover{
+	background-color:red;
+}</string>
+     </property>
      <property name="text">
       <string>Gray Scale</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
      </property>
+    </widget>
+    <widget class="QGroupBox" name="sliderGroup">
+     <property name="geometry">
+      <rect>
+       <x>790</x>
+       <y>10</y>
+       <width>611</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>GroupBox</string>
+     </property>
+     <widget class="QSlider" name="filterSlider">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>391</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="singleStep">
+       <number>5</number>
+      </property>
+      <property name="pageStep">
+       <number>30</number>
+      </property>
+      <property name="value">
+       <number>20</number>
+      </property>
+      <property name="sliderPosition">
+       <number>20</number>
+      </property>
+      <property name="tracking">
+       <bool>true</bool>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksBelow</enum>
+      </property>
+      <property name="tickInterval">
+       <number>5</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="sliderText">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>81</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>JetBrains Mono</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Value:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="sliderValue">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>80</y>
+        <width>49</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>JetBrains Mono</family>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel{
+	color: #000;
+}</string>
+      </property>
+      <property name="text">
+       <string>20</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="filterApply">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>30</y>
+        <width>140</width>
+        <height>47</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Apply</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="progressLabel">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>80</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>JetBrains Mono</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Progress Label</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
@@ -323,127 +462,6 @@
       <string>save</string>
      </property>
     </widget>
-    <widget class="QLabel" name="sliderText">
-     <property name="geometry">
-      <rect>
-       <x>640</x>
-       <y>150</y>
-       <width>81</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>JetBrains Mono</family>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Value:</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="filterApply">
-     <property name="geometry">
-      <rect>
-       <x>1080</x>
-       <y>120</y>
-       <width>140</width>
-       <height>47</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Apply</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="sliderValue">
-     <property name="geometry">
-      <rect>
-       <x>710</x>
-       <y>160</y>
-       <width>49</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>JetBrains Mono</family>
-       <pointsize>16</pointsize>
-      </font>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLabel{
-	color: #000;
-}</string>
-     </property>
-     <property name="text">
-      <string>20</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="progressLabel">
-     <property name="geometry">
-      <rect>
-       <x>1090</x>
-       <y>170</y>
-       <width>111</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>JetBrains Mono</family>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Progress Label</string>
-     </property>
-    </widget>
-    <widget class="QSlider" name="filterSlider">
-     <property name="geometry">
-      <rect>
-       <x>650</x>
-       <y>110</y>
-       <width>391</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="mouseTracking">
-      <bool>true</bool>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="singleStep">
-      <number>5</number>
-     </property>
-     <property name="pageStep">
-      <number>30</number>
-     </property>
-     <property name="value">
-      <number>20</number>
-     </property>
-     <property name="sliderPosition">
-      <number>20</number>
-     </property>
-     <property name="tracking">
-      <bool>true</bool>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::TicksBelow</enum>
-     </property>
-     <property name="tickInterval">
-      <number>5</number>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="widget_3" native="true">
     <property name="geometry">
@@ -451,7 +469,7 @@
       <x>0</x>
       <y>110</y>
       <width>1621</width>
-      <height>571</height>
+      <height>621</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -463,8 +481,8 @@
     <widget class="QPushButton" name="rotateLeft">
      <property name="geometry">
       <rect>
-       <x>1020</x>
-       <y>460</y>
+       <x>910</x>
+       <y>470</y>
        <width>91</width>
        <height>41</height>
       </rect>
@@ -483,8 +501,8 @@
     <widget class="QPushButton" name="rotateRight">
      <property name="geometry">
       <rect>
-       <x>910</x>
-       <y>460</y>
+       <x>1010</x>
+       <y>470</y>
        <width>101</width>
        <height>41</height>
       </rect>
@@ -503,7 +521,7 @@
     <widget class="QPushButton" name="resizeFilterBtn">
      <property name="geometry">
       <rect>
-       <x>1230</x>
+       <x>1320</x>
        <y>460</y>
        <width>91</width>
        <height>41</height>
@@ -645,14 +663,13 @@
       <rect>
        <x>910</x>
        <y>60</y>
-       <width>411</width>
-       <height>391</height>
+       <width>700</width>
+       <height>400</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">#outImg{
 	
-	background-color: rgb(93, 93, 93);
 }</string>
      </property>
      <property name="frameShape">
@@ -662,16 +679,16 @@
       <string/>
      </property>
      <property name="alignment">
-      <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="inImg">
      <property name="geometry">
       <rect>
-       <x>210</x>
-       <y>70</y>
-       <width>401</width>
-       <height>391</height>
+       <x>150</x>
+       <y>60</y>
+       <width>700</width>
+       <height>400</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -691,7 +708,7 @@
       <string/>
      </property>
      <property name="alignment">
-      <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
     <widget class="QPushButton" name="redoBtn">
@@ -715,6 +732,9 @@
      </property>
     </widget>
    </widget>
+   <zorder>widget_3</zorder>
+   <zorder>widget</zorder>
+   <zorder>widget_2</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionLoad_Image">
@@ -732,8 +752,6 @@
   <tabstop>sunLightFilter</tabstop>
   <tabstop>purpleFilter</tabstop>
   <tabstop>clearImg</tabstop>
-  <tabstop>filterSlider</tabstop>
-  <tabstop>filterApply</tabstop>
   <tabstop>undoBtn</tabstop>
   <tabstop>redoBtn</tabstop>
  </tabstops>
