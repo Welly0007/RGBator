@@ -272,6 +272,7 @@ QPushButton:checked{
       </rect>
      </property>
      <property name="styleSheet">
+<<<<<<< HEAD
       <string notr="true">QPushButton {
 	background-color: rgb(207, 207, 207);
 	border-color: rgb(207, 207, 207);
@@ -282,6 +283,10 @@ QPushButton:hover{
 	background-color:rgb(0, 85, 255);
 	border-color: #fff;
 	color: #fff;
+=======
+      <string notr="true">#grayFilter:hover{
+	background-color:red;
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
 }</string>
      </property>
      <property name="text">
@@ -294,9 +299,15 @@ QPushButton:hover{
     <widget class="QGroupBox" name="sliderGroup">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>937</x>
        <y>4</y>
        <width>580</width>
+=======
+       <x>790</x>
+       <y>10</y>
+       <width>611</width>
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
        <height>131</height>
       </rect>
      </property>
@@ -315,11 +326,14 @@ QPushButton:hover{
       <property name="mouseTracking">
        <bool>true</bool>
       </property>
+<<<<<<< HEAD
       <property name="styleSheet">
        <string notr="true">QSlider{
 	border: none;
 }</string>
       </property>
+=======
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
       <property name="maximum">
        <number>100</number>
       </property>
@@ -363,11 +377,14 @@ QPushButton:hover{
         <pointsize>12</pointsize>
        </font>
       </property>
+<<<<<<< HEAD
       <property name="styleSheet">
        <string notr="true">QLabel{
 	border: none;
 }</string>
       </property>
+=======
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
       <property name="text">
        <string>Value:</string>
       </property>
@@ -375,16 +392,26 @@ QPushButton:hover{
      <widget class="QLabel" name="sliderValue">
       <property name="geometry">
        <rect>
+<<<<<<< HEAD
         <x>66</x>
         <y>86</y>
         <width>40</width>
+=======
+        <x>100</x>
+        <y>80</y>
+        <width>49</width>
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
         <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
         <family>JetBrains Mono</family>
+<<<<<<< HEAD
         <pointsize>-1</pointsize>
+=======
+        <pointsize>16</pointsize>
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
        </font>
       </property>
       <property name="layoutDirection">
@@ -393,8 +420,11 @@ QPushButton:hover{
       <property name="styleSheet">
        <string notr="true">QLabel{
 	color: #000;
+<<<<<<< HEAD
 	border: none;
 	font-size: 20px;
+=======
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
 }</string>
       </property>
       <property name="text">
@@ -407,6 +437,7 @@ QPushButton:hover{
      <widget class="QPushButton" name="filterApply">
       <property name="geometry">
        <rect>
+<<<<<<< HEAD
         <x>440</x>
         <y>29</y>
         <width>120</width>
@@ -420,6 +451,14 @@ QPushButton:hover{
 	color: #fff;
 }</string>
       </property>
+=======
+        <x>420</x>
+        <y>30</y>
+        <width>140</width>
+        <height>47</height>
+       </rect>
+      </property>
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
       <property name="text">
        <string>Apply</string>
       </property>
@@ -427,8 +466,13 @@ QPushButton:hover{
      <widget class="QLabel" name="progressLabel">
       <property name="geometry">
        <rect>
+<<<<<<< HEAD
         <x>453</x>
         <y>76</y>
+=======
+        <x>430</x>
+        <y>80</y>
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
         <width>111</width>
         <height>41</height>
        </rect>
@@ -439,16 +483,20 @@ QPushButton:hover{
         <pointsize>9</pointsize>
        </font>
       </property>
+<<<<<<< HEAD
       <property name="styleSheet">
        <string notr="true">QLabel{
 	border: none;
 }</string>
       </property>
+=======
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
       <property name="text">
        <string>Progress Label</string>
       </property>
      </widget>
     </widget>
+<<<<<<< HEAD
     <widget class="QPushButton" name="B_W_Filter">
      <property name="geometry">
       <rect>
@@ -542,6 +590,8 @@ QPushButton:checked{
       <bool>true</bool>
      </property>
     </widget>
+=======
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
@@ -716,7 +766,11 @@ QPushButton:pressed{
     <widget class="QPushButton" name="rotateLeft">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>870</x>
+=======
+       <x>910</x>
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
        <y>470</y>
        <width>91</width>
        <height>41</height>
@@ -736,7 +790,11 @@ QPushButton:pressed{
     <widget class="QPushButton" name="rotateRight">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>966</x>
+=======
+       <x>1010</x>
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
        <y>470</y>
        <width>101</width>
        <height>41</height>
@@ -756,8 +814,13 @@ QPushButton:pressed{
     <widget class="QPushButton" name="resizeFilterBtn">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>1343</x>
        <y>471</y>
+=======
+       <x>1320</x>
+       <y>460</y>
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
        <width>91</width>
        <height>41</height>
       </rect>
@@ -920,7 +983,11 @@ QPushButton:pressed{
     <widget class="QLabel" name="inImg">
      <property name="geometry">
       <rect>
+<<<<<<< HEAD
        <x>68</x>
+=======
+       <x>150</x>
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
        <y>60</y>
        <width>700</width>
        <height>400</height>
@@ -970,7 +1037,10 @@ QPushButton:pressed{
    <zorder>widget_3</zorder>
    <zorder>widget</zorder>
    <zorder>widget_2</zorder>
+<<<<<<< HEAD
    <zorder>horizontalSpacer_4</zorder>
+=======
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionLoad_Image">

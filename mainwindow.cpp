@@ -60,6 +60,7 @@ void rotate90(Image &image);
 void rotateI90(Image &image);
 void invert_color(Image &image);
 void grayScale(Image &image);
+<<<<<<< HEAD
 void Black_and_White(Image &img);
 void sunlight_filter(Image &image, int sunStrength);
 void blur_filter(Image &image, int blurStr);
@@ -67,6 +68,11 @@ void Dark_and_Light(Image &img, int strength);
 void purple_filter(Image &image);
 Image Detect_Image(Image &img);
 void Applay_Detect(Image &img);
+=======
+void sunlight_filter(Image &image, int sunStrength);
+void blur_filter(Image &image, int blurStr);
+void purple_filter(Image &image);
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
 void oilPainting_filter(Image &image, int strength);
 void resize_image(Image &image, int newHeight);
 void resize_image(Image &image, int newHeight, int newWidth);
@@ -125,11 +131,16 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->invertFilter->setEnabled(true);
         ui->oilFilter->setEnabled(true);
         ui->grayFilter->setEnabled(true);
+<<<<<<< HEAD
         ui->B_W_Filter->setEnabled(true);
         ui->blurFilter->setEnabled(true);
         ui->rotateLeft->setEnabled(true);
         ui->DetectFilter->setEnabled(true);
         ui->BrightFilter->setEnabled(true);
+=======
+        ui->blurFilter->setEnabled(true);
+        ui->rotateLeft->setEnabled(true);
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
         ui->rotateRight->setEnabled(true);
         ui->purpleFilter->setEnabled(true);
         ui->sunLightFilter->setEnabled(true);
@@ -246,6 +257,7 @@ void MainWindow::on_grayFilter_clicked()
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+<<<<<<< HEAD
     hide_others();
 }
 
@@ -269,9 +281,10 @@ void MainWindow::on_DetectFilter_clicked()
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+=======
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
     hide_others();
 }
-
 
 void MainWindow::on_filterSlider_valueChanged(int value)
 {
@@ -352,6 +365,7 @@ void MainWindow::on_blurFilter_clicked(bool checked)
     hide_others("blurFilter");
     ui->filterSlider->setValue(20);
     ui->sliderGroup->setTitle("Blur Filter");
+<<<<<<< HEAD
     show_sliderWidgets(checked);
 }
 
@@ -360,6 +374,8 @@ void MainWindow::on_BrightFilter_clicked(bool checked)
     hide_others("BrightFilter");
     ui->filterSlider->setValue(20);
     ui->sliderGroup->setTitle("Brightnees");
+=======
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
     show_sliderWidgets(checked);
 }
 void MainWindow::on_oilFilter_clicked(bool checked)
@@ -443,9 +459,12 @@ void MainWindow::hide_others(string curr)
     if (curr != "oilFilter") {
         ui->oilFilter->setChecked(false);
     }
+<<<<<<< HEAD
     if(curr != "BrightFilter") {
         ui->BrightFilter->setChecked(false);
     }
+=======
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
     ui->sliderGroup->hide();
     ui->heightEditVal->setText(QString::number(currImg.height));
     ui->widthEditVal->setText(QString::number(currImg.width));
@@ -658,6 +677,7 @@ void blur_filter(Image &image, int blurStr)
     image = newImage;
 }
 
+<<<<<<< HEAD
 void Dark_and_Light(Image &img, int strength){
 
 
@@ -853,3 +873,56 @@ void Applay_Detect(Image &img) {
 
 
 
+=======
+void oilPainting_filter(Image &image, int strength)
+{
+    Image newImage(image.width, image.height);
+
+    int KernelSize = 10.0 * static_cast<double>(strength) / 100.0;
+    double IntensityLevel = 20.0;
+    if (KernelSize < 3) {
+        return;
+    }
+
+    for (int i = 0; i < image.width; i++) {
+        for (int j = 0; j < image.height; j++) {
+            vector<int> frequencyLevels(IntensityLevel + 1, 0);
+            vector<int> r_pixels(IntensityLevel + 1, 0);
+            vector<int> g_pixels(IntensityLevel + 1, 0);
+            vector<int> b_pixels(IntensityLevel + 1, 0);
+
+            //  Kernel loop to find most frequent color
+            for (int a = i - (KernelSize - 1) / 2; a <= i + (KernelSize + 1) / 2; a++) {
+                for (int b = j - (KernelSize - 1) / 2; b <= j + (KernelSize + 1) / 2; b++) {
+                    if (a >= 0 && b >= 0 && a < image.width && b < image.height) {
+                        float avgPixel = 0;
+                        for (int k = 0; k < 3; k++) {
+                            avgPixel += image(a, b, k);
+                        }
+                        avgPixel /= 3.0;
+                        int currIntensity = avgPixel * IntensityLevel / 255.0f;
+                        frequencyLevels[currIntensity]++;
+                        r_pixels[currIntensity] += image(a, b, 0);
+                        g_pixels[currIntensity] += image(a, b, 1);
+                        b_pixels[currIntensity] += image(a, b, 2);
+                    }
+                }
+            }
+            int max_index = 0;
+            int freq_max = frequencyLevels[0];
+            for (int i = 0; i < IntensityLevel + 1; i++) {
+                if (freq_max < frequencyLevels[i]) {
+                    freq_max = frequencyLevels[i];
+                    max_index = i;
+                }
+            }
+            newImage(i, j, 0) = r_pixels[max_index] / freq_max;
+            newImage(i, j, 1) = g_pixels[max_index] / freq_max;
+            newImage(i, j, 2) = b_pixels[max_index] / freq_max;
+        }
+    }
+    image = newImage;
+}
+
+
+>>>>>>> 98dd5e257d0b83f9da904b40a44bf98129773fcf
