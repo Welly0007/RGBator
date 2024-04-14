@@ -846,3 +846,10 @@ void Applay_Detect(Image &img) {
 }
 
 
+
+
+
+
+
+
+
