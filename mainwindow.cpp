@@ -86,13 +86,9 @@ void MainWindow::on_loadImgBtn_clicked()
 {
     //  Open File Dialoge to load Image, With specified Extensions
     QString filter = "(*.jpg *.png *.bmp *.tga) ;; (*.jpg) ;; (*.png) ;; (*.bmp) ;; (*.tga)";
-    QString filePath = QFileDialog::getOpenFileName(
-        this,
-        "load",
-        QDir::homePath(),
-        filter);
+    QString filePath = QFileDialog::getOpenFileName(this, "load", QDir::homePath(), filter);
 
-    if(filePath != ""){
+    if (filePath != "") {
         //  Initializing the Image for Image_class Libirary
         string orImgPath = filePath.toStdString();
         orImg.loadNewImage(orImgPath);
@@ -143,6 +139,7 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->undoBtn->setEnabled(false);
         ui->redoBtn->setEnabled(false);
     }
+    hide_others();
 }
 
 //  Save Image
@@ -150,9 +147,9 @@ void MainWindow::on_loadImgBtn_clicked()
 void MainWindow::on_saveImgBtn_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-    "Save Image",
-    QDir::homePath(),
-    "*.png ;; *.jpg ;; *.tga ;; *.bmp)");
+                                                    "Save Image",
+                                                    QDir::homePath(),
+                                                    "*.png ;; *.jpg ;; *.tga ;; *.bmp)");
     if (!fileName.isEmpty()) {
         // Copy the file to the chosen location
         QFile::copy(QtempPath, fileName);
@@ -249,7 +246,6 @@ void MainWindow::on_grayFilter_clicked()
     hide_others();
 }
 
-
 void MainWindow::on_B_W_Filter_clicked()
 {
     redoStack.push(currImg);
@@ -272,10 +268,20 @@ void MainWindow::on_DetectFilter_clicked()
     hide_others();
 }
 
-
 void MainWindow::on_filterSlider_valueChanged(int value)
 {
-    ui->sliderValue->setText(QString::number(value));
+    if(ui->BrightFilter->isChecked()){
+        int brightVal = value - 50;
+        if(brightVal == 0){
+            ui->sliderValue->setText("Normal Brightness");
+        }else{
+            ui->sliderValue->setText(QString::number(brightVal));
+        }
+
+    }else{
+        ui->sliderValue->setText(QString::number(value));
+    }
+
 }
 
 void MainWindow::on_filterApply_clicked()
@@ -320,13 +326,9 @@ void MainWindow::on_filterApply_clicked()
                 resize_image(currImg, imgHeight);
             }
         }
-    } else if(ui->BrightFilter->isChecked()) {
-        if(strength != 0) {
-            Dark_and_Light(currImg,strength);
-        }
+    } else if (ui->BrightFilter->isChecked()) {
+            Dark_and_Light(currImg, strength+50);
     }
-
-
 
     //  Displaying the Image;
     currImg.saveImage(tempPath);
@@ -358,7 +360,7 @@ void MainWindow::on_blurFilter_clicked(bool checked)
 void MainWindow::on_BrightFilter_clicked(bool checked)
 {
     hide_others("BrightFilter");
-    ui->filterSlider->setValue(20);
+    ui->filterSlider->setValue(50);
     ui->sliderGroup->setTitle("Brightnees");
     show_sliderWidgets(checked);
 }
@@ -443,7 +445,7 @@ void MainWindow::hide_others(string curr)
     if (curr != "oilFilter") {
         ui->oilFilter->setChecked(false);
     }
-    if(curr != "BrightFilter") {
+    if (curr != "BrightFilter") {
         ui->BrightFilter->setChecked(false);
     }
     ui->sliderGroup->hide();
@@ -658,49 +660,36 @@ void blur_filter(Image &image, int blurStr)
     image = newImage;
 }
 
-void Dark_and_Light(Image &img, int strength){
-
-
-    Image newImage(img.width, img.height);
-    int kernelSize = 21.0 * strength / 100.0;
-
-    if(kernelSize < 50) {
-        for (int i = 0; i < img.width; i++)
-        {
-            for (int j = 0; j < img.height; j++)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    newImage(i, j, k) = img(i, j, k) * kernelSize;
+void Dark_and_Light(Image &image, int strength)
+{
+    if(strength >50){
+        float brightStrength = ((static_cast<float>(strength) -50.0)/50.0) * 255.0;
+        for(int i = 0;i<image.width; i++){
+            for(int j = 0; j < image.height; j++){
+                for (int k = 0; k < 3; k++) {
+                    int adjustedValue = brightStrength;
+                    if(image(i,j,k) +  adjustedValue>255){
+                        adjustedValue = 255 - image(i,j,k);
+                    }
+                    image(i,j,k) += adjustedValue;
                 }
             }
         }
-    } else{
-        for (int i = 0; i < img.width; i++)
-        {
-            for (int j = 0; j < img.height; j++)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-
-                    if (img(i, j, k) > img.width / 2 && img(i, j, k) > img.height / 2)
-                    {
-                        newImage(i, j, k) = min(img(i, j, k) + kernelSize, 255);
+    }else if(strength<50){
+        float darkStrength = ((50.0 - static_cast<float>(strength))/50.0) * 255.0;
+        for(int i = 0;i<image.width; i++){
+            for(int j = 0; j < image.height; j++){
+                for (int k = 0; k < 3; k++) {
+                    int adjustedValue = darkStrength;
+                    if(image(i,j,k) -  adjustedValue < 0){
+                        adjustedValue = image(i,j,k);
                     }
-                    else
-                    {
-                        newImage(i, j, k) = min(img(i, j, k) + kernelSize, 255);
-                    }
+                    image(i,j,k) -= adjustedValue;
                 }
             }
         }
     }
-
-    img = newImage;
-
-
 }
-
 
 void oilPainting_filter(Image &image, int strength)
 {
@@ -752,12 +741,10 @@ void oilPainting_filter(Image &image, int strength)
     image = newImage;
 }
 
-
-void Black_and_White(Image &img) {
-
+void Black_and_White(Image &img)
+{
     for (int i = 0; i < img.width; ++i) {
         for (int j = 0; j < img.height; ++j) {
-
             unsigned int avg = 0;
             for (int k = 0; k < img.channels; ++k) {
                 avg += img(i, j, k);
@@ -774,31 +761,25 @@ void Black_and_White(Image &img) {
     }
 }
 
-
-Image Detect_Image(Image &img) {
-
+Image Detect_Image(Image &img)
+{
     Image newImage(img.width, img.height);
 
-    for (int i = 0; i < img.width; ++i)
-    {
-        for (int j = 0; j < img.height; ++j)
-        {
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
             unsigned int avg = 0;
-            for (int k = 0; k < img.channels; ++k)
-            {
+            for (int k = 0; k < img.channels; ++k) {
                 avg += img(i, j, k);
             }
             avg /= 3;
             for (int l = 0; l < 3; ++l) {
-                img(i,j,l) = avg;
+                img(i, j, l) = avg;
             }
-
         }
     }
 
     for (int i = 0; i < img.width; ++i) {
         for (int j = 0; j < img.height; ++j) {
-
             unsigned int avg = 0;
             for (int k = 0; k < img.channels; ++k) {
                 avg += img(i, j, k);
@@ -814,14 +795,14 @@ Image Detect_Image(Image &img) {
         }
     }
 
-    for(int i = 0; i < img.width; i++) {
-        for(int j = 0; j < img.height; j++){
-            for(int k = 0; k < img.channels; k++) {
-                if(img(i,j,k) == 0 && img(i++,j,k) == 0 && img(i--,j,k) == 0 && img(i,j + 1,k) == 0 &&
-                    img(i,j - 1,k) == 0) {
-                    newImage(i,j,k) = 255;
+    for (int i = 0; i < img.width; i++) {
+        for (int j = 0; j < img.height; j++) {
+            for (int k = 0; k < img.channels; k++) {
+                if (img(i, j, k) == 0 && img(i++, j, k) == 0 && img(i--, j, k) == 0
+                    && img(i, j + 1, k) == 0 && img(i, j - 1, k) == 0) {
+                    newImage(i, j, k) = 255;
                 } else {
-                    newImage(i,j,k) = img(i,j,k);
+                    newImage(i, j, k) = img(i, j, k);
                 }
             }
         }
@@ -830,26 +811,16 @@ Image Detect_Image(Image &img) {
     // Assign the pointer to the dynamically allocated object
     img = newImage;
     return img;
-
 }
 
-void Applay_Detect(Image &img) {
+void Applay_Detect(Image &img)
+{
     int img_h = img.height;
-    if(img_h > 1000) {
+    if (img_h > 1000) {
         resize_image(img, 800);
     }
     Detect_Image(img);
-    if(img_h > 1000) {
+    if (img_h > 1000) {
         resize_image(img, img_h);
     }
-
 }
-
-
-
-
-
-
-
-
-

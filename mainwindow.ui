@@ -353,7 +353,7 @@ QPushButton:hover{
        <rect>
         <x>10</x>
         <y>80</y>
-        <width>81</width>
+        <width>171</width>
         <height>41</height>
        </rect>
       </property>
@@ -375,9 +375,9 @@ QPushButton:hover{
      <widget class="QLabel" name="sliderValue">
       <property name="geometry">
        <rect>
-        <x>66</x>
-        <y>86</y>
-        <width>40</width>
+        <x>80</x>
+        <y>85</y>
+        <width>241</width>
         <height>31</height>
        </rect>
       </property>
@@ -401,7 +401,7 @@ QPushButton:hover{
        <string>20</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignCenter</set>
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
      <widget class="QPushButton" name="filterApply">
@@ -970,7 +970,6 @@ QPushButton:pressed{
    <zorder>widget_3</zorder>
    <zorder>widget</zorder>
    <zorder>widget_2</zorder>
-   <zorder>horizontalSpacer_4</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionLoad_Image">

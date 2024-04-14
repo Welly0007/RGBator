@@ -52,11 +52,8 @@ private slots:
 
     void on_grayFilter_clicked();
 
-    void on_grayFilter_2_clicked();
-
     void on_B_W_Filter_clicked();
 
-    void on_CropFilter_clicked(bool checked);
 
     void on_DetectFilter_clicked();
 
