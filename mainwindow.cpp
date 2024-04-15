@@ -10,7 +10,7 @@
 #include <cmath>
 #include <math.h>
 #include <limits> // for std::numeric_limits<int>::max()
-
+#define NCHANNEL 3
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -85,6 +85,7 @@ void oilPainting_filter(Image &image, int strength);
 void resize_image(Image &image, int newHeight);
 void resize_image(Image &image, int newHeight, int newWidth);
 void crop(Image &img, int x, int y, int width, int height);
+void edgeDetection(Image &image);
 
 //  other functions prototpyes
 void clear_redo_stack();
@@ -93,8 +94,8 @@ void clear_undo_stack();
 void hide_others(string curr);
 void show_sliderWidgets(bool);
 void show_cropWidgets(bool);
-Image Detect_Image(Image &img);
-void Applay_Detect(Image &img);
+// Image Detect_Image(Image &img);
+// void Applay_Detect(Image &img);
 
 //  File Events functions
 
@@ -295,7 +296,8 @@ void MainWindow::on_B_W_Filter_clicked()
 void MainWindow::on_DetectFilter_clicked()
 {
     redoStack.push(currImg);
-    Applay_Detect(currImg);
+    grayScale(currImg);
+    edgeDetection(currImg);
     clear_undo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
@@ -579,18 +581,19 @@ void MainWindow::show_cropWidgets(bool checked){
     }
 
 }
-void Applay_Detect(Image &img)
-{
-    int img_h = img.height;
-    int img_w = img.width;
-    if (img_h >= 500 && img_w >= 500) {
-        resize_image(img, 200,200);
-    }
-    Detect_Image(img);
-    if (img_h >= 500 && img_w >= 500) {
-        resize_image(img, img_h, img_w);
-    }
-}
+
+// void Applay_Detect(Image &img)
+// {
+//     int img_h = img.height;
+//     int img_w = img.width;
+//     if (img_h >= 500 && img_w >= 500) {
+//         resize_image(img, 200,200);
+//     }
+//     Detect_Image(img);
+//     if (img_h >= 500 && img_w >= 500) {
+//         resize_image(img, img_h, img_w);
+//     }
+// }
 //  Filter Functions Declaration
 
 void grayScale(Image &image)
@@ -890,57 +893,108 @@ void Black_and_White(Image &img)
 
 
 
-Image Detect_Image(Image &img)
-{
-    Image newImage(img.width, img.height);
+// Image Detect_Image(Image &img)
+// {
+//     Image newImage(img.width, img.height);
 
-    for (int i = 0; i < img.width; ++i) {
-        for (int j = 0; j < img.height; ++j) {
-            unsigned int avg = 0;
-            for (int k = 0; k < img.channels; ++k) {
-                avg += img(i, j, k);
-            }
-            avg /= 3;
-            for (int l = 0; l < 3; ++l) {
-                img(i, j, l) = avg;
-            }
-        }
-    }
+//     for (int i = 0; i < img.width; ++i) {
+//         for (int j = 0; j < img.height; ++j) {
+//             unsigned int avg = 0;
+//             for (int k = 0; k < img.channels; ++k) {
+//                 avg += img(i, j, k);
+//             }
+//             avg /= 3;
+//             for (int l = 0; l < 3; ++l) {
+//                 img(i, j, l) = avg;
+//             }
+//         }
+//     }
 
-    for (int i = 0; i < img.width; ++i) {
-        for (int j = 0; j < img.height; ++j) {
-            unsigned int avg = 0;
-            for (int k = 0; k < img.channels; ++k) {
-                avg += img(i, j, k);
-            }
-            avg = avg / 3;
-            for (int k = 0; k < 3; ++k) {
-                if (avg > 127) {
-                    img(i, j, k) = 255;
-                } else {
-                    img(i, j, k) = 0;
+//     for (int i = 0; i < img.width; ++i) {
+//         for (int j = 0; j < img.height; ++j) {
+//             unsigned int avg = 0;
+//             for (int k = 0; k < img.channels; ++k) {
+//                 avg += img(i, j, k);
+//             }
+//             avg = avg / 3;
+//             for (int k = 0; k < 3; ++k) {
+//                 if (avg > 127) {
+//                     img(i, j, k) = 255;
+//                 } else {
+//                     img(i, j, k) = 0;
+//                 }
+//             }
+//         }
+//     }
+
+//     for (int i = 0; i < img.width; i++) {
+//         for (int j = 0; j < img.height; j++) {
+//             for (int k = 0; k < img.channels; k++) {
+//                 if (img(i, j, k) == 0 && img(i++, j, k) == 0 && img(i--, j, k) == 0
+//                     && img(i, j + 1, k) == 0 && img(i, j - 1, k) == 0) {
+//                     newImage(i, j, k) = 255;
+//                 } else {
+//                     newImage(i, j, k) = img(i, j, k);
+//                 }
+//             }
+//         }
+//     }
+
+//     // Assign the pointer to the dynamically allocated object
+//     img = newImage;
+//     return img;
+// }
+
+
+void edgeDetection(Image &image) {
+    Image imageout = image;
+    // Sobel kernels for horizontal and vertical gradients
+    int sobel_kernel_x[3][3] = {
+        {-1, 0, 1},
+        {-2, 0, 2},
+        {-1, 0, 1}
+    };
+
+    int sobel_kernel_y[3][3] = {
+        {-1, -2, -1},
+        {0, 0, 0},
+        {1, 2, 1}
+    };
+
+    int width = image.width;
+    int height = image.height;
+
+    //Image resultImage(width, height, NCHANNEL);
+
+    for (int y = 1; y < height - 1; ++y) {
+        for (int x = 1; x < width - 1; ++x) {
+            for (int c = 0; c < NCHANNEL; ++c) {
+                int sumX = 0;
+                int sumY = 0;
+
+                for (int m = -1; m <= 1; m++) {
+                    for (int n = -1; n <= 1; n++) {
+                        sumX += image(x + m, y + n, c) * sobel_kernel_x[m + 1][n + 1];
+                        sumY += image(x + m, y + n, c) * sobel_kernel_y[m + 1][n + 1];
+                    }
                 }
+
+                // Calculate magnitude using both horizontal and vertical gradients
+                int magnitude = sqrt(sumX * sumX + sumY * sumY);
+
+                // Clipping to ensure the result is within [0, 255]
+                magnitude = min(max(magnitude, 0), 255);
+
+                // Assign the magnitude to the result image
+                imageout(x, y, c) = magnitude;
             }
         }
     }
-
-    for (int i = 0; i < img.width; i++) {
-        for (int j = 0; j < img.height; j++) {
-            for (int k = 0; k < img.channels; k++) {
-                if (img(i, j, k) == 0 && img(i++, j, k) == 0 && img(i--, j, k) == 0
-                    && img(i, j + 1, k) == 0 && img(i, j - 1, k) == 0) {
-                    newImage(i, j, k) = 255;
-                } else {
-                    newImage(i, j, k) = img(i, j, k);
-                }
-            }
-        }
-    }
-
-    // Assign the pointer to the dynamically allocated object
-    img = newImage;
-    return img;
+    image = imageout;
 }
+
+
+
 void crop(Image &img, int x, int y, int width, int height) {
 
     Image newImage(width, height);
