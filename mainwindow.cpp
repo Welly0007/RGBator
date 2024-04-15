@@ -7,6 +7,7 @@
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <stack>
+#include <limits> // for std::numeric_limits<int>::max()
 
 using namespace std;
 
@@ -15,9 +16,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //  setting some widgets to be initially hidden
-    ui->sliderGroup->hide();
 
+    connect(ui->outImg, &CustomLabel::mouseHolding, this, &MainWindow::handleMouseHolding);
+
+
+    //  setting some widgets to be initially hidden
+    show_cropWidgets(false);
+    ui->sliderGroup->hide();
     ui->widthEditVal->hide();
     ui->heightEditVal->hide();
     ui->heightLabel->hide();
@@ -37,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->DetectFilter->setEnabled(false);
     ui->BrightFilter->setEnabled(false);
     ui->sunLightFilter->setEnabled(false);
+    ui->cropFilter->setEnabled(false);
     ui->undoBtn->setEnabled(false);
     ui->redoBtn->setEnabled(false);
     ui->saveImgBtn->setEnabled(false);
@@ -65,11 +71,10 @@ void sunlight_filter(Image &image, int sunStrength);
 void blur_filter(Image &image, int blurStr);
 void Dark_and_Light(Image &img, int strength);
 void purple_filter(Image &image);
-Image Detect_Image(Image &img);
-void Applay_Detect(Image &img);
 void oilPainting_filter(Image &image, int strength);
 void resize_image(Image &image, int newHeight);
 void resize_image(Image &image, int newHeight, int newWidth);
+void crop(Image &img, int x, int y, int width, int height);
 
 //  other functions prototpyes
 void clear_redo_stack();
@@ -77,29 +82,39 @@ void clear_undo_stack();
 
 void hide_others(string curr);
 void show_sliderWidgets(bool);
+void show_cropWidgets(bool);
+Image Detect_Image(Image &img);
+void Applay_Detect(Image &img);
 
 //  File Events functions
 
 //  Load image
+void MainWindow::outImageDisplay(){
+    float aspectRatio = static_cast<float>(currImg.width)/currImg.height;
+    labelHeight = 400;
+    labelWidth = labelHeight*aspectRatio;
+    if(labelWidth > 700){
+        labelWidth = min(currImg.width,700);
+        labelHeight = min(currImg.height,400);
+    }
+    ui->outImg->setMaximumWidth(labelWidth);
+    ui->outImg->setMaximumHeight(labelHeight);
+    QPixmap currImageDis(QtempPath);
+    ui->outImg->setPixmap(currImageDis.scaled(labelWidth, labelHeight));
 
+}
 void MainWindow::on_loadImgBtn_clicked()
 {
     //  Open File Dialoge to load Image, With specified Extensions
     QString filter = "(*.jpg *.png *.bmp *.tga) ;; (*.jpg) ;; (*.png) ;; (*.bmp) ;; (*.tga)";
     QString filePath = QFileDialog::getOpenFileName(this, "load", QDir::homePath(), filter);
 
+    //  Check if File is Checked or not
     if (filePath != "") {
-        //  Initializing the Image for Image_class Libirary
+        //  Initializing the OrImage and CurrentImage for Image_class Libirary
         string orImgPath = filePath.toStdString();
         orImg.loadNewImage(orImgPath);
-        //  Displaying The image on Input and output Qlabels
-        QPixmap img(filePath);
-        labelHeight = 400;
-        labelWidth = 700;
-        ui->inImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
-        ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
-
-        //  Setting the Current Image
+        //  getting the absolute paths and saving the original in the app directory if needed
         int lastSlash = orImgPath.find_last_of("/\\");
         int dot = orImgPath.find_last_of('.');
         tempPath = orImgPath.substr(lastSlash + 1, dot - (lastSlash + 1)) + ".jpg";
@@ -109,6 +124,15 @@ void MainWindow::on_loadImgBtn_clicked()
         orImg.loadNewImage("original" + tempPath);
         currImg = orImg;
         currImg.saveImage(tempPath);
+
+        //Displaying the in and out Image;
+        QPixmap img(filePath);
+        labelHeight = 400;
+        ui->inImg->setPixmap(img.scaled(700, labelHeight, Qt::KeepAspectRatio));
+        outImageDisplay();
+
+
+
         ui->widthEditVal->setText(QString::number(orImg.width));
         ui->heightEditVal->setText(QString::number(orImg.height));
         //  Show specific widgets after the Image Has been Loaded
@@ -129,6 +153,7 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->rotateRight->setEnabled(true);
         ui->purpleFilter->setEnabled(true);
         ui->sunLightFilter->setEnabled(true);
+        ui->cropFilter->setEnabled(true);
         ui->undoBtn->setEnabled(true);
         ui->redoBtn->setEnabled(true);
         ui->saveImgBtn->setEnabled(true);
@@ -147,9 +172,9 @@ void MainWindow::on_loadImgBtn_clicked()
 void MainWindow::on_saveImgBtn_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-                                                    "Save Image",
-                                                    QDir::homePath(),
-                                                    "*.png ;; *.jpg ;; *.tga ;; *.bmp)");
+        "Save Image",
+        QDir::homePath(),
+        "*.png ;; *.jpg ;; *.tga ;; *.bmp)");
     if (!fileName.isEmpty()) {
         // Copy the file to the chosen location
         QFile::copy(QtempPath, fileName);
@@ -162,8 +187,7 @@ void MainWindow::on_clearImg_clicked()
 {
     currImg = orImg;
     currImg.saveImage(tempPath);
-    QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    outImageDisplay();
     clear_redo_stack();
     clear_undo_stack();
     hide_others();
@@ -179,9 +203,8 @@ void MainWindow::on_redoBtn_clicked()
         redoStack.pop();
         // Save current state for undo
         currImg.saveImage(tempPath);
-        QPixmap img = QPixmap(QtempPath);
-        ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
     }
+    outImageDisplay();
     hide_others();
 }
 
@@ -194,9 +217,8 @@ void MainWindow::on_undoBtn_clicked()
         currImg = undoStack.top();
         undoStack.pop();
         currImg.saveImage(tempPath);
-        QPixmap img = QPixmap(QtempPath);
-        ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
     }
+    outImageDisplay();
     hide_others();
 }
 
@@ -208,8 +230,7 @@ void MainWindow::on_rotateRight_clicked()
     rotate90(currImg);
     clear_undo_stack();
     currImg.saveImage(tempPath);
-    QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    outImageDisplay();
     hide_others();
 }
 
@@ -219,8 +240,7 @@ void MainWindow::on_rotateLeft_clicked()
     rotateI90(currImg);
     clear_undo_stack();
     currImg.saveImage(tempPath);
-    QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    outImageDisplay();
     hide_others();
 }
 
@@ -269,7 +289,7 @@ void MainWindow::on_DetectFilter_clicked()
 }
 
 void MainWindow::on_filterSlider_valueChanged(int value)
-{
+{   //  special vals for brightness filter
     if(ui->BrightFilter->isChecked()){
         int brightVal = value - 50;
         if(brightVal == 0){
@@ -277,7 +297,7 @@ void MainWindow::on_filterSlider_valueChanged(int value)
         }else{
             ui->sliderValue->setText(QString::number(brightVal));
         }
-
+    //  normal Condition
     }else{
         ui->sliderValue->setText(QString::number(value));
     }
@@ -290,17 +310,21 @@ void MainWindow::on_filterApply_clicked()
     ui->progressLabel->show();
     QApplication::processEvents();
     //  adjusting redo - undo stacks
-
     redoStack.push(currImg);
     clear_undo_stack();
+
     // getting the strength from the slider
     int strength = ui->sliderValue->text().toInt();
 
     // choosing the filter according to the button clicked;
+
     if (ui->sunLightFilter->isChecked()) {
-        sunlight_filter(currImg, strength);
-    } else if (ui->blurFilter->isChecked()) {
+        sunlight_filter(currImg, strength);    
+    }
+
+    else if (ui->blurFilter->isChecked()) {
         int imgHeight = currImg.height;
+
         if (strength != 0) {
             if (imgHeight > 1000) {
                 resize_image(currImg, 720);
@@ -312,8 +336,9 @@ void MainWindow::on_filterApply_clicked()
                 resize_image(currImg, imgHeight);
             }
         }
+    }
 
-    } else if (ui->oilFilter->isChecked()) {
+    else if (ui->oilFilter->isChecked()) {
         int imgHeight = currImg.height;
         if (strength != 0) {
             if (imgHeight > 1000) {
@@ -326,7 +351,10 @@ void MainWindow::on_filterApply_clicked()
                 resize_image(currImg, imgHeight);
             }
         }
-    } else if (ui->BrightFilter->isChecked()) {
+    }
+
+    else if (ui->BrightFilter->isChecked()) {
+            //  +50 because we have manipulated the image
             Dark_and_Light(currImg, strength+50);
     }
 
@@ -361,7 +389,7 @@ void MainWindow::on_BrightFilter_clicked(bool checked)
 {
     hide_others("BrightFilter");
     ui->filterSlider->setValue(50);
-    ui->sliderGroup->setTitle("Brightnees");
+    ui->sliderGroup->setTitle("Brightnees Filter");
     show_sliderWidgets(checked);
 }
 void MainWindow::on_oilFilter_clicked(bool checked)
@@ -371,6 +399,7 @@ void MainWindow::on_oilFilter_clicked(bool checked)
     ui->sliderGroup->setTitle("Oil Painting Filter");
     show_sliderWidgets(checked);
 }
+
 
 void MainWindow::on_purpleFilter_clicked()
 {
@@ -392,8 +421,7 @@ void MainWindow::on_resizeFilterBtn_clicked()
 
     clear_undo_stack();
     currImg.saveImage(tempPath);
-    QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    outImageDisplay();
     hide_others();
 }
 
@@ -405,7 +433,6 @@ void MainWindow::on_widthEditVal_textEdited()
         int width = ui->widthEditVal->text().toInt();
         float aspectRatio = static_cast<float>(currImg.height) / currImg.width;
         int newHeight = static_cast<int>(width * aspectRatio);
-
         ui->heightEditVal->setText(QString::number(newHeight));
     }
 }
@@ -421,6 +448,10 @@ void MainWindow::on_heightEditVal_textEdited()
         ui->widthEditVal->setText(QString::number(newWidth));
     }
 }
+
+
+
+
 //  Other Functions Declaration
 void clear_redo_stack()
 {
@@ -449,10 +480,14 @@ void MainWindow::hide_others(string curr)
         ui->BrightFilter->setChecked(false);
     }
     ui->sliderGroup->hide();
+    show_cropWidgets(false);
+    ui->cropFilter->setChecked(false);
     ui->heightEditVal->setText(QString::number(currImg.height));
     ui->widthEditVal->setText(QString::number(currImg.width));
     ui->resizeFilterBtn->hide();
     ui->resizeRatio->setChecked(true);
+    ui->justFrame->hide();
+    // ui->cropApply->hide();
     if (undoStack.empty()) {
         ui->undoBtn->setEnabled(false);
     } else {
@@ -474,7 +509,31 @@ void MainWindow::show_sliderWidgets(bool checked)
     }
     ui->progressLabel->hide();
 }
+void MainWindow::show_cropWidgets(bool checked){
+    if(checked){
+        ui->justFrame->show();
+        ui->cropGroup->show();
+        ui->justFrame->move(ui->outImg->pos().x()+ ui->outFrame->pos().x(), ui->outImg->pos().y()+ui->outFrame->pos().y());
+        ui->justFrame->resize(labelWidth/2,labelHeight/2);
+        ui->cropWidth->setText(QString::number(labelWidth/2));
+        ui->cropHeight->setText(QString::number(labelHeight/2));
+    }else{
+        ui->cropGroup->hide();
+        ui->justFrame->hide();
+    }
 
+}
+void Applay_Detect(Image &img)
+{
+    int img_h = img.height;
+    if (img_h > 1000) {
+        resize_image(img, 800);
+    }
+    Detect_Image(img);
+    if (img_h > 1000) {
+        resize_image(img, img_h);
+    }
+}
 //  Filter Functions Declaration
 
 void grayScale(Image &image)
@@ -812,15 +871,126 @@ Image Detect_Image(Image &img)
     img = newImage;
     return img;
 }
+void crop(Image &img, int x, int y, int width, int height) {
 
-void Applay_Detect(Image &img)
-{
-    int img_h = img.height;
-    if (img_h > 1000) {
-        resize_image(img, 800);
+    Image newImage(width, height);
+
+
+    for (int i = 0; i < width; ++i) {
+        for (int j = 0; j < height; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                newImage(i, j, k) = img(x + i, y + j, k);
+            }
+        }
     }
-    Detect_Image(img);
-    if (img_h > 1000) {
-        resize_image(img, img_h);
+
+    img = newImage;
+}
+
+//  Section for the crop custom label
+void MainWindow::on_cropFilter_clicked(bool checked)
+{
+    hide_others();
+    ui->cropFilter->setChecked(checked);
+    show_cropWidgets(checked);
+
+}
+void MainWindow::on_cropWidth_textEdited(const QString &arg1)
+{
+
+    if(arg1.toInt() > labelWidth){
+        ui->cropWidth->setText(QString::number(labelWidth));
+    }
+    int width = ui->cropWidth->text().toInt();
+    int height = ui->cropHeight->text().toInt();
+    ui->justFrame->resize(width, height);
+    ui->justFrame->move(ui->outImg->pos().x()+ ui->outFrame->pos().x(), ui->outImg->pos().y()+ui->outFrame->pos().y());
+}
+
+
+void MainWindow::on_cropHeight_textChanged(const QString &arg1)
+{
+
+    if(arg1.toInt() > labelHeight){
+        ui->cropHeight->setText(QString::number(labelHeight));
+    }
+    int width = ui->cropWidth->text().toInt();
+    int height = ui->cropHeight->text().toInt();
+    ui->justFrame->resize(width, height);
+    ui->justFrame->move(ui->outImg->pos().x()+ ui->outFrame->pos().x(), ui->outImg->pos().y()+ui->outFrame->pos().y());
+}
+CustomLabel::CustomLabel(QWidget* parent) : QLabel(parent), isHolding(false) {
+    // constructor implementation (optional)
+}
+void CustomLabel::mousePressEvent(QMouseEvent* event) {
+    if (event->button() == Qt::LeftButton) {
+        isHolding = true; // Flag to track hold state
+        emit mousePressed(event->pos());
+    }else{
+        isHolding= false;
     }
 }
+
+void CustomLabel::mouseMoveEvent(QMouseEvent* event) {
+    if (isHolding) {
+        emit mouseHolding(event->pos());
+    }
+}
+void CustomLabel::mouseReleaseEvent(QMouseEvent* event) {
+    if (event->button() == Qt::LeftButton) {
+        isHolding = false; // Reset flag on left button release
+    }
+}
+
+int clamp(int value, int min, int max) {
+    return std::min(std::max(value, min), max);
+}
+
+void MainWindow::handleMouseHolding(const QPoint& pos) {
+
+
+    // Helper function to clamp a value within a range
+    if(ui->cropFilter->isChecked()){
+    int frameWidth = ui->justFrame->width();
+    int frameHeight = ui->justFrame->height();
+    int initialOffsetX = ui->outFrame->pos().x() + ui->outImg->pos().x();
+    int initialOffsetY = ui->outFrame->pos().y() + ui->outImg->pos().y();
+
+    // Calculate boundaries with descriptive variable names
+    int rightBound = ui->outImg->width() - frameWidth + initialOffsetX;
+    int lowerBound = labelHeight - frameHeight +initialOffsetY;
+
+    // Move the frame based on position and boundaries
+    int clampedX = clamp(pos.x(), 0, rightBound - initialOffsetX);
+    int clampedY = clamp(pos.y(), 0, lowerBound - initialOffsetY);
+    ui->justFrame->move(clampedX + initialOffsetX, clampedY + initialOffsetY);
+    qDebug() << "pos: " << ui->justFrame->pos().x() - initialOffsetX<<"\nposY: " << ui->justFrame->pos().y() - initialOffsetY;
+    }
+}
+
+
+void MainWindow::on_cropApply_clicked()
+{
+    int startX =  ui->justFrame->pos().x() - ui->outFrame->pos().x() - ui->outImg->pos().x();
+    int startY =  ui->justFrame->pos().y() - ui->outFrame->pos().y() - ui->outImg->pos().y();
+    int width = ui->justFrame->width(), height = ui->justFrame->height();
+    float aspectRatio = static_cast<float>(currImg.height) / labelHeight;
+    startX *=aspectRatio;
+    startY *=aspectRatio;
+    width*=aspectRatio;
+    height*=aspectRatio;
+    redoStack.push(currImg);
+    crop(currImg, startX,startY,width,height);
+    clear_undo_stack();
+    currImg.saveImage(tempPath);
+    outImageDisplay();
+    hide_others();
+}
+
+
+
+
+
+
+
+
