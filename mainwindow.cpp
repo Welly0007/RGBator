@@ -7,6 +7,8 @@
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <stack>
+#include <cmath>
+#include <math.h>
 #include <limits> // for std::numeric_limits<int>::max()
 
 using namespace std;
@@ -29,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->widthLabel->hide();
     ui->resizeFilterBtn->hide();
     ui->resizeRatio->hide();
+    ui->rotateLeft->hide();
+    ui->rotateRight->hide();
 
     //  Disabling Some pushButtons Before loading Image
     ui->invertFilter->setEnabled(false);
@@ -37,11 +41,14 @@ MainWindow::MainWindow(QWidget *parent)
     ui->rotateLeft->setEnabled(false);
     ui->grayFilter->setEnabled(false);
     ui->B_W_Filter->setEnabled(false);
+    ui->SkewFilter->setEnabled(false);
     ui->rotateRight->setEnabled(false);
     ui->purpleFilter->setEnabled(false);
     ui->DetectFilter->setEnabled(false);
     ui->BrightFilter->setEnabled(false);
+    ui->oldtvFilter->setEnabled(false);
     ui->sunLightFilter->setEnabled(false);
+    ui->FrameFilter->setEnabled(false);
     ui->cropFilter->setEnabled(false);
     ui->undoBtn->setEnabled(false);
     ui->redoBtn->setEnabled(false);
@@ -64,13 +71,16 @@ stack<Image> undoStack, redoStack;
 //  Filters functions prototypes
 void rotate90(Image &image);
 void rotateI90(Image &image);
-void invert_color(Image &image);
+void invert_color(Image &img);
 void grayScale(Image &image);
 void Black_and_White(Image &img);
 void sunlight_filter(Image &image, int sunStrength);
 void blur_filter(Image &image, int blurStr);
-void Dark_and_Light(Image &img, int strength);
+void Dark_and_Light(Image &imgage, int strength);
 void purple_filter(Image &image);
+void Skew(Image &iamge);
+void Frame(Image &img, int r, int g, int b);
+void Old_Tv(Image &image);
 void oilPainting_filter(Image &image, int strength);
 void resize_image(Image &image, int newHeight);
 void resize_image(Image &image, int newHeight, int newWidth);
@@ -141,6 +151,8 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->heightLabel->show();
         ui->widthLabel->show();
         ui->resizeRatio->show();
+        ui->rotateLeft->show();
+        ui->rotateRight->show();
         //Enabling Filters buttons
         ui->invertFilter->setEnabled(true);
         ui->oilFilter->setEnabled(true);
@@ -151,8 +163,11 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->DetectFilter->setEnabled(true);
         ui->BrightFilter->setEnabled(true);
         ui->rotateRight->setEnabled(true);
+        ui->FrameFilter->setEnabled(true);
         ui->purpleFilter->setEnabled(true);
+        ui->SkewFilter->setEnabled(true);
         ui->sunLightFilter->setEnabled(true);
+        ui->oldtvFilter->setEnabled(true);
         ui->cropFilter->setEnabled(true);
         ui->undoBtn->setEnabled(true);
         ui->redoBtn->setEnabled(true);
@@ -172,9 +187,9 @@ void MainWindow::on_loadImgBtn_clicked()
 void MainWindow::on_saveImgBtn_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-        "Save Image",
-        QDir::homePath(),
-        "*.png ;; *.jpg ;; *.tga ;; *.bmp)");
+                                                    "Save Image",
+                                                    QDir::homePath(),
+                                                    "*.png ;; *.jpg ;; *.tga ;; *.bmp)");
     if (!fileName.isEmpty()) {
         // Copy the file to the chosen location
         QFile::copy(QtempPath, fileName);
@@ -288,6 +303,46 @@ void MainWindow::on_DetectFilter_clicked()
     hide_others();
 }
 
+void MainWindow::on_SkewFilter_clicked()
+{
+    redoStack.push(currImg);
+    Skew(currImg);
+    clear_undo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+}
+
+
+void MainWindow::on_oldtvFilter_clicked()
+{
+    redoStack.push(currImg);
+    Old_Tv(currImg);
+    clear_undo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+}
+
+
+void MainWindow::on_FrameFilter_clicked()
+{
+    QColor ColorValue = QColorDialog::getColor(Qt::white, this, tr("Selcet Color"));
+    int red = ColorValue.red();
+    int green = ColorValue.green();
+    int blue = ColorValue.blue();
+    redoStack.push(currImg);
+    Frame(currImg, red, green, blue);
+    clear_undo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+
+}
+
 void MainWindow::on_filterSlider_valueChanged(int value)
 {   //  special vals for brightness filter
     if(ui->BrightFilter->isChecked()){
@@ -297,12 +352,13 @@ void MainWindow::on_filterSlider_valueChanged(int value)
         }else{
             ui->sliderValue->setText(QString::number(brightVal));
         }
-    //  normal Condition
+        //  normal Condition
     }else{
         ui->sliderValue->setText(QString::number(value));
     }
 
 }
+
 
 void MainWindow::on_filterApply_clicked()
 {
@@ -319,7 +375,7 @@ void MainWindow::on_filterApply_clicked()
     // choosing the filter according to the button clicked;
 
     if (ui->sunLightFilter->isChecked()) {
-        sunlight_filter(currImg, strength);    
+        sunlight_filter(currImg, strength);
     }
 
     else if (ui->blurFilter->isChecked()) {
@@ -354,8 +410,8 @@ void MainWindow::on_filterApply_clicked()
     }
 
     else if (ui->BrightFilter->isChecked()) {
-            //  +50 because we have manipulated the image
-            Dark_and_Light(currImg, strength+50);
+        //  +50 because we have manipulated the image
+        Dark_and_Light(currImg, strength+50);
     }
 
     //  Displaying the Image;
@@ -526,12 +582,13 @@ void MainWindow::show_cropWidgets(bool checked){
 void Applay_Detect(Image &img)
 {
     int img_h = img.height;
-    if (img_h > 1000) {
-        resize_image(img, 800);
+    int img_w = img.width;
+    if (img_h >= 500 && img_w >= 500) {
+        resize_image(img, 200,200);
     }
     Detect_Image(img);
-    if (img_h > 1000) {
-        resize_image(img, img_h);
+    if (img_h >= 500 && img_w >= 500) {
+        resize_image(img, img_h, img_w);
     }
 }
 //  Filter Functions Declaration
@@ -578,15 +635,26 @@ void rotateI90(Image &image)
     }
     image = newImage;
 }
-void invert_color(Image &image)
+void invert_color(Image &img)
 {
-    for (int i = 0; i < image.width; i++) {
-        for (int j = 0; j < image.height; j++) {
-            for (int k = 0; k < 3; k++) {
-                image(i, j, k) = 255 - image(i, j, k);
-            }
+
+    for(int i = 1; i < img.width; i++) {
+        for(int j = 1; j < img.height; j++) {
+
+            int red = img(i, j, 0);
+            int green = img(i, j, 1);
+            int blue = img(i, j, 2);
+
+            red = 255;
+            green = 255 - green;
+            blue = 255 - blue;
+            // Setting new RGB values
+            img(i, j, 0) = red;
+            img(i, j, 1) = green;
+            img(i, j, 2) = blue;
         }
     }
+
 }
 
 void purple_filter(Image &image)
@@ -595,7 +663,7 @@ void purple_filter(Image &image)
     for (int i = 0; i < image.width; i++) {
         for (int j = 0; j < image.height; j++) {
             R = image(i, j, 0) + 255 * 0.627, G = image(i, j, 1) + 255 * 0.125,
-            B = image(i, j, 2) + 255 * 0.941;
+                B = image(i, j, 2) + 255 * 0.941;
             if (R > 255) {
                 R = 255;
             }
@@ -820,6 +888,8 @@ void Black_and_White(Image &img)
     }
 }
 
+
+
 Image Detect_Image(Image &img)
 {
     Image newImage(img.width, img.height);
@@ -951,20 +1021,20 @@ void MainWindow::handleMouseHolding(const QPoint& pos) {
 
     // Helper function to clamp a value within a range
     if(ui->cropFilter->isChecked()){
-    int frameWidth = ui->justFrame->width();
-    int frameHeight = ui->justFrame->height();
-    int initialOffsetX = ui->outFrame->pos().x() + ui->outImg->pos().x();
-    int initialOffsetY = ui->outFrame->pos().y() + ui->outImg->pos().y();
+        int frameWidth = ui->justFrame->width();
+        int frameHeight = ui->justFrame->height();
+        int initialOffsetX = ui->outFrame->pos().x() + ui->outImg->pos().x();
+        int initialOffsetY = ui->outFrame->pos().y() + ui->outImg->pos().y();
 
-    // Calculate boundaries with descriptive variable names
-    int rightBound = ui->outImg->width() - frameWidth + initialOffsetX;
-    int lowerBound = labelHeight - frameHeight +initialOffsetY;
+        // Calculate boundaries with descriptive variable names
+        int rightBound = ui->outImg->width() - frameWidth + initialOffsetX;
+        int lowerBound = labelHeight - frameHeight +initialOffsetY;
 
-    // Move the frame based on position and boundaries
-    int clampedX = clamp(pos.x(), 0, rightBound - initialOffsetX);
-    int clampedY = clamp(pos.y(), 0, lowerBound - initialOffsetY);
-    ui->justFrame->move(clampedX + initialOffsetX, clampedY + initialOffsetY);
-    qDebug() << "pos: " << ui->justFrame->pos().x() - initialOffsetX<<"\nposY: " << ui->justFrame->pos().y() - initialOffsetY;
+        // Move the frame based on position and boundaries
+        int clampedX = clamp(pos.x(), 0, rightBound - initialOffsetX);
+        int clampedY = clamp(pos.y(), 0, lowerBound - initialOffsetY);
+        ui->justFrame->move(clampedX + initialOffsetX, clampedY + initialOffsetY);
+        qDebug() << "pos: " << ui->justFrame->pos().x() - initialOffsetX<<"\nposY: " << ui->justFrame->pos().y() - initialOffsetY;
     }
 }
 
@@ -989,8 +1059,75 @@ void MainWindow::on_cropApply_clicked()
 
 
 
+void Skew(Image& image){
+    // int angle;
+    // cout << "Enter the skew angle in degrees: \n";
+    // while (true){
+    //     cin >> angle;
+    //     cin.ignore();
+    //     if (cin.fail() || angle >= 90 || angle < 0) {
+    //         cin.clear();
+    //         cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    //         cout << "Invalid input. Please enter an angle less than 90 degrees.\n";
+    //     }
+    //     else {
+    //         break;
+    //     }
+    // }
+    double skew = tan(45 * M_PI / 180);
+    Image new_image(image.width + static_cast<int>(image.height * fabs(skew)), image.height);
+    for (int i = 0; i < image.width; ++i) {
+        for (int j = 0; j < image.height; ++j) {
+            int newi = i + static_cast<int>((image.height-1-j) * skew);
+            for (int k = 0; k < 3; ++k) {
+                new_image(newi, j, k) = image(i, j, k);
+            }
+        }
+    }
+
+}
 
 
+void Old_Tv(Image &image){
+    srand(static_cast<unsigned int>(time(nullptr)));
+    for (int i = 0; i < image.height; ++i) {
+        for (int j = 0; j < image.width; ++j) {
+            int random = rand() % 256 - 128;
+            for (int k = 0; k < 3; ++k) {
+                int newValue = image(j, i, k) + random;
+                newValue = max(0, min(255, newValue));
+                image(j, i, k) = static_cast<unsigned char>(newValue);
+            }
+        }
+    }
+
+}
+
+
+void Frame(Image &img, int r, int g, int b) {
+    Image newImage(img.width, img.height);
+    int border = img.width / 50; // Width of the frame
+    int innerBorder = img.width / 100; // Width of the inner frame
+    for (int i = 0; i < img.width; i++) {
+        for (int j = 0; j < img.height; j++) {
+            if (i < border || i >= img.width - border || j < border || j >= img.height - border) {
+                img(i, j, 0) = r;
+                img(i, j, 1) = g;
+                img(i, j, 2) = b;
+            }
+        }
+    }
+
+for (int i = 0; i < img.width; ++i) {
+    for (int j = 0; j < img.height; ++j) {
+        for (int k = 0; k <3 ; ++k) {
+            newImage(i,j,k)=img(i,j,k);
+        }
+    }
+}
+img = newImage;
+
+}
 
 
 

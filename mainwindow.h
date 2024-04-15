@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QColorDialog>>
+#include <QColor>
+#include <QPalette>
+#include <QDebug>>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -92,6 +96,14 @@ private slots:
     void on_cropHeight_textChanged(const QString &arg1);
 
     void on_cropApply_clicked();
+
+    void on_SkewFilter_clicked();
+
+    void on_oldtvFilter_clicked();
+
+    void on_FrameFilter_clicked();
+
+    void on_colors_clicked();
 
 private:
     Ui::MainWindow *ui;
