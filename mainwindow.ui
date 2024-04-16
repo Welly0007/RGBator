@@ -99,6 +99,9 @@
 }</string>
     </property>
     <widget class="QPushButton" name="invertFilter">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -132,7 +135,7 @@ QPushButton:hover {
 }</string>
      </property>
      <property name="text">
-      <string>invert color</string>
+      <string>Invert Colors</string>
      </property>
     </widget>
     <widget class="QPushButton" name="sunLightFilter">
@@ -600,7 +603,7 @@ QPushButton:hover {
 }</string>
      </property>
      <property name="text">
-      <string>Blck_White</string>
+      <string>BlackNWhite</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -640,7 +643,7 @@ QPushButton:hover {
 }</string>
      </property>
      <property name="text">
-      <string>Detect Edag</string>
+      <string>Detect Edges</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -974,6 +977,126 @@ QPushButton:hover {
      </property>
      <property name="text">
       <string>Frame</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="NeonFilter">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>120</y>
+       <width>100</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	
+	color: rgb(161, 161, 161);
+	border-bottom:  2px solid rgb(161, 161, 161);
+	border-top: none;
+	border-right: none;
+	border-left: none;
+	font-weight: 800;
+	border-radius: 0px;
+	transition: 0.3s;
+}
+
+QPushButton:hover {
+	
+	background-color: rgb(0, 0, 127);
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	border-bottom:  2px solid #fff;
+	color: rgb(255, 255, 255);
+	
+
+}</string>
+     </property>
+     <property name="text">
+      <string>Neon Colors</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="HorizontalFlip">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>120</y>
+       <width>100</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	
+	color: rgb(161, 161, 161);
+	border-bottom:  2px solid rgb(161, 161, 161);
+	border-top: none;
+	border-right: none;
+	border-left: none;
+	font-weight: 800;
+	border-radius: 0px;
+	transition: 0.3s;
+}
+
+QPushButton:hover {
+	
+	background-color: rgb(0, 0, 127);
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	border-bottom:  2px solid #fff;
+	color: rgb(255, 255, 255);
+	
+
+}</string>
+     </property>
+     <property name="text">
+      <string>H Flip</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="VerticalFlip">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>120</y>
+       <width>100</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	
+	color: rgb(161, 161, 161);
+	border-bottom:  2px solid rgb(161, 161, 161);
+	border-top: none;
+	border-right: none;
+	border-left: none;
+	font-weight: 800;
+	border-radius: 0px;
+	transition: 0.3s;
+}
+
+QPushButton:hover {
+	
+	background-color: rgb(0, 0, 127);
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	border-bottom:  2px solid #fff;
+	color: rgb(255, 255, 255);
+	
+
+}</string>
+     </property>
+     <property name="text">
+      <string>V Flip</string>
      </property>
      <property name="checkable">
       <bool>true</bool>

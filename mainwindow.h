@@ -103,7 +103,13 @@ private slots:
 
     void on_FrameFilter_clicked();
 
-    void on_colors_clicked();
+    //void on_colors_clicked();
+
+    void on_NeonFilter_clicked();
+
+    void on_HorizontalFlip_clicked();
+
+    void on_VerticalFlip_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -49,6 +49,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->oldtvFilter->setEnabled(false);
     ui->sunLightFilter->setEnabled(false);
     ui->FrameFilter->setEnabled(false);
+    ui->NeonFilter->setEnabled(false);
+    ui->HorizontalFlip->setEnabled(false);
+    ui->VerticalFlip->setEnabled(false);
     ui->cropFilter->setEnabled(false);
     ui->undoBtn->setEnabled(false);
     ui->redoBtn->setEnabled(false);
@@ -78,7 +81,7 @@ void sunlight_filter(Image &image, int sunStrength);
 void blur_filter(Image &image, int blurStr);
 void Dark_and_Light(Image &imgage, int strength);
 void purple_filter(Image &image);
-void Skew(Image &iamge);
+void Skew(Image &image);
 void Frame(Image &img, int r, int g, int b);
 void Old_Tv(Image &image);
 void oilPainting_filter(Image &image, int strength);
@@ -86,6 +89,8 @@ void resize_image(Image &image, int newHeight);
 void resize_image(Image &image, int newHeight, int newWidth);
 void crop(Image &img, int x, int y, int width, int height);
 void edgeDetection(Image &image);
+void flip_horizontally(Image &image1);
+void flip_vertically(Image &image1);
 
 //  other functions prototpyes
 void clear_redo_stack();
@@ -170,6 +175,9 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->sunLightFilter->setEnabled(true);
         ui->oldtvFilter->setEnabled(true);
         ui->cropFilter->setEnabled(true);
+        ui->NeonFilter->setEnabled(true);
+        ui->HorizontalFlip->setEnabled(true);
+        ui->VerticalFlip->setEnabled(true);
         ui->undoBtn->setEnabled(true);
         ui->redoBtn->setEnabled(true);
         ui->saveImgBtn->setEnabled(true);
@@ -239,6 +247,41 @@ void MainWindow::on_undoBtn_clicked()
 }
 
 //  Filters Events
+
+void MainWindow::on_NeonFilter_clicked()
+{
+    redoStack.push(currImg);
+    edgeDetection(currImg);
+    clear_undo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+}
+
+
+void MainWindow::on_HorizontalFlip_clicked()
+{
+    redoStack.push(currImg);
+    flip_horizontally(currImg);
+    clear_undo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+}
+
+
+void MainWindow::on_VerticalFlip_clicked()
+{
+    redoStack.push(currImg);
+    flip_vertically(currImg);
+    clear_undo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+}
 
 void MainWindow::on_rotateRight_clicked()
 {
@@ -892,60 +935,6 @@ void Black_and_White(Image &img)
 }
 
 
-
-// Image Detect_Image(Image &img)
-// {
-//     Image newImage(img.width, img.height);
-
-//     for (int i = 0; i < img.width; ++i) {
-//         for (int j = 0; j < img.height; ++j) {
-//             unsigned int avg = 0;
-//             for (int k = 0; k < img.channels; ++k) {
-//                 avg += img(i, j, k);
-//             }
-//             avg /= 3;
-//             for (int l = 0; l < 3; ++l) {
-//                 img(i, j, l) = avg;
-//             }
-//         }
-//     }
-
-//     for (int i = 0; i < img.width; ++i) {
-//         for (int j = 0; j < img.height; ++j) {
-//             unsigned int avg = 0;
-//             for (int k = 0; k < img.channels; ++k) {
-//                 avg += img(i, j, k);
-//             }
-//             avg = avg / 3;
-//             for (int k = 0; k < 3; ++k) {
-//                 if (avg > 127) {
-//                     img(i, j, k) = 255;
-//                 } else {
-//                     img(i, j, k) = 0;
-//                 }
-//             }
-//         }
-//     }
-
-//     for (int i = 0; i < img.width; i++) {
-//         for (int j = 0; j < img.height; j++) {
-//             for (int k = 0; k < img.channels; k++) {
-//                 if (img(i, j, k) == 0 && img(i++, j, k) == 0 && img(i--, j, k) == 0
-//                     && img(i, j + 1, k) == 0 && img(i, j - 1, k) == 0) {
-//                     newImage(i, j, k) = 255;
-//                 } else {
-//                     newImage(i, j, k) = img(i, j, k);
-//                 }
-//             }
-//         }
-//     }
-
-//     // Assign the pointer to the dynamically allocated object
-//     img = newImage;
-//     return img;
-// }
-
-
 void edgeDetection(Image &image) {
     Image imageout = image;
     // Sobel kernels for horizontal and vertical gradients
@@ -1182,6 +1171,38 @@ for (int i = 0; i < img.width; ++i) {
 img = newImage;
 
 }
+
+
+void flip_horizontally(Image &image1){
+    for (int i = 0; i < image1.width/2; i++)
+    {
+        for (int j = 0; j < image1.height; j++)
+        {
+            for (int k = 0; k < image1.channels; k++)
+            {
+                swap(image1(i,j,k), image1(image1.width-i-1,j,k));
+            }
+
+        }
+
+    }
+}
+
+void flip_vertically(Image &image1){
+    for (int i = 0; i < image1.width; i++)
+    {
+        for (int j = 0; j < image1.height/2; j++)
+        {
+            for (int k = 0; k < image1.channels; k++)
+            {
+                swap(image1(i,j,k), image1(i,image1.height-j-1,k));
+            }
+
+        }
+
+    }
+}
+
 
 
 
