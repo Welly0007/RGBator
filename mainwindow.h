@@ -152,6 +152,8 @@ private slots:
 
     void on_infraredFilter_clicked();
 
+    void on_MergeFilter_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

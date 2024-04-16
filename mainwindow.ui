@@ -80,7 +80,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>639</y>
+      <y>640</y>
       <width>1621</width>
       <height>201</height>
      </rect>
@@ -815,6 +815,44 @@ QPushButton:hover{
       <string>Infrared</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="MergeFilter">
+     <property name="geometry">
+      <rect>
+       <x>635</x>
+       <y>124</y>
+       <width>101</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Merge</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Fiter">
+     <property name="geometry">
+      <rect>
+       <x>750</x>
+       <y>5</y>
+       <width>101</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Filter</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
     <zorder>sliderGroup</zorder>
     <zorder>invertFilter</zorder>
     <zorder>sunLightFilter</zorder>
@@ -834,6 +872,8 @@ QPushButton:hover{
     <zorder>VerticalFlip</zorder>
     <zorder>oldtvFilter</zorder>
     <zorder>infraredFilter</zorder>
+    <zorder>MergeFilter</zorder>
+    <zorder>Fiter</zorder>
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
