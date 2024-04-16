@@ -418,7 +418,6 @@ void MainWindow::on_resizeFilterBtn_clicked()
     int newHeight = ui->heightEditVal->text().toInt();
     int newWidth = ui->widthEditVal->text().toInt();
     resize_image(currImg, newHeight, newWidth);
-
     clear_undo_stack();
     currImg.saveImage(tempPath);
     outImageDisplay();
@@ -974,11 +973,12 @@ void MainWindow::on_cropApply_clicked()
     int startX =  ui->justFrame->pos().x() - ui->outFrame->pos().x() - ui->outImg->pos().x();
     int startY =  ui->justFrame->pos().y() - ui->outFrame->pos().y() - ui->outImg->pos().y();
     int width = ui->justFrame->width(), height = ui->justFrame->height();
-    float aspectRatio = static_cast<float>(currImg.height) / labelHeight;
-    startX *=aspectRatio;
-    startY *=aspectRatio;
-    width*=aspectRatio;
-    height*=aspectRatio;
+    float aspectRatioH = static_cast<float>(currImg.height) / labelHeight;
+    float aspectRatioW = static_cast<float>(currImg.width) / labelWidth;
+    startX *=aspectRatioW;
+    startY *=aspectRatioH;
+    width*=aspectRatioW;
+    height*=aspectRatioH;
     redoStack.push(currImg);
     crop(currImg, startX,startY,width,height);
     clear_undo_stack();
