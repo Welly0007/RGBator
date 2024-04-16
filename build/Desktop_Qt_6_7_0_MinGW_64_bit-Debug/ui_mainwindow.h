@@ -23,7 +23,7 @@
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
-#include "mainwindow.h"
+
 
 QT_BEGIN_NAMESPACE
 
@@ -62,6 +62,8 @@ public:
     QPushButton *VerticalFlip;
     QPushButton *oldtvFilter;
     QPushButton *infraredFilter;
+    QPushButton *MergeFilter;
+    QPushButton *Fiter;
     QWidget *widget_2;
     FancyButton *loadImgBtn;
     FancyButton *clearImg;
@@ -116,7 +118,7 @@ public:
         centralwidget->setAutoFillBackground(true);
         widget = new QWidget(centralwidget);
         widget->setObjectName("widget");
-        widget->setGeometry(QRect(0, 639, 1621, 201));
+        widget->setGeometry(QRect(0, 640, 1621, 201));
         widget->setStyleSheet(QString::fromUtf8("QWidget {\n"
 "	background-color: #252525;\n"
 "	color: #000;\n"
@@ -421,6 +423,16 @@ public:
         infraredFilter->setEnabled(true);
         infraredFilter->setGeometry(QRect(509, 123, 101, 51));
         infraredFilter->setStyleSheet(QString::fromUtf8(""));
+        MergeFilter = new QPushButton(widget);
+        MergeFilter->setObjectName("MergeFilter");
+        MergeFilter->setGeometry(QRect(635, 124, 101, 50));
+        MergeFilter->setStyleSheet(QString::fromUtf8(""));
+        MergeFilter->setCheckable(true);
+        Fiter = new QPushButton(widget);
+        Fiter->setObjectName("Fiter");
+        Fiter->setGeometry(QRect(750, 5, 101, 50));
+        Fiter->setStyleSheet(QString::fromUtf8(""));
+        Fiter->setCheckable(true);
         sliderGroup->raise();
         invertFilter->raise();
         sunLightFilter->raise();
@@ -440,6 +452,8 @@ public:
         VerticalFlip->raise();
         oldtvFilter->raise();
         infraredFilter->raise();
+        MergeFilter->raise();
+        Fiter->raise();
         widget_2 = new QWidget(centralwidget);
         widget_2->setObjectName("widget_2");
         widget_2->setGeometry(QRect(-3, 0, 1621, 90));
@@ -689,6 +703,8 @@ public:
         VerticalFlip->setText(QCoreApplication::translate("MainWindow", "V Flip", nullptr));
         oldtvFilter->setText(QCoreApplication::translate("MainWindow", "Old TV", nullptr));
         infraredFilter->setText(QCoreApplication::translate("MainWindow", "Infrared", nullptr));
+        MergeFilter->setText(QCoreApplication::translate("MainWindow", "MergeFilter", nullptr));
+        Fiter->setText(QCoreApplication::translate("MainWindow", "Filter", nullptr));
         loadImgBtn->setText(QCoreApplication::translate("MainWindow", "Load Image", nullptr));
         clearImg->setText(QCoreApplication::translate("MainWindow", "Reset Image", nullptr));
         saveImgBtn->setText(QCoreApplication::translate("MainWindow", "Save  \360\237\222\276", nullptr));

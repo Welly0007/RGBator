@@ -59,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->VerticalFlip->setEnabled(false);
     ui->cropFilter->setEnabled(false);
     ui->infraredFilter->setEnabled(false);
+    ui->MergeFilter->setEnabled(false);
     ui->redoBtn->setEnabled(false);
     ui->undoBtn->setEnabled(false);
     ui->saveImgBtn->setEnabled(false);
@@ -98,6 +99,7 @@ void crop(Image &img, int x, int y, int width, int height);
 void edgeDetection(Image &image);
 void flip_horizontally(Image &image1);
 void flip_vertically(Image &image1);
+void Merge(Image &img, Image &img2);
 
 //  other functions prototpyes
 void clear_undo_stack();
@@ -190,6 +192,7 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->undoBtn->setEnabled(true);
         ui->saveImgBtn->setEnabled(true);
         ui->clearImg->setEnabled(true);
+        ui->MergeFilter->setEnabled(true);
         //  clear_undo_stack();
         clear_undo_stack();
         clear_redo_stack();
@@ -565,6 +568,42 @@ void MainWindow::on_heightEditVal_textEdited()
         int newWidth = static_cast<int>(height * aspectRatio);
         ui->widthEditVal->setText(QString::number(newWidth));
     }
+}
+
+// MERGE
+void MainWindow::on_MergeFilter_clicked()
+{
+    //  Open File Dialoge to load Image, With specified Extensions
+    QString filter = "(*.jpg *.png *.bmp *.tga) ;; (*.jpg) ;; (*.png) ;; (*.bmp) ;; (*.tga)";
+    QString filePath = QFileDialog::getOpenFileName(this, "load", QDir::homePath(), filter);
+
+    //  Check if File is Checked or not
+    if (filePath != "") {
+        //  Initializing the OrImage and CurrentImage for Image_class Libirary
+        string orImgPath = filePath.toStdString();
+        orImg.loadNewImage(orImgPath);
+        //  getting the absolute paths and saving the original in the app directory if needed
+        int lastSlash = orImgPath.find_last_of("/\\");
+        int dot = orImgPath.find_last_of('.');
+        tempPath = orImgPath.substr(lastSlash + 1, dot - (lastSlash + 1)) + ".jpg";
+        QtempPath = QString::fromStdString(tempPath);
+
+        orImg.saveImage("original" + tempPath);
+        orImg.loadNewImage("original" + tempPath);
+
+        ui->widthEditVal->setText(QString::number(orImg.width));
+        ui->heightEditVal->setText(QString::number(orImg.height));
+
+
+        undoStack.push(currImg);
+        Merge(currImg,orImg);
+        clear_redo_stack();
+        currImg.saveImage(tempPath);
+        QPixmap img = QPixmap(QtempPath);
+        ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+        hide_others();
+    }
+
 }
 
 
@@ -1231,6 +1270,31 @@ void flip_vertically(Image &image1){
 
     }
 }
+
+void Merge(Image &img, Image &img2) {
+    Image newImage;
+    int max_w = max(img.width, img2.width);
+    int max_h = max(img.height, img2.height);
+    Image Larger_img(max_w,max_h);
+
+    newImage = Image(Larger_img.width, Larger_img.height);
+    for(int i = 0; i < max_w; ++i) {
+        for(int j = 0; j < max_h; ++j) {
+            int avg_w = i * img.width / img2.width;
+            int avg_h = j * img.height / img2.height;
+
+            unsigned red_pixel = (img(avg_w,avg_h,0) + img2(i,j,0)) / 2;
+            unsigned green_pixel = (img(avg_w,avg_h,1) + img2(i,j,1)) / 2;
+            unsigned blue_pixel = (img(avg_w,avg_h,2) + img2(i,j,2)) / 2;
+
+            newImage.setPixel(i,j,0, red_pixel);
+            newImage.setPixel(i,j,1, green_pixel);
+            newImage.setPixel(i,j,2, blue_pixel);
+        }
+    }
+    img = newImage;
+}
+
 
 
 
