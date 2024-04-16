@@ -25,14 +25,8 @@
   <property name="styleSheet">
    <string notr="true">
 #MainWindow QPushButton {
-	border:  1px solid gray;
 	padding: 1px 5px;
 	border-radius: 5px;
-}
-
- QPushButton:hover {
-	background-color: rgb(79, 88, 255);
-	border: 1px solid #fff;
 }
 
 
@@ -93,9 +87,43 @@
     </property>
     <property name="styleSheet">
      <string notr="true">QWidget {
-	background-color: rgb(27, 27, 27);
+	background-color: #252525;
 	color: #000;
 	border: 1px solid #000;
+	font: 9pt &quot;JetBrains Mono&quot;;
+}
+QPushButton{
+	
+	color: rgba(161, 161, 161,0.1);
+	border-bottom:  2px solid rgba(161, 161, 161,0.1);
+	border-top: none;
+	border-right: none;
+	border-left: none;
+	font-weight: 800;
+	border-radius: 0px;
+}
+
+QPushButton:Enabled:hover {
+	
+	background-color: #59FFA0;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	color:  #222222;
+	
+
+}
+QPushButton:checked{
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	color: #fff;
+	border-bottom:  2px solid #fff;
+	border-top: none;
+	border-right: none;
+	border-left: none;
+}
+QPushButton:Enabled{
+	color: rgba(255, 255, 255,1);
+	border-bottom:  2px solid rgba(161, 161, 161,1);
 }</string>
     </property>
     <widget class="QPushButton" name="invertFilter">
@@ -111,28 +139,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-	
-
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Invert Colors</string>
@@ -148,38 +155,7 @@ QPushButton:hover {
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-	
-
-}
-QPushButton:checked{
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	color: #fff;
-	border-bottom:  2px solid #fff;
-	border-top: none;
-	border-right: none;
-	border-left: none;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Sunlight</string>
@@ -198,27 +174,7 @@ QPushButton:checked{
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Purple Color</string>
@@ -234,38 +190,7 @@ QPushButton:hover {
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-	
-
-}
-QPushButton:checked{
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	color: #fff;
-	border-bottom:  2px solid #fff;
-	border-top: none;
-	border-right: none;
-	border-left: none;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Oil Painting</string>
@@ -284,38 +209,7 @@ QPushButton:checked{
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-	
-
-}
-QPushButton:checked{
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	color: #fff;
-	border-bottom:  2px solid #fff;
-	border-top: none;
-	border-right: none;
-	border-left: none;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Blur</string>
@@ -334,33 +228,13 @@ QPushButton:checked{
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Gray Scale</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QGroupBox" name="sliderGroup">
@@ -374,7 +248,7 @@ QPushButton:hover {
      </property>
      <property name="styleSheet">
       <string notr="true">QGroupBox{
-	color: rgb(0, 0, 255);
+	color: #59FFA0;
 	border-radius: 10px;
 	border-color: #fff;
 }</string>
@@ -401,14 +275,14 @@ QPushButton:hover {
 
 QSlider::groove:horizontal{
 	border: 1px solid #000;
-	height: 4px;
+	height: 5px;
 }
 QSlider::handle:horizontal{
-	background: rgb(161, 161, 161);
+	background: #fff;
 	width: 12px;
+	height: 12px;
 	margin: -5px -1px;
 	border-radius: 6px;
-	border: 1px solid rgb(0, 0, 127);
 }
 
 QSlider::handle:horizontal:hover{
@@ -417,11 +291,11 @@ QSlider::handle:horizontal:hover{
 }
 
 QSlider::add-page:horizontal{
-	background: qlineargradient(x1: 0, y1:0, x2: 0, y2: 1, stop: 0 #b1b1b1, stop: 1 #c4c4c4);
+	background: qlineargradient(x1: 0, y1:0, x2: 1, y2:0, stop: 0 #fff, stop: 1 #000);
 }
 
 QSlider::sub-page:horizontal{
-	background: rgb(0, 0, 127);
+	background: #59FFA0;
 }
 
 </string>
@@ -467,6 +341,7 @@ QSlider::sub-page:horizontal{
        <font>
         <family>JetBrains Mono</family>
         <pointsize>-1</pointsize>
+        <italic>false</italic>
         <fontweight>Medium</fontweight>
        </font>
       </property>
@@ -495,6 +370,8 @@ QSlider::sub-page:horizontal{
        <font>
         <family>JetBrains Mono</family>
         <pointsize>-1</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="layoutDirection">
@@ -528,15 +405,14 @@ QSlider::sub-page:horizontal{
 QPushButton{
 	color: #fff;
 	border: 1px solid #000;
-	font-weight: 800;
-	border-radius: 23px;
+	border-radius: 15px;
 	border-color: #fff;
 }
 
 QPushButton:hover{
-	background-color:rgb(0, 0, 127);
-	border-color: rgb(0, 0, 127) ;
-	color: #fff;
+	background-color: #59FFA0;
+	border-color: rgb(0, 0, 0) ;
+	color: #353535;
 }</string>
       </property>
       <property name="text">
@@ -556,6 +432,8 @@ QPushButton:hover{
        <font>
         <family>JetBrains Mono</family>
         <pointsize>9</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="styleSheet">
@@ -580,27 +458,7 @@ QPushButton:hover{
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>BlackNWhite</string>
@@ -618,35 +476,17 @@ QPushButton:hover {
        <height>50</height>
       </rect>
      </property>
+     <property name="mouseTracking">
+      <bool>true</bool>
+     </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-	
-
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Detect Edges</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="BrightFilter">
@@ -659,38 +499,7 @@ QPushButton:hover {
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-	
-
-}
-QPushButton:checked{
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	color: #fff;
-	border-bottom:  2px solid #fff;
-	border-top: none;
-	border-right: none;
-	border-left: none;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Brightness</string>
@@ -709,38 +518,7 @@ QPushButton:checked{
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-	
-
-}
-QPushButton:checked{
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	color: #fff;
-	border-bottom:  2px solid #fff;
-	border-top: none;
-	border-right: none;
-	border-left: none;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Crop</string>
@@ -760,7 +538,7 @@ QPushButton:checked{
      </property>
      <property name="styleSheet">
       <string notr="true">QGroupBox{
-	color: rgb(0, 0, 255);
+	color: 	#59FFA0;
 	border-radius: 10px;
 	border-color: #fff;
 }</string>
@@ -781,15 +559,15 @@ QPushButton:checked{
        <string notr="true">
 QPushButton{
 	color: #fff;
-	border: 1px solid #fff;
-	font-weight: 800;
-	border-radius: 23px;
+	border: 1px solid #000;
+	border-radius: 15px;
+	border-color: #fff;
 }
 
 QPushButton:hover{
-	background-color:rgb(0, 0, 127);
-	border-color: rgb(0, 0, 127) ;
-	color: #fff;
+	background-color: #59FFA0;
+	border-color: rgb(0, 0, 0) ;
+	color: #353535;
 }</string>
       </property>
       <property name="text">
@@ -914,27 +692,7 @@ QPushButton:hover{
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Skew</string>
@@ -946,34 +704,14 @@ QPushButton:hover {
     <widget class="QPushButton" name="FrameFilter">
      <property name="geometry">
       <rect>
-       <x>633</x>
+       <x>634</x>
        <y>67</y>
        <width>101</width>
        <height>50</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Frame</string>
@@ -985,35 +723,14 @@ QPushButton:hover {
     <widget class="QPushButton" name="NeonFilter">
      <property name="geometry">
       <rect>
-       <x>150</x>
-       <y>120</y>
+       <x>151</x>
+       <y>124</y>
        <width>100</width>
        <height>50</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-	
-
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Neon Colors</string>
@@ -1025,35 +742,14 @@ QPushButton:hover {
     <widget class="QPushButton" name="HorizontalFlip">
      <property name="geometry">
       <rect>
-       <x>260</x>
-       <y>120</y>
+       <x>269</x>
+       <y>124</y>
        <width>100</width>
        <height>50</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-	
-
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>H Flip</string>
@@ -1065,35 +761,14 @@ QPushButton:hover {
     <widget class="QPushButton" name="VerticalFlip">
      <property name="geometry">
       <rect>
-       <x>380</x>
-       <y>120</y>
+       <x>389</x>
+       <y>124</y>
        <width>100</width>
        <height>50</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-	
-
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>V Flip</string>
@@ -1102,6 +777,63 @@ QPushButton:hover {
       <bool>true</bool>
      </property>
     </widget>
+    <widget class="QPushButton" name="oldtvFilter">
+     <property name="geometry">
+      <rect>
+       <x>511</x>
+       <y>67</y>
+       <width>101</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Old TV</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="infraredFilter">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>509</x>
+       <y>123</y>
+       <width>101</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Infrared</string>
+     </property>
+    </widget>
+    <zorder>sliderGroup</zorder>
+    <zorder>invertFilter</zorder>
+    <zorder>sunLightFilter</zorder>
+    <zorder>purpleFilter</zorder>
+    <zorder>oilFilter</zorder>
+    <zorder>blurFilter</zorder>
+    <zorder>grayFilter</zorder>
+    <zorder>B_W_Filter</zorder>
+    <zorder>DetectFilter</zorder>
+    <zorder>BrightFilter</zorder>
+    <zorder>cropFilter</zorder>
+    <zorder>cropGroup</zorder>
+    <zorder>SkewFilter</zorder>
+    <zorder>FrameFilter</zorder>
+    <zorder>NeonFilter</zorder>
+    <zorder>HorizontalFlip</zorder>
+    <zorder>VerticalFlip</zorder>
+    <zorder>oldtvFilter</zorder>
+    <zorder>infraredFilter</zorder>
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
@@ -1113,149 +845,150 @@ QPushButton:hover {
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">#widget_2 {
-	border-bottom-color: rgb(0, 0, 0);
-	
-	background-color: rgb(0, 0, 0);
-	
-	
+     <string notr="true">#widget_2{
+	background-color: #252525;
+}
+QPushButton{
+	border: 2px solid rgb(161,161,161);
+	border-radius: 5px;
 }</string>
     </property>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>16</y>
-       <width>101</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">#label{
-	font: 600 9pt &quot;Segoe UI Semibold&quot;;
-	color: #fff;
-	font-size: 30px;
-	font-weight: 600;
-}</string>
-     </property>
-     <property name="text">
-      <string>RGB</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>24</y>
-       <width>70</width>
-       <height>40</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">#label_2{
-	color: rgb(0, 0, 255);
-	font-size: 25px;
-	font-weight: 600;
-}</string>
-     </property>
-     <property name="text">
-      <string>ator</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="loadImgBtn">
+    <widget class="FancyButton" name="loadImgBtn">
      <property name="geometry">
       <rect>
        <x>930</x>
        <y>20</y>
-       <width>111</width>
-       <height>41</height>
+       <width>110</width>
+       <height>50</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	color: #fff;
-	border: 1px solid #fff;
-	font-weight: 800;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border : 1px solid rgb(0, 0, 127);
-
-}
-
-QPushButton:pressed{
-	border: 2px solid #fff;
-}
-
-</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Load Image</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="clearImg">
+    <widget class="FancyButton" name="clearImg">
      <property name="geometry">
       <rect>
        <x>1080</x>
        <y>20</y>
-       <width>111</width>
-       <height>41</height>
+       <width>110</width>
+       <height>50</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-	color: #fff;
-	border: 1px solid #fff;
-	font-weight: 800;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border : 1px solid rgb(0, 0, 127);
-
-}
-
-QPushButton:pressed{
-	border: 2px solid red;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Reset Image</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="saveImgBtn">
+    <widget class="FancyButton" name="saveImgBtn">
      <property name="geometry">
       <rect>
        <x>1350</x>
        <y>20</y>
-       <width>101</width>
-       <height>41</height>
+       <width>110</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Save  💾</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="undoBtn">
+     <property name="geometry">
+      <rect>
+       <x>1510</x>
+       <y>50</y>
+       <width>92</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">#undoBtn{
+	font: 12pt &quot;JetBrains Mono&quot;;
+}</string>
+     </property>
+     <property name="text">
+      <string> Undo</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normalon>build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/icons/undo_alt.png</normalon>
+      </iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="shortcut">
+      <string>Ctrl+Z</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="redoBtn">
+     <property name="geometry">
+      <rect>
+       <x>1510</x>
+       <y>9</y>
+       <width>92</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">#redoBtn{
+	font: 12pt &quot;JetBrains Mono&quot;;
+}
+</string>
+     </property>
+     <property name="text">
+      <string> Redo</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normalon>build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/icons/redo_alt.png</normalon>
+      </iconset>
+     </property>
+     <property name="shortcut">
+      <string>Ctrl+Y</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="titleIcon">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>400</width>
+       <height>80</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton{
-	color: #fff;
-	border: 1px solid #fff;
-	font-weight: 800;
-	font-size: 18px;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border : 1px solid rgb(0, 0, 127);
-
-}
-
-QPushButton:pressed{
-	border: 2px solid red;
+border:none;
 }</string>
      </property>
      <property name="text">
-      <string>save</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/icons/RGB.png</normaloff>build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/icons/RGB.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>350</width>
+       <height>350</height>
+      </size>
      </property>
     </widget>
    </widget>
@@ -1270,23 +1003,29 @@ QPushButton:pressed{
     </property>
     <property name="styleSheet">
      <string notr="true">#widget_3{
-	
-	background-color: rgb(56, 56, 56);
+	background-color: #151515;
 }</string>
     </property>
     <widget class="QPushButton" name="rotateLeft">
      <property name="geometry">
       <rect>
-       <x>850</x>
-       <y>456</y>
-       <width>40</width>
-       <height>41</height>
+       <x>1130</x>
+       <y>480</y>
+       <width>32</width>
+       <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>JetBrains Mono</family>
+       <pointsize>-1</pointsize>
+      </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton{
-	font-size: 30px;
+	font-size: 50px;
 	border: none;
+	color:#fff;
 }
 
 QPushButton:hover{
@@ -1294,14 +1033,24 @@ QPushButton:hover{
 }</string>
      </property>
      <property name="text">
-      <string>⬅️</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/icons/rotate_left.png</normaloff>build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/icons/rotate_left.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
      </property>
     </widget>
     <widget class="QPushButton" name="resizeFilterBtn">
      <property name="geometry">
       <rect>
        <x>1360</x>
-       <y>14</y>
+       <y>13</y>
        <width>121</width>
        <height>41</height>
       </rect>
@@ -1332,7 +1081,7 @@ QPushButton:hover {
      <property name="geometry">
       <rect>
        <x>890</x>
-       <y>20</y>
+       <y>10</y>
        <width>60</width>
        <height>21</height>
       </rect>
@@ -1342,7 +1091,7 @@ QPushButton:hover {
      </property>
      <property name="styleSheet">
       <string notr="true">QLineEdit{
-	border-radius: 7px;
+	border-radius: 4px;
 	color: #fff;
 	border-color: #fff;
 }</string>
@@ -1358,7 +1107,7 @@ QPushButton:hover {
      <property name="geometry">
       <rect>
        <x>830</x>
-       <y>10</y>
+       <y>0</y>
        <width>50</width>
        <height>41</height>
       </rect>
@@ -1386,15 +1135,15 @@ QPushButton:hover {
     <widget class="QLineEdit" name="heightEditVal">
      <property name="geometry">
       <rect>
-       <x>1021</x>
-       <y>20</y>
+       <x>890</x>
+       <y>40</y>
        <width>61</width>
        <height>21</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">QLineEdit{
-	border-radius: 7px;
+	border-radius: 5px;
 	color: #fff;
 	border-color: #fff;
 }</string>
@@ -1403,8 +1152,8 @@ QPushButton:hover {
     <widget class="QLabel" name="heightLabel">
      <property name="geometry">
       <rect>
-       <x>960</x>
-       <y>10</y>
+       <x>829</x>
+       <y>30</y>
        <width>51</width>
        <height>41</height>
       </rect>
@@ -1432,15 +1181,21 @@ QPushButton:hover {
     <widget class="QCheckBox" name="resizeRatio">
      <property name="geometry">
       <rect>
-       <x>1120</x>
-       <y>20</y>
-       <width>121</width>
+       <x>970</x>
+       <y>26</y>
+       <width>151</width>
        <height>22</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>JetBrains Mono</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
       <string notr="true">QCheckBox{
-	color: #000;
+	color: #fff;
 
 }</string>
      </property>
@@ -1451,39 +1206,11 @@ QPushButton:hover {
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="undoBtn">
-     <property name="geometry">
-      <rect>
-       <x>1310</x>
-       <y>514</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton{
-	color: #fff;
-	border: 1px solid #fff;
-	font-weight: 800;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border : 1px solid rgb(0, 0, 127);
-
-}
-</string>
-     </property>
-     <property name="text">
-      <string>Undo</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="inImg">
      <property name="geometry">
       <rect>
        <x>61</x>
-       <y>50</y>
+       <y>70</y>
        <width>700</width>
        <height>400</height>
       </rect>
@@ -1500,45 +1227,17 @@ QPushButton:hover {
       <enum>QFrame::Raised</enum>
      </property>
      <property name="text">
-      <string/>
+      <string>Source Preview</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="redoBtn">
-     <property name="geometry">
-      <rect>
-       <x>1410</x>
-       <y>513</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton{
-	color: #fff;
-	border: 1px solid #fff;
-	font-weight: 800;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border : 1px solid rgb(0, 0, 127);
-
-}
-</string>
-     </property>
-     <property name="text">
-      <string>Redo</string>
      </property>
     </widget>
     <widget class="QWidget" name="outFrame" native="true">
      <property name="geometry">
       <rect>
        <x>820</x>
-       <y>60</y>
+       <y>70</y>
        <width>700</width>
        <height>400</height>
       </rect>
@@ -1589,7 +1288,10 @@ QPushButton:hover {
          <string notr="true"/>
         </property>
         <property name="text">
-         <string/>
+         <string>Load an Image to see changes</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -1599,7 +1301,7 @@ QPushButton:hover {
      <property name="geometry">
       <rect>
        <x>820</x>
-       <y>50</y>
+       <y>70</y>
        <width>361</width>
        <height>161</height>
       </rect>
@@ -1613,7 +1315,7 @@ border: 2px dashed #fff
       <enum>QFrame::NoFrame</enum>
      </property>
      <property name="text">
-      <string>Just Frame</string>
+      <string>Drag to Crop</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -1622,16 +1324,23 @@ border: 2px dashed #fff
     <widget class="QPushButton" name="rotateRight">
      <property name="geometry">
       <rect>
-       <x>1456</x>
-       <y>456</y>
-       <width>50</width>
-       <height>41</height>
+       <x>1190</x>
+       <y>480</y>
+       <width>32</width>
+       <height>32</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>JetBrains Mono</family>
+       <pointsize>-1</pointsize>
+      </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton{
-	font-size: 30px;
+	font-size: 50px;
 	border: none;
+	color:#fff;
 }
 
 QPushButton:hover{
@@ -1639,53 +1348,23 @@ QPushButton:hover{
 }</string>
      </property>
      <property name="text">
-      <string>➡️</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/icons/rotate_right.png</normaloff>build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/icons/rotate_right.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
      </property>
     </widget>
-   </widget>
-   <widget class="QPushButton" name="oldtvFilter">
-    <property name="geometry">
-     <rect>
-      <x>513</x>
-      <y>706</y>
-      <width>101</width>
-      <height>50</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QPushButton{
-	
-	color: rgb(161, 161, 161);
-	border-bottom:  2px solid rgb(161, 161, 161);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
-	transition: 0.3s;
-}
-
-QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	border-bottom:  2px solid #fff;
-	color: rgb(255, 255, 255);
-
-}</string>
-    </property>
-    <property name="text">
-     <string>Old TV</string>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
    </widget>
    <zorder>widget_3</zorder>
    <zorder>widget</zorder>
    <zorder>widget_2</zorder>
-   <zorder>oldtvFilter</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionLoad_Image">
@@ -1698,6 +1377,11 @@ QPushButton:hover {
   <customwidget>
    <class>CustomLabel</class>
    <extends>QLabel</extends>
+   <header>mainwindow.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FancyButton</class>
+   <extends>QPushButton</extends>
    <header>mainwindow.h</header>
   </customwidget>
  </customwidgets>

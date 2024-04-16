@@ -24,6 +24,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     //  setting some widgets to be initially hidden
     show_cropWidgets(false);
+    ui->rotateLeft->setIcon(QIcon("icons/rotate_left.png"));
+    ui->rotateRight->setIcon(QIcon("icons/rotate_right.png"));
+    ui->undoBtn->setIcon(QIcon("icons/undo_alt.png"));
+    ui->redoBtn->setIcon(QIcon("icons/redo_alt.png"));
+    ui->titleIcon->setIcon(QIcon("icons/RGB.png"));
     ui->sliderGroup->hide();
     ui->widthEditVal->hide();
     ui->heightEditVal->hide();
@@ -31,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->widthLabel->hide();
     ui->resizeFilterBtn->hide();
     ui->resizeRatio->hide();
-    ui->rotateLeft->hide();
-    ui->rotateRight->hide();
+    // ui->rotateLeft->hide();
+    // ui->rotateRight->hide();
 
     //  Disabling Some pushButtons Before loading Image
     ui->invertFilter->setEnabled(false);
@@ -53,8 +58,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->HorizontalFlip->setEnabled(false);
     ui->VerticalFlip->setEnabled(false);
     ui->cropFilter->setEnabled(false);
-    ui->undoBtn->setEnabled(false);
+    ui->infraredFilter->setEnabled(false);
     ui->redoBtn->setEnabled(false);
+    ui->undoBtn->setEnabled(false);
     ui->saveImgBtn->setEnabled(false);
     ui->clearImg->setEnabled(false);
 }
@@ -69,12 +75,13 @@ Image currImg;
 string tempPath;
 QString QtempPath;
 int labelWidth, labelHeight;
-stack<Image> undoStack, redoStack;
+stack<Image> redoStack, undoStack;
 
 //  Filters functions prototypes
 void rotate90(Image &image);
 void rotateI90(Image &image);
 void invert_color(Image &img);
+void infrared_color(Image &img);
 void grayScale(Image &image);
 void Black_and_White(Image &img);
 void sunlight_filter(Image &image, int sunStrength);
@@ -93,8 +100,8 @@ void flip_horizontally(Image &image1);
 void flip_vertically(Image &image1);
 
 //  other functions prototpyes
-void clear_redo_stack();
 void clear_undo_stack();
+void clear_redo_stack();
 
 void hide_others(string curr);
 void show_sliderWidgets(bool);
@@ -157,8 +164,8 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->heightLabel->show();
         ui->widthLabel->show();
         ui->resizeRatio->show();
-        ui->rotateLeft->show();
-        ui->rotateRight->show();
+        // ui->rotateLeft->show();
+        // ui->rotateRight->show();
         //Enabling Filters buttons
         ui->invertFilter->setEnabled(true);
         ui->oilFilter->setEnabled(true);
@@ -178,15 +185,16 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->NeonFilter->setEnabled(true);
         ui->HorizontalFlip->setEnabled(true);
         ui->VerticalFlip->setEnabled(true);
-        ui->undoBtn->setEnabled(true);
+        ui->infraredFilter->setEnabled(true);
         ui->redoBtn->setEnabled(true);
+        ui->undoBtn->setEnabled(true);
         ui->saveImgBtn->setEnabled(true);
         ui->clearImg->setEnabled(true);
-        //  clear_redo_stack();
-        clear_redo_stack();
+        //  clear_undo_stack();
         clear_undo_stack();
-        ui->undoBtn->setEnabled(false);
+        clear_redo_stack();
         ui->redoBtn->setEnabled(false);
+        ui->undoBtn->setEnabled(false);
     }
     hide_others();
 }
@@ -212,23 +220,8 @@ void MainWindow::on_clearImg_clicked()
     currImg = orImg;
     currImg.saveImage(tempPath);
     outImageDisplay();
-    clear_redo_stack();
     clear_undo_stack();
-    hide_others();
-}
-
-//  Redo
-
-void MainWindow::on_redoBtn_clicked()
-{
-    if (!redoStack.empty()) {
-        undoStack.push(currImg);
-        currImg = redoStack.top();
-        redoStack.pop();
-        // Save current state for undo
-        currImg.saveImage(tempPath);
-    }
-    outImageDisplay();
+    clear_redo_stack();
     hide_others();
 }
 
@@ -237,9 +230,24 @@ void MainWindow::on_redoBtn_clicked()
 void MainWindow::on_undoBtn_clicked()
 {
     if (!undoStack.empty()) {
-        redoStack.push(currImg); // Save current state for redo
+        redoStack.push(currImg);
         currImg = undoStack.top();
         undoStack.pop();
+        // Save current state for redo
+        currImg.saveImage(tempPath);
+    }
+    outImageDisplay();
+    hide_others();
+}
+
+//  redo
+
+void MainWindow::on_redoBtn_clicked()
+{
+    if (!redoStack.empty()) {
+        undoStack.push(currImg); // Save current state for undo
+        currImg = redoStack.top();
+        redoStack.pop();
         currImg.saveImage(tempPath);
     }
     outImageDisplay();
@@ -250,9 +258,9 @@ void MainWindow::on_undoBtn_clicked()
 
 void MainWindow::on_NeonFilter_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     edgeDetection(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -262,9 +270,9 @@ void MainWindow::on_NeonFilter_clicked()
 
 void MainWindow::on_HorizontalFlip_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     flip_horizontally(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -274,9 +282,9 @@ void MainWindow::on_HorizontalFlip_clicked()
 
 void MainWindow::on_VerticalFlip_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     flip_vertically(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -285,9 +293,9 @@ void MainWindow::on_VerticalFlip_clicked()
 
 void MainWindow::on_rotateRight_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     rotate90(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     outImageDisplay();
     hide_others();
@@ -295,9 +303,9 @@ void MainWindow::on_rotateRight_clicked()
 
 void MainWindow::on_rotateLeft_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     rotateI90(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     outImageDisplay();
     hide_others();
@@ -305,9 +313,19 @@ void MainWindow::on_rotateLeft_clicked()
 
 void MainWindow::on_invertFilter_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     invert_color(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+}
+void MainWindow::on_infraredFilter_clicked()
+{
+    undoStack.push(currImg);
+    infrared_color(currImg);
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -316,9 +334,9 @@ void MainWindow::on_invertFilter_clicked()
 
 void MainWindow::on_grayFilter_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     grayScale(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -327,9 +345,9 @@ void MainWindow::on_grayFilter_clicked()
 
 void MainWindow::on_B_W_Filter_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     Black_and_White(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -338,10 +356,10 @@ void MainWindow::on_B_W_Filter_clicked()
 
 void MainWindow::on_DetectFilter_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     grayScale(currImg);
     edgeDetection(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -350,9 +368,9 @@ void MainWindow::on_DetectFilter_clicked()
 
 void MainWindow::on_SkewFilter_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     Skew(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -362,9 +380,9 @@ void MainWindow::on_SkewFilter_clicked()
 
 void MainWindow::on_oldtvFilter_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     Old_Tv(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -378,9 +396,9 @@ void MainWindow::on_FrameFilter_clicked()
     int red = ColorValue.red();
     int green = ColorValue.green();
     int blue = ColorValue.blue();
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     Frame(currImg, red, green, blue);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -410,9 +428,9 @@ void MainWindow::on_filterApply_clicked()
     ui->progressLabel->setText("In Progress...");
     ui->progressLabel->show();
     QApplication::processEvents();
-    //  adjusting redo - undo stacks
-    redoStack.push(currImg);
-    clear_undo_stack();
+    //  adjusting undo - redo stacks
+    undoStack.push(currImg);
+    clear_redo_stack();
 
     // getting the strength from the slider
     int strength = ui->sliderValue->text().toInt();
@@ -466,8 +484,8 @@ void MainWindow::on_filterApply_clicked()
 
     ui->progressLabel->setText("Done !");
 
-    ui->redoBtn->setEnabled(true);
-    ui->undoBtn->setEnabled(false);
+    ui->undoBtn->setEnabled(true);
+    ui->redoBtn->setEnabled(false);
 }
 
 void MainWindow::on_sunLightFilter_clicked(bool checked)
@@ -504,9 +522,9 @@ void MainWindow::on_oilFilter_clicked(bool checked)
 
 void MainWindow::on_purpleFilter_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     purple_filter(currImg);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
@@ -515,11 +533,11 @@ void MainWindow::on_purpleFilter_clicked()
 
 void MainWindow::on_resizeFilterBtn_clicked()
 {
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     int newHeight = ui->heightEditVal->text().toInt();
     int newWidth = ui->widthEditVal->text().toInt();
     resize_image(currImg, newHeight, newWidth);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     outImageDisplay();
     hide_others();
@@ -553,16 +571,16 @@ void MainWindow::on_heightEditVal_textEdited()
 
 
 //  Other Functions Declaration
-void clear_redo_stack()
-{
-    while (!redoStack.empty()) {
-        redoStack.pop();
-    }
-}
 void clear_undo_stack()
 {
     while (!undoStack.empty()) {
         undoStack.pop();
+    }
+}
+void clear_redo_stack()
+{
+    while (!redoStack.empty()) {
+        redoStack.pop();
     }
 }
 void MainWindow::hide_others(string curr)
@@ -588,15 +606,15 @@ void MainWindow::hide_others(string curr)
     ui->resizeRatio->setChecked(true);
     ui->justFrame->hide();
     // ui->cropApply->hide();
-    if (undoStack.empty()) {
-        ui->undoBtn->setEnabled(false);
-    } else {
-        ui->undoBtn->setEnabled(true);
-    }
     if (redoStack.empty()) {
         ui->redoBtn->setEnabled(false);
     } else {
         ui->redoBtn->setEnabled(true);
+    }
+    if (undoStack.empty()) {
+        ui->undoBtn->setEnabled(false);
+    } else {
+        ui->undoBtn->setEnabled(true);
     }
 }
 
@@ -685,6 +703,17 @@ void invert_color(Image &img)
 
     for(int i = 1; i < img.width; i++) {
         for(int j = 1; j < img.height; j++) {
+            for(int k = 0; k<3;k++){
+                img(i, j, k) = 255 -img(i, j, k);
+            }
+        }
+    }
+}
+void infrared_color(Image &img)
+{
+
+    for(int i = 1; i < img.width; i++) {
+        for(int j = 1; j < img.height; j++) {
 
             int red = img(i, j, 0);
             int green = img(i, j, 1);
@@ -699,30 +728,31 @@ void invert_color(Image &img)
             img(i, j, 2) = blue;
         }
     }
-
 }
 
-void purple_filter(Image &image)
-{
-    int R, G, B;
-    for (int i = 0; i < image.width; i++) {
-        for (int j = 0; j < image.height; j++) {
-            R = image(i, j, 0) + 255 * 0.627, G = image(i, j, 1) + 255 * 0.125,
-                B = image(i, j, 2) + 255 * 0.941;
-            if (R > 255) {
-                R = 255;
-            }
-            if (B > 255) {
-                B = 255;
-            }
-            if (G > 255) {
-                G = 255;
-            }
-            image(i, j, 0) = R;
-            image(i, j, 1) = G;
-            image(i, j, 2) = B;
+void purple_filter(Image& image){
+    Image newImage(image.width, image.height);
+    int purpleStrength = 50;
+    float R, G, B;
+    for(int i=0; i < image.width ; i++){
+        for(int j=0; j < image.height ; j++){
+            R = image(i, j ,0) +  purpleStrength * 0.927;
+            G = image(i, j, 1) -  purpleStrength * 0.570;
+            B = image(i, j, 2) +  purpleStrength * 0.941;
+
+            // Ensure R, G, B values are within the valid range [0, 255]
+            R = (R > 255) ? 255 : (R < 0) ? 0 : R;
+            G = (G > 255) ? 255 : (G < 0) ? 0 : G;
+            B = (B > 255) ? 255 : (B < 0) ? 0 : B;
+
+            newImage(i, j, 0) = R;
+            newImage(i, j, 1) = G;
+            newImage(i, j, 2) = B;
         }
     }
+
+    // Replace the original image with the new image
+    image = newImage;
 }
 
 void sunlight_filter(Image &image, int sunStrength)
@@ -1076,7 +1106,6 @@ void MainWindow::handleMouseHolding(const QPoint& pos) {
         int clampedX = clamp(pos.x(), 0, rightBound - initialOffsetX);
         int clampedY = clamp(pos.y(), 0, lowerBound - initialOffsetY);
         ui->justFrame->move(clampedX + initialOffsetX, clampedY + initialOffsetY);
-        qDebug() << "pos: " << ui->justFrame->pos().x() - initialOffsetX<<"\nposY: " << ui->justFrame->pos().y() - initialOffsetY;
     }
 }
 
@@ -1092,9 +1121,9 @@ void MainWindow::on_cropApply_clicked()
     startY *=aspectRatioH;
     width*=aspectRatioW;
     height*=aspectRatioH;
-    redoStack.push(currImg);
+    undoStack.push(currImg);
     crop(currImg, startX,startY,width,height);
-    clear_undo_stack();
+    clear_redo_stack();
     currImg.saveImage(tempPath);
     outImageDisplay();
     hide_others();
@@ -1202,6 +1231,9 @@ void flip_vertically(Image &image1){
 
     }
 }
+
+
+
 
 
 

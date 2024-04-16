@@ -7,14 +7,53 @@
 #include <QColorDialog>>
 #include <QColor>
 #include <QPalette>
-#include <QDebug>>
-
+#include <QDebug>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPushButton>
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
+class FancyButton : public QPushButton {
+    Q_OBJECT
 
+public:
+    explicit FancyButton(QWidget* parent = nullptr)
+        : QPushButton(parent) {}
+
+protected:
+    void paintEvent(QPaintEvent*) override {
+        QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        // Set the color and font
+        painter.setPen(Qt::black);
+        painter.setFont(QFont("JetBrains mono", 10, QFont::Bold));
+
+        // Create the path for the fancy corners
+        QPainterPath path;
+        path.moveTo(5, 0);
+        path.lineTo(width(), 0);
+        path.lineTo(width(), 5);
+        path.lineTo(width(), height()-5);
+        path.lineTo(width()-5, height());
+        path.lineTo(5, height());
+        path.lineTo(0, height());
+        path.lineTo(0, 5);
+        path.closeSubpath();
+
+        // Set the clip path
+        painter.setClipPath(path);
+
+        // Draw the background
+        painter.fillPath(path, QColor("#59FFA0"));
+
+        // Draw the text
+        painter.drawText(rect(), Qt::AlignCenter, text());
+    }
+};
 
 class CustomLabel : public QLabel {
     Q_OBJECT
@@ -110,6 +149,8 @@ private slots:
     void on_HorizontalFlip_clicked();
 
     void on_VerticalFlip_clicked();
+
+    void on_infraredFilter_clicked();
 
 private:
     Ui::MainWindow *ui;
