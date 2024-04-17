@@ -156,6 +156,8 @@ private slots:
 
     void on_MergeCrop_clicked();
 
+    void on_empossFilter_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

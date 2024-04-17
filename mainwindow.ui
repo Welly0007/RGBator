@@ -834,7 +834,7 @@ QPushButton:hover{
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="Fiter">
+    <widget class="QPushButton" name="empossFilter">
      <property name="geometry">
       <rect>
        <x>750</x>
@@ -847,7 +847,7 @@ QPushButton:hover{
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>Filter</string>
+      <string>Emposs</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -892,7 +892,7 @@ QPushButton:hover{
     <zorder>oldtvFilter</zorder>
     <zorder>infraredFilter</zorder>
     <zorder>MergeFilter</zorder>
-    <zorder>Fiter</zorder>
+    <zorder>empossFilter</zorder>
     <zorder>MergeCrop</zorder>
    </widget>
    <widget class="QWidget" name="widget_2" native="true">

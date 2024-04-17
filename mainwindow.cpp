@@ -59,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->HorizontalFlip->setEnabled(false);
     ui->VerticalFlip->setEnabled(false);
     ui->cropFilter->setEnabled(false);
+    ui->empossFilter->setEnabled(false);
     ui->infraredFilter->setEnabled(false);
     ui->MergeFilter->setEnabled(false);
     ui->redoBtn->setEnabled(false);
@@ -86,6 +87,7 @@ void rotateI90(Image &image);
 void invert_color(Image &img);
 void infrared_color(Image &img);
 void grayScale(Image &image);
+void emposs(Image &image);
 void Black_and_White(Image &img);
 void sunlight_filter(Image &image, int sunStrength);
 void blur_filter(Image &image, int blurStr);
@@ -197,6 +199,7 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->HorizontalFlip->setEnabled(true);
         ui->VerticalFlip->setEnabled(true);
         ui->infraredFilter->setEnabled(true);
+        ui->empossFilter->setEnabled(true);
         ui->redoBtn->setEnabled(true);
         ui->undoBtn->setEnabled(true);
         ui->saveImgBtn->setEnabled(true);
@@ -392,6 +395,20 @@ void MainWindow::on_grayFilter_clicked()
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
     hide_others();
 }
+
+
+void MainWindow::on_empossFilter_clicked()
+{
+    undoStack.push(currImg);
+    emposs(currImg);
+    clear_redo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+}
+
+
 
 void MainWindow::on_B_W_Filter_clicked()
 {
@@ -756,6 +773,19 @@ void grayScale(Image &image)
             for (int l = 0; l < 3; ++l) {
                 image(i, j, l) = avg;
             }
+        }
+    }
+}
+
+void emposs(Image& image){
+    for(int i=0; i < image.width-1 ; i++){
+        for(int j=0; j < image.height-1 ; j++){
+            int R = abs(image(i,j,0) - image(i+1,j+1,0) + 128);
+            int G = abs(image(i,j,1) - image(i+1,j+1,1) + 128);
+            int B = abs(image(i,j,2) - image(i+1,j+1,2) + 128);
+            image(i,j,0) = R > 255 ? 255 : R;
+            image(i,j,1) = B > 255 ? 255 : B;
+            image(i,j,2) = G > 255 ? 255 : G;
         }
     }
 }
@@ -1454,5 +1484,8 @@ void old_tv(Image &image1, double brightness_factor, int noise_intensity){
         }
     }
 }
+
+
+
 
 
