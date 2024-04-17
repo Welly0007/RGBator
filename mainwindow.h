@@ -136,11 +136,9 @@ private slots:
 
     void on_cropApply_clicked();
 
-    void on_SkewFilter_clicked();
 
     void on_oldtvFilter_clicked();
 
-    void on_FrameFilter_clicked();
 
     //void on_colors_clicked();
 
@@ -161,6 +159,14 @@ private slots:
     void on_SkewFilter_clicked(bool checked);
 
     void on_filterSlider_rangeChanged(int min, int max);
+
+    void on_FrameFilter_clicked(bool checked);
+
+    void on_colorBtn_clicked();
+
+    void on_fancyBtn_clicked();
+
+    void on_applyBtn1_clicked();
 
 private:
     Ui::MainWindow *ui;

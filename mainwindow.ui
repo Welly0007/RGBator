@@ -872,6 +872,64 @@ QPushButton:hover{
       <bool>true</bool>
      </property>
     </widget>
+    <widget class="QGroupBox" name="FrameGroup">
+     <property name="geometry">
+      <rect>
+       <x>940</x>
+       <y>20</y>
+       <width>541</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox{
+	color: 	#59FFA0;
+	border-radius: 10px;
+	border-color: #fff;
+}</string>
+     </property>
+     <property name="title">
+      <string>Frame Filter</string>
+     </property>
+     <widget class="QPushButton" name="colorBtn">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>48</y>
+        <width>171</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton{
+	border: 2px solid rgb(161,161,161);
+	border-radius: 5px;
+}</string>
+      </property>
+      <property name="text">
+       <string>Colored Frame</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="fancyBtn">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>48</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton{
+	border: 2px solid rgb(161,161,161);
+	border-radius: 5px;
+}</string>
+      </property>
+      <property name="text">
+       <string>Fancy Frame</string>
+      </property>
+     </widget>
+    </widget>
     <zorder>sliderGroup</zorder>
     <zorder>invertFilter</zorder>
     <zorder>sunLightFilter</zorder>
@@ -894,6 +952,7 @@ QPushButton:hover{
     <zorder>MergeFilter</zorder>
     <zorder>empossFilter</zorder>
     <zorder>MergeCrop</zorder>
+    <zorder>FrameGroup</zorder>
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
@@ -1424,6 +1483,85 @@ QPushButton:hover{
        <height>32</height>
       </size>
      </property>
+    </widget>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>30</y>
+       <width>561</width>
+       <height>461</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="Fancy1">
+      <attribute name="title">
+       <string>Fancy 1</string>
+      </attribute>
+      <widget class="QPushButton" name="applyBtn1">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>363</y>
+         <width>531</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+	border : 1px solid #fff; 
+}</string>
+       </property>
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="FancyFrame1" native="true">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>10</y>
+         <width>541</width>
+         <height>351</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="Fancy2">
+      <attribute name="title">
+       <string>Fancy 2</string>
+      </attribute>
+      <widget class="QPushButton" name="applyBtn_2">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>363</y>
+         <width>531</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+	border : 1px solid #fff; 
+}</string>
+       </property>
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="FancyFrame2" native="true">
+       <property name="geometry">
+        <rect>
+         <x>7</x>
+         <y>5</y>
+         <width>541</width>
+         <height>351</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </widget>
    <zorder>widget_3</zorder>

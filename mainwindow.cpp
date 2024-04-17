@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->widthLabel->hide();
     ui->resizeFilterBtn->hide();
     ui->resizeRatio->hide();
+    ui->FrameGroup->hide();
+    ui->tabWidget->hide();
     // ui->rotateLeft->hide();
     // ui->rotateRight->hide();
 
@@ -93,7 +95,8 @@ void sunlight_filter(Image &image, int sunStrength);
 void blur_filter(Image &image, int blurStr);
 void Dark_and_Light(Image &imgage, int strength);
 void purple_filter(Image &image);
-void Frame(Image &img, int r, int g, int b);
+void color_frame(Image &img, int r, int g, int b);
+void fancy_frame_1(Image& image, int R, int G, int B);
 void Skew(Image& image, int angle);
 void old_tv(Image &image1, double brightness_factor = 1, int noise_intensity = 30);
 void oilPainting_filter(Image &image, int strength);
@@ -448,21 +451,67 @@ void MainWindow::on_oldtvFilter_clicked()
 }
 
 
-void MainWindow::on_FrameFilter_clicked()
+// void MainWindow::on_FrameFilter_clicked()
+// {
+//     QColor ColorValue = QColorDialog::getColor(Qt::white, this, tr("Selcet Color"));
+//     int red = ColorValue.red();
+//     int green = ColorValue.green();
+//     int blue = ColorValue.blue();
+//     undoStack.push(currImg);
+//     Frame(currImg, red, green, blue);
+//     clear_redo_stack();
+//     currImg.saveImage(tempPath);
+//     QPixmap img = QPixmap(QtempPath);
+//     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+//     hide_others();
+
+// }
+
+void MainWindow::on_FrameFilter_clicked(bool checked)
+{
+    if(checked){
+        ui->FrameGroup->show();
+    } else {
+        ui->FrameGroup->hide();
+    }
+}
+
+void MainWindow::on_colorBtn_clicked()
 {
     QColor ColorValue = QColorDialog::getColor(Qt::white, this, tr("Selcet Color"));
     int red = ColorValue.red();
     int green = ColorValue.green();
     int blue = ColorValue.blue();
     undoStack.push(currImg);
-    Frame(currImg, red, green, blue);
+    color_frame(currImg, red, green, blue);
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
     hide_others();
-
 }
+
+
+void MainWindow::on_fancyBtn_clicked()
+{
+    ui->tabWidget->show();
+}
+
+void MainWindow::on_applyBtn1_clicked()
+{
+    QColor ColorValue = QColorDialog::getColor(Qt::white, this, tr("Selcet Color"));
+    int red = ColorValue.red();
+    int green = ColorValue.green();
+    int blue = ColorValue.blue();
+    undoStack.push(currImg);
+    fancy_frame_1(currImg,red,green,blue);
+    clear_redo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    hide_others();
+}
+
 
 void MainWindow::on_filterSlider_valueChanged(int value)
 {   //  special vals for brightness filter
@@ -1284,7 +1333,7 @@ void Skew(Image& image, int angle) {
 
 
 
-void Frame(Image &img, int r, int g, int b) {
+void color_frame(Image &img, int r, int g, int b) {
     Image newImage(img.width, img.height);
     int border = img.width / 50; // Width of the frame
     int innerBorder = img.width / 100; // Width of the inner frame
@@ -1298,15 +1347,61 @@ void Frame(Image &img, int r, int g, int b) {
         }
     }
 
-for (int i = 0; i < img.width; ++i) {
-    for (int j = 0; j < img.height; ++j) {
-        for (int k = 0; k <3 ; ++k) {
-            newImage(i,j,k)=img(i,j,k);
+    for (int i = 0; i < img.width; ++i) {
+        for (int j = 0; j < img.height; ++j) {
+            for (int k = 0; k <3 ; ++k) {
+                newImage(i,j,k)=img(i,j,k);
+            }
         }
     }
-}
-img = newImage;
+    img = newImage;
 
+}
+
+void fancy_frame_1(Image& image, int R, int G, int B) {
+    int frameWidth = min(image.width, image.height) / 20;
+    Image newImage(image.width, image.height);
+    //  Declare vars for CPP
+    for(int i=0; i < image.width; i++){
+        for(int j=0; j < image.height; j++){
+            if(i < frameWidth || i > image.width -frameWidth){
+
+                newImage(i,j,0) = R;
+                newImage(i,j,1) = G;
+                newImage(i,j,2) = B;
+            }
+            else if(j < frameWidth || j > image.height - frameWidth){
+                newImage(i,j,0) = R;
+                newImage(i,j,1) = G;
+                newImage(i,j,2) = B;
+            }
+            else{
+                newImage(i,j,0) = image(i,j,0);
+                newImage(i,j,1) = image(i,j,1);
+                newImage(i,j,2) = image(i,j,2);
+            }
+
+        }
+    }
+    for(int i=0; i < image.width ; i++){
+        for(int j=0; j < image.height ; j++){
+
+            if(i < frameWidth || i > image.width -frameWidth){
+                if(j< frameWidth*4 || j > image.height - (frameWidth*4)){
+                    newImage(i,j,0) = R;
+                    newImage(i,j,1) = G;
+                    newImage(i,j,2) = B;
+                }
+            }else if(j < frameWidth || j > image.height - frameWidth){
+                if(i< frameWidth*4  || i > image.width - (frameWidth*4)){
+                    newImage(i,j,0) = R;
+                    newImage(i,j,1) = G;
+                    newImage(i,j,2) = B;
+                }
+            }
+        }
+    }
+    image = newImage;
 }
 
 
@@ -1475,6 +1570,14 @@ void old_tv(Image &image1, double brightness_factor, int noise_intensity){
         }
     }
 }
+
+
+
+
+
+
+
+
 
 
 
