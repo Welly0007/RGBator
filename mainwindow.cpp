@@ -1360,19 +1360,16 @@ void Merge(Image &img, Image &img2)
     img = newImage;
 }
 
-void mergeWResize(Image &image1, Image &image2)
-{
+void mergeWResize(Image& image1, Image& image2) {
     int width, height;
-    if (image1.width * image1.height > image2.width * image2.height) {
+    //resize for the gui changes the second picture only
+    if (image1.width == image2.width && image1.height == image2.height) {
+        image1 = sameSizeMerge(image1 ,image2);
+    } else {
         width = image1.width;
         height = image1.height;
         Image resizedImg = resizeForMerge(image2, width, height);
         image1 = sameSizeMerge(image1, resizedImg);
-    } else {
-        width = image2.width;
-        height = image2.height;
-        Image resizedImg = resizeForMerge(image1, width, height);
-        image1 = sameSizeMerge(resizedImg, image2);
     }
 }
 
