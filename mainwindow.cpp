@@ -93,7 +93,8 @@ void Dark_and_Light(Image &imgage, int strength);
 void purple_filter(Image &image);
 void Skew(Image &image);
 void Frame(Image &img, int r, int g, int b);
-void Old_Tv(Image &image);
+//void Old_Tv(Image &image);
+void old_tv(Image &image1, double brightness_factor = 1, int noise_intensity = 30);
 void oilPainting_filter(Image &image, int strength);
 void resize_image(Image &image, int newHeight);
 void resize_image(Image &image, int newHeight, int newWidth);
@@ -430,7 +431,7 @@ void MainWindow::on_SkewFilter_clicked()
 void MainWindow::on_oldtvFilter_clicked()
 {
     undoStack.push(currImg);
-    Old_Tv(currImg);
+    old_tv(currImg);
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
@@ -1246,20 +1247,20 @@ void Skew(Image& image){
 }
 
 
-void Old_Tv(Image &image){
-    srand(static_cast<unsigned int>(time(nullptr)));
-    for (int i = 0; i < image.height; ++i) {
-        for (int j = 0; j < image.width; ++j) {
-            int random = rand() % 256 - 128;
-            for (int k = 0; k < 3; ++k) {
-                int newValue = image(j, i, k) + random;
-                newValue = max(0, min(255, newValue));
-                image(j, i, k) = static_cast<unsigned char>(newValue);
-            }
-        }
-    }
+// void Old_Tv(Image &image){
+//     srand(static_cast<unsigned int>(time(nullptr)));
+//     for (int i = 0; i < image.height; ++i) {
+//         for (int j = 0; j < image.width; ++j) {
+//             int random = rand() % 256 - 128;
+//             for (int k = 0; k < 3; ++k) {
+//                 int newValue = image(j, i, k) + random;
+//                 newValue = max(0, min(255, newValue));
+//                 image(j, i, k) = static_cast<unsigned char>(newValue);
+//             }
+//         }
+//     }
 
-}
+// }
 
 
 void Frame(Image &img, int r, int g, int b) {
@@ -1429,5 +1430,29 @@ Image cropForMerge(Image &image, int x, int y, int width, int height) {
     return croppedImg;
 }
 
+
+void old_tv(Image &image1, double brightness_factor, int noise_intensity){
+    for (int i = 0; i < image1.width; i++)
+    {
+        for (int j = 0; j < image1.height; j++)
+        {
+            if (j % 2 == 0)
+            {
+                double random = rand() % (2 * noise_intensity) - noise_intensity;
+                for (int k = 0; k < NCHANNEL; k++)
+                {
+                    if (image1(i, j, k) + random > 255) {
+                        image1(i, j, k) = 255;
+                    } else if (image1(i, j, k) + random < 0) {
+                        image1(i, j, k) = 0;
+                    } else {
+                        image1(i, j, k) += random;
+                        image1(i, j, k) *= brightness_factor;
+                    }  
+                }
+            }
+        }
+    }
+}
 
 
