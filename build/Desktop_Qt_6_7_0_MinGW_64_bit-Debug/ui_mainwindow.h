@@ -65,6 +65,7 @@ public:
     QPushButton *MergeFilter;
     QPushButton *empossFilter;
     QPushButton *MergeCrop;
+    QPushButton *swirlFilter;
     QWidget *widget_2;
     FancyButton *loadImgBtn;
     FancyButton *clearImg;
@@ -72,6 +73,7 @@ public:
     QPushButton *undoBtn;
     QPushButton *redoBtn;
     QPushButton *titleIcon;
+    QLabel *undoTip;
     QWidget *widget_3;
     QPushButton *rotateLeft;
     QPushButton *resizeFilterBtn;
@@ -146,10 +148,11 @@ public:
 "	\n"
 "\n"
 "}\n"
-"QPushButton:checked{\n"
+"QPushButton:Enabled:checked{\n"
+"	background-color: #59FFA0;\n"
 "	border-top-right-radius: 10px;\n"
 "	border-top-left-radius: 10px;\n"
-"	color: #fff;\n"
+"	color:  #222222;\n"
 "	border-bottom:  2px solid #fff;\n"
 "	border-top: none;\n"
 "	border-right: none;\n"
@@ -158,6 +161,7 @@ public:
 "QPushButton:Enabled{\n"
 "	color: rgba(255, 255, 255,1);\n"
 "	border-bottom:  2px solid rgba(161, 161, 161,1);\n"
+"\n"
 "}"));
         invertFilter = new QPushButton(widget);
         invertFilter->setObjectName("invertFilter");
@@ -231,8 +235,8 @@ public:
 "\n"
 ""));
         filterSlider->setMaximum(100);
-        filterSlider->setSingleStep(5);
-        filterSlider->setPageStep(30);
+        filterSlider->setSingleStep(10);
+        filterSlider->setPageStep(10);
         filterSlider->setValue(20);
         filterSlider->setSliderPosition(20);
         filterSlider->setTracking(true);
@@ -241,7 +245,7 @@ public:
         filterSlider->setTickInterval(5);
         sliderText = new QLabel(sliderGroup);
         sliderText->setObjectName("sliderText");
-        sliderText->setGeometry(QRect(10, 70, 61, 41));
+        sliderText->setGeometry(QRect(10, 70, 81, 41));
         QFont font;
         font.setFamilies({QString::fromUtf8("JetBrains Mono")});
         font.setWeight(QFont::Medium);
@@ -255,7 +259,7 @@ public:
 "}"));
         sliderValue = new QLabel(sliderGroup);
         sliderValue->setObjectName("sliderValue");
-        sliderValue->setGeometry(QRect(79, 77, 40, 31));
+        sliderValue->setGeometry(QRect(100, 75, 321, 31));
         QFont font1;
         font1.setFamilies({QString::fromUtf8("JetBrains Mono")});
         font1.setBold(false);
@@ -302,7 +306,7 @@ public:
         B_W_Filter->setObjectName("B_W_Filter");
         B_W_Filter->setGeometry(QRect(33, 124, 100, 50));
         B_W_Filter->setStyleSheet(QString::fromUtf8(""));
-        B_W_Filter->setCheckable(true);
+        B_W_Filter->setCheckable(false);
         DetectFilter = new QPushButton(widget);
         DetectFilter->setObjectName("DetectFilter");
         DetectFilter->setGeometry(QRect(150, 68, 100, 50));
@@ -398,27 +402,27 @@ public:
         FrameFilter->setObjectName("FrameFilter");
         FrameFilter->setGeometry(QRect(634, 67, 101, 50));
         FrameFilter->setStyleSheet(QString::fromUtf8(""));
-        FrameFilter->setCheckable(true);
+        FrameFilter->setCheckable(false);
         NeonFilter = new QPushButton(widget);
         NeonFilter->setObjectName("NeonFilter");
         NeonFilter->setGeometry(QRect(151, 124, 100, 50));
         NeonFilter->setStyleSheet(QString::fromUtf8(""));
-        NeonFilter->setCheckable(true);
+        NeonFilter->setCheckable(false);
         HorizontalFlip = new QPushButton(widget);
         HorizontalFlip->setObjectName("HorizontalFlip");
         HorizontalFlip->setGeometry(QRect(269, 124, 100, 50));
         HorizontalFlip->setStyleSheet(QString::fromUtf8(""));
-        HorizontalFlip->setCheckable(true);
+        HorizontalFlip->setCheckable(false);
         VerticalFlip = new QPushButton(widget);
         VerticalFlip->setObjectName("VerticalFlip");
         VerticalFlip->setGeometry(QRect(389, 124, 100, 50));
         VerticalFlip->setStyleSheet(QString::fromUtf8(""));
-        VerticalFlip->setCheckable(true);
+        VerticalFlip->setCheckable(false);
         oldtvFilter = new QPushButton(widget);
         oldtvFilter->setObjectName("oldtvFilter");
         oldtvFilter->setGeometry(QRect(511, 67, 101, 50));
         oldtvFilter->setStyleSheet(QString::fromUtf8(""));
-        oldtvFilter->setCheckable(true);
+        oldtvFilter->setCheckable(false);
         infraredFilter = new QPushButton(widget);
         infraredFilter->setObjectName("infraredFilter");
         infraredFilter->setEnabled(true);
@@ -428,18 +432,22 @@ public:
         MergeFilter->setObjectName("MergeFilter");
         MergeFilter->setGeometry(QRect(635, 124, 111, 50));
         MergeFilter->setStyleSheet(QString::fromUtf8(""));
-        MergeFilter->setCheckable(true);
+        MergeFilter->setCheckable(false);
         empossFilter = new QPushButton(widget);
         empossFilter->setObjectName("empossFilter");
         empossFilter->setGeometry(QRect(750, 5, 101, 50));
         empossFilter->setStyleSheet(QString::fromUtf8(""));
-        empossFilter->setCheckable(true);
+        empossFilter->setCheckable(false);
         MergeCrop = new QPushButton(widget);
         MergeCrop->setObjectName("MergeCrop");
         MergeCrop->setGeometry(QRect(750, 70, 111, 50));
         MergeCrop->setStyleSheet(QString::fromUtf8(""));
-        MergeCrop->setCheckable(true);
-        sliderGroup->raise();
+        MergeCrop->setCheckable(false);
+        swirlFilter = new QPushButton(widget);
+        swirlFilter->setObjectName("swirlFilter");
+        swirlFilter->setGeometry(QRect(760, 125, 111, 50));
+        swirlFilter->setStyleSheet(QString::fromUtf8(""));
+        swirlFilter->setCheckable(true);
         invertFilter->raise();
         sunLightFilter->raise();
         purpleFilter->raise();
@@ -461,6 +469,8 @@ public:
         MergeFilter->raise();
         empossFilter->raise();
         MergeCrop->raise();
+        swirlFilter->raise();
+        sliderGroup->raise();
         widget_2 = new QWidget(centralwidget);
         widget_2->setObjectName("widget_2");
         widget_2->setGeometry(QRect(-3, 0, 1621, 90));
@@ -470,32 +480,70 @@ public:
 "QPushButton{\n"
 "	border: 2px solid rgb(161,161,161);\n"
 "	border-radius: 5px;\n"
-"}"));
+"}\n"
+"\n"
+""));
         loadImgBtn = new FancyButton(widget_2);
         loadImgBtn->setObjectName("loadImgBtn");
-        loadImgBtn->setGeometry(QRect(930, 20, 110, 50));
-        loadImgBtn->setStyleSheet(QString::fromUtf8(""));
+        loadImgBtn->setGeometry(QRect(810, 20, 110, 50));
+        loadImgBtn->setStyleSheet(QString::fromUtf8("#clearImg{\n"
+"	color:#fff;\n"
+"}\n"
+"#saveImgBtn{\n"
+"	color:#fff;\n"
+"}\n"
+"#loadImgBtn{\n"
+"	color:#222222;\n"
+"}\n"
+"#clearImg:Enabled{\n"
+"	color:#222222;\n"
+"}\n"
+"#saveImgBtn:Enabled{\n"
+"	color:#222222;\n"
+"}\n"
+""));
         clearImg = new FancyButton(widget_2);
         clearImg->setObjectName("clearImg");
-        clearImg->setGeometry(QRect(1080, 20, 110, 50));
-        clearImg->setStyleSheet(QString::fromUtf8(""));
+        clearImg->setGeometry(QRect(950, 20, 110, 50));
+        clearImg->setStyleSheet(QString::fromUtf8("#loadImgBtn{\n"
+"	color:#222222;\n"
+"}\n"
+"#clearImg:Enabled{\n"
+"	color:#222222;\n"
+"}\n"
+"#saveImgBtn:Enabled{\n"
+"	color:#222222;\n"
+"}\n"
+""));
         saveImgBtn = new FancyButton(widget_2);
         saveImgBtn->setObjectName("saveImgBtn");
-        saveImgBtn->setGeometry(QRect(1350, 20, 110, 50));
-        saveImgBtn->setStyleSheet(QString::fromUtf8(""));
+        saveImgBtn->setGeometry(QRect(1180, 20, 110, 50));
+        saveImgBtn->setStyleSheet(QString::fromUtf8("\n"
+"#loadImgBtn{\n"
+"	color:#222222;\n"
+"}\n"
+"#clearImg:Enabled{\n"
+"	color:#222222;\n"
+"}\n"
+"#saveImgBtn:Enabled{\n"
+"	color:#222222;\n"
+"}\n"
+""));
         undoBtn = new QPushButton(widget_2);
         undoBtn->setObjectName("undoBtn");
-        undoBtn->setGeometry(QRect(1510, 50, 92, 32));
+        undoBtn->setGeometry(QRect(1410, 50, 92, 32));
         undoBtn->setStyleSheet(QString::fromUtf8("#undoBtn{\n"
 "	font: 12pt \"JetBrains Mono\";\n"
-"}"));
+"}\n"
+"\n"
+""));
         QIcon icon;
         icon.addFile(QString::fromUtf8("build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/icons/undo_alt.png"), QSize(), QIcon::Normal, QIcon::On);
         undoBtn->setIcon(icon);
         undoBtn->setIconSize(QSize(16, 16));
         redoBtn = new QPushButton(widget_2);
         redoBtn->setObjectName("redoBtn");
-        redoBtn->setGeometry(QRect(1510, 9, 92, 32));
+        redoBtn->setGeometry(QRect(1410, 9, 92, 32));
         redoBtn->setStyleSheet(QString::fromUtf8("#redoBtn{\n"
 "	font: 12pt \"JetBrains Mono\";\n"
 "}\n"
@@ -514,6 +562,14 @@ public:
         icon2.addFile(QString::fromUtf8("build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/icons/RGB.png"), QSize(), QIcon::Normal, QIcon::Off);
         titleIcon->setIcon(icon2);
         titleIcon->setIconSize(QSize(350, 350));
+        undoTip = new QLabel(widget_2);
+        undoTip->setObjectName("undoTip");
+        undoTip->setGeometry(QRect(1300, 10, 111, 101));
+        QFont font4;
+        font4.setFamilies({QString::fromUtf8("JetBrains Mono")});
+        undoTip->setFont(font4);
+        undoTip->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
+        undoTip->setWordWrap(true);
         widget_3 = new QWidget(centralwidget);
         widget_3->setObjectName("widget_3");
         widget_3->setGeometry(QRect(0, 90, 1621, 621));
@@ -523,8 +579,6 @@ public:
         rotateLeft = new QPushButton(widget_3);
         rotateLeft->setObjectName("rotateLeft");
         rotateLeft->setGeometry(QRect(1130, 480, 32, 32));
-        QFont font4;
-        font4.setFamilies({QString::fromUtf8("JetBrains Mono")});
         rotateLeft->setFont(font4);
         rotateLeft->setStyleSheet(QString::fromUtf8("QPushButton{\n"
 "	font-size: 50px;\n"
@@ -637,6 +691,8 @@ public:
         justFrame = new QLabel(widget_3);
         justFrame->setObjectName("justFrame");
         justFrame->setGeometry(QRect(820, 70, 361, 161));
+        justFrame->setMouseTracking(false);
+        justFrame->setTabletTracking(false);
         justFrame->setStyleSheet(QString::fromUtf8("#justFrame{\n"
 "border: 2px dashed #fff\n"
 "}"));
@@ -713,6 +769,7 @@ public:
         MergeFilter->setText(QCoreApplication::translate("MainWindow", "MergeWResize", nullptr));
         empossFilter->setText(QCoreApplication::translate("MainWindow", "Emposs", nullptr));
         MergeCrop->setText(QCoreApplication::translate("MainWindow", "MergeWCrop", nullptr));
+        swirlFilter->setText(QCoreApplication::translate("MainWindow", "Swirl", nullptr));
         loadImgBtn->setText(QCoreApplication::translate("MainWindow", "Load Image", nullptr));
         clearImg->setText(QCoreApplication::translate("MainWindow", "Reset Image", nullptr));
         saveImgBtn->setText(QCoreApplication::translate("MainWindow", "Save  \360\237\222\276", nullptr));
@@ -725,6 +782,9 @@ public:
         redoBtn->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+Y", nullptr));
 #endif // QT_CONFIG(shortcut)
         titleIcon->setText(QString());
+        undoTip->setText(QCoreApplication::translate("MainWindow", "Tip: You can\n"
+"ctrl+z for undo\n"
+"ctr+y for redo", nullptr));
         rotateLeft->setText(QString());
         resizeFilterBtn->setText(QCoreApplication::translate("MainWindow", "Resize \360\237\224\247", nullptr));
         widthLabel->setText(QCoreApplication::translate("MainWindow", "Width:", nullptr));

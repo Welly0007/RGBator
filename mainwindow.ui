@@ -112,10 +112,11 @@ QPushButton:Enabled:hover {
 	
 
 }
-QPushButton:checked{
+QPushButton:Enabled:checked{
+	background-color: #59FFA0;
 	border-top-right-radius: 10px;
 	border-top-left-radius: 10px;
-	color: #fff;
+	color:  #222222;
 	border-bottom:  2px solid #fff;
 	border-top: none;
 	border-right: none;
@@ -124,6 +125,7 @@ QPushButton:checked{
 QPushButton:Enabled{
 	color: rgba(255, 255, 255,1);
 	border-bottom:  2px solid rgba(161, 161, 161,1);
+
 }</string>
     </property>
     <widget class="QPushButton" name="invertFilter">
@@ -304,10 +306,10 @@ QSlider::sub-page:horizontal{
        <number>100</number>
       </property>
       <property name="singleStep">
-       <number>5</number>
+       <number>10</number>
       </property>
       <property name="pageStep">
-       <number>30</number>
+       <number>10</number>
       </property>
       <property name="value">
        <number>20</number>
@@ -333,7 +335,7 @@ QSlider::sub-page:horizontal{
        <rect>
         <x>10</x>
         <y>70</y>
-        <width>61</width>
+        <width>81</width>
         <height>41</height>
        </rect>
       </property>
@@ -360,9 +362,9 @@ QSlider::sub-page:horizontal{
      <widget class="QLabel" name="sliderValue">
       <property name="geometry">
        <rect>
-        <x>79</x>
-        <y>77</y>
-        <width>251</width>
+        <x>100</x>
+        <y>75</y>
+        <width>321</width>
         <height>31</height>
        </rect>
       </property>
@@ -464,7 +466,7 @@ QPushButton:hover{
       <string>BlackNWhite</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="DetectFilter">
@@ -717,7 +719,7 @@ QPushButton:hover{
       <string>Frame</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="NeonFilter">
@@ -736,7 +738,7 @@ QPushButton:hover{
       <string>Neon Colors</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="HorizontalFlip">
@@ -755,7 +757,7 @@ QPushButton:hover{
       <string>H Flip</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="VerticalFlip">
@@ -774,7 +776,7 @@ QPushButton:hover{
       <string>V Flip</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="oldtvFilter">
@@ -793,7 +795,7 @@ QPushButton:hover{
       <string>Old TV</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="infraredFilter">
@@ -831,7 +833,7 @@ QPushButton:hover{
       <string>MergeWResize</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="empossFilter">
@@ -850,7 +852,7 @@ QPushButton:hover{
       <string>Emposs</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="MergeCrop">
@@ -869,9 +871,29 @@ QPushButton:hover{
       <string>MergeWCrop</string>
      </property>
      <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="swirlFilter">
+     <property name="geometry">
+      <rect>
+       <x>760</x>
+       <y>125</y>
+       <width>111</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Swirl</string>
+     </property>
+     <property name="checkable">
       <bool>true</bool>
      </property>
     </widget>
+<<<<<<< HEAD
     <widget class="QGroupBox" name="FrameGroup">
      <property name="geometry">
       <rect>
@@ -931,6 +953,8 @@ QPushButton:hover{
      </widget>
     </widget>
     <zorder>sliderGroup</zorder>
+=======
+>>>>>>> a922668c1bff88e2c6027b05a72df0d9dd4d3838
     <zorder>invertFilter</zorder>
     <zorder>sunLightFilter</zorder>
     <zorder>purpleFilter</zorder>
@@ -952,7 +976,12 @@ QPushButton:hover{
     <zorder>MergeFilter</zorder>
     <zorder>empossFilter</zorder>
     <zorder>MergeCrop</zorder>
+<<<<<<< HEAD
     <zorder>FrameGroup</zorder>
+=======
+    <zorder>swirlFilter</zorder>
+    <zorder>sliderGroup</zorder>
+>>>>>>> a922668c1bff88e2c6027b05a72df0d9dd4d3838
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
@@ -984,7 +1013,22 @@ QPushButton{
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">#clearImg{
+	color:#fff;
+}
+#saveImgBtn{
+	color:#fff;
+}
+#loadImgBtn{
+	color:#222222;
+}
+#clearImg:Enabled{
+	color:#222222;
+}
+#saveImgBtn:Enabled{
+	color:#222222;
+}
+</string>
      </property>
      <property name="text">
       <string>Load Image</string>
@@ -1000,7 +1044,16 @@ QPushButton{
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">#loadImgBtn{
+	color:#222222;
+}
+#clearImg:Enabled{
+	color:#222222;
+}
+#saveImgBtn:Enabled{
+	color:#222222;
+}
+</string>
      </property>
      <property name="text">
       <string>Reset Image</string>
@@ -1016,7 +1069,17 @@ QPushButton{
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">
+#loadImgBtn{
+	color:#222222;
+}
+#clearImg:Enabled{
+	color:#222222;
+}
+#saveImgBtn:Enabled{
+	color:#222222;
+}
+</string>
      </property>
      <property name="text">
       <string>Save  💾</string>
@@ -1112,6 +1175,32 @@ border:none;
        <width>350</width>
        <height>350</height>
       </size>
+     </property>
+    </widget>
+    <widget class="QLabel" name="undoTip">
+     <property name="geometry">
+      <rect>
+       <x>1300</x>
+       <y>20</y>
+       <width>111</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>JetBrains Mono</family>
+      </font>
+     </property>
+     <property name="text">
+      <string>Tip: You can
+ctrl+z for undo
+ctr+y for redo</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
@@ -1428,6 +1517,12 @@ QPushButton:hover {
        <width>361</width>
        <height>161</height>
       </rect>
+     </property>
+     <property name="mouseTracking">
+      <bool>false</bool>
+     </property>
+     <property name="tabletTracking">
+      <bool>false</bool>
      </property>
      <property name="styleSheet">
       <string notr="true">#justFrame{

@@ -9,7 +9,8 @@
 #include <stack>
 #include <cmath>
 #include <math.h>
-#include <limits> // for std::numeric_limits<int>::max() 
+#include <limits> // for std::numeric_limits<int>::max()
+#define C_PI 3.141592653589793238462643383279502884197169399375
 #define NCHANNEL 3
 using namespace std;
 
@@ -68,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->undoBtn->setEnabled(false);
     ui->saveImgBtn->setEnabled(false);
     ui->clearImg->setEnabled(false);
+    ui->swirlFilter->setEnabled(false);
 }
 MainWindow::~MainWindow()
 {
@@ -98,6 +100,7 @@ void purple_filter(Image &image);
 void color_frame(Image &img, int r, int g, int b);
 void fancy_frame_1(Image& image, int R, int G, int B);
 void Skew(Image& image, int angle);
+void swirl(Image &img, int strength);
 void old_tv(Image &image1, double brightness_factor = 1, int noise_intensity = 30);
 void oilPainting_filter(Image &image, int strength);
 void resize_image(Image &image, int newHeight);
@@ -148,6 +151,7 @@ void MainWindow::on_loadImgBtn_clicked()
 
     //  Check if File is Checked or not
     if (filePath != "") {
+        ui->undoTip->hide();
         //  Initializing the OrImage and CurrentImage for Image_class Libirary
         string orImgPath = filePath.toStdString();
         orImg.loadNewImage(orImgPath);
@@ -207,6 +211,7 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->saveImgBtn->setEnabled(true);
         ui->clearImg->setEnabled(true);
         ui->MergeFilter->setEnabled(true);
+        ui->swirlFilter->setEnabled(true);
         //  clear_undo_stack();
         clear_undo_stack();
         clear_redo_stack();
@@ -304,7 +309,7 @@ void MainWindow::on_MergeCrop_clicked()
         clear_redo_stack();
         currImg.saveImage(tempPath);
         QPixmap img = QPixmap(QtempPath);
-        ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+        ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
         hide_others();
     }
 
@@ -318,7 +323,7 @@ void MainWindow::on_NeonFilter_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -330,7 +335,7 @@ void MainWindow::on_HorizontalFlip_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -342,7 +347,7 @@ void MainWindow::on_VerticalFlip_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -373,7 +378,7 @@ void MainWindow::on_invertFilter_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 void MainWindow::on_infraredFilter_clicked()
@@ -383,7 +388,7 @@ void MainWindow::on_infraredFilter_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -394,7 +399,7 @@ void MainWindow::on_grayFilter_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -406,7 +411,7 @@ void MainWindow::on_empossFilter_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -419,7 +424,7 @@ void MainWindow::on_B_W_Filter_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -432,7 +437,7 @@ void MainWindow::on_DetectFilter_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -446,7 +451,7 @@ void MainWindow::on_oldtvFilter_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -487,7 +492,7 @@ void MainWindow::on_colorBtn_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -522,16 +527,17 @@ void MainWindow::on_filterSlider_valueChanged(int value)
         }else{
             ui->sliderValue->setText(QString::number(brightVal));
         }
-        //  normal Condition
-    }else{
-        ui->sliderValue->setText(QString::number(value));
-    }
-    if(ui->SkewFilter->isChecked()){
-        if(value == 90) {
+    //  special condition for skew
+    }else if(ui->SkewFilter->isChecked()){
+        if(value==90){
             ui->sliderValue->setText("Normal Position");
-        } else if(value > 90) {
-            ui->sliderValue->setText("Out of range");
+        }else{
+            ui->sliderValue->setText(QString::number(value));
         }
+    }
+    //  normal Condition
+    else{
+        ui->sliderValue->setText(QString::number(value));
     }
 }
 
@@ -592,17 +598,16 @@ void MainWindow::on_filterApply_clicked()
     }
 
     else if (ui->SkewFilter->isChecked()) {
-        if(angle >= 0){
             Skew(currImg,angle);
-        } else if (angle >= 100) {
-            Skew(currImg, angle - 10);
-        }
+    }else if(ui->swirlFilter->isChecked()){
+        swirl(currImg, 100 - strength);
     }
 
     //  Displaying the Image;
     currImg.saveImage(tempPath);
-    QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    outImageDisplay();
+    ui->heightEditVal->setText(QString::number(currImg.height));
+    ui->widthEditVal->setText(QString::number(currImg.width));
 
     ui->progressLabel->setText("Done !");
 
@@ -645,7 +650,19 @@ void MainWindow::on_SkewFilter_clicked(bool checked)
 {
     hide_others("SkewFilter");
     ui->filterSlider->setValue(0);
+    ui->sliderText->resize(235,41);
+    ui->sliderValue->move(255,75);
+    ui->sliderText->setText("Value in degrees:");
+    ui->filterSlider->setMaximum(90);
     ui->sliderGroup->setTitle("Skew Filter");
+    show_sliderWidgets(checked);
+}
+
+void MainWindow::on_swirlFilter_clicked(bool checked)
+{
+    hide_others("swirlFilter");
+    ui->filterSlider->setValue(20);
+    ui->sliderGroup->setTitle("Swirl Filter");
     show_sliderWidgets(checked);
 }
 
@@ -657,7 +674,7 @@ void MainWindow::on_purpleFilter_clicked()
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
 
@@ -728,7 +745,7 @@ void MainWindow::on_MergeFilter_clicked()
         clear_redo_stack();
         currImg.saveImage(tempPath);
         QPixmap img = QPixmap(QtempPath);
-        ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+        ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
         hide_others();
     }
 
@@ -767,6 +784,9 @@ void MainWindow::hide_others(string curr)
     if(curr != "SkewFilter") {
         ui->SkewFilter->setChecked(false);
     }
+    if(curr != "swirlFilter") {
+        ui->swirlFilter->setChecked(false);
+    }
     ui->sliderGroup->hide();
     show_cropWidgets(false);
     ui->cropFilter->setChecked(false);
@@ -775,7 +795,10 @@ void MainWindow::hide_others(string curr)
     ui->resizeFilterBtn->hide();
     ui->resizeRatio->setChecked(true);
     ui->justFrame->hide();
-    // ui->cropApply->hide();
+    ui->filterSlider->setMaximum(100);
+    ui->sliderText->setText("Value:");
+    ui->sliderText->resize(81,41);
+    ui->sliderValue->move(100,75);
     if (redoStack.empty()) {
         ui->redoBtn->setEnabled(false);
     } else {
@@ -1570,6 +1593,51 @@ void old_tv(Image &image1, double brightness_factor, int noise_intensity){
         }
     }
 }
+
+void swirl(Image &img, int strength){
+    float factor = (static_cast<double>(strength)/100.0f)*1.3f;
+    if(factor<0.3f){
+        factor=0.3;
+    }
+    factor *=(static_cast<double>(img.height)/4.0f);
+    double x0 = img.width/2;
+    double y0 = img.height/2;
+    Image temp = img;
+    for(int i=0;i<img.width;i++){
+        for(int j=0;j<img.height;j++){
+            double x = i - x0;
+            double y = j - y0;
+            double r = sqrt(x*x + y*y);
+            double originalAngle;
+            if(x!=0){
+                originalAngle =atan(abs(y)/abs(x));
+                if(x>0 && y<0) originalAngle = C_PI*2.0f - originalAngle;
+                else if(x <= 0 && y>= 0) originalAngle = C_PI - originalAngle;
+                else if(x<0 && y<0) originalAngle += C_PI;
+            }
+            else{
+                if(y>0) originalAngle = C_PI/2.0f;
+                else originalAngle = C_PI*3.0f/2.0f;
+
+            }
+            double swirlFactor = abs(r-img.width)/factor;
+            double angle = originalAngle + swirlFactor;
+            int x1 = (int) (floor(r*cos(angle)+0.5f))+x0;
+            int y1 = (int) (floor(r*sin(angle)+0.5f))+y0;
+            x1 = x1%img.width;
+            y1 = y1%img.height;
+            x1 = img.width - x1;
+            y1 = img.height - y1;
+            if(x1>=0 && x1<img.width && y1>=0 && y1<img.height){
+                temp(i,j,0) = img(x1,y1,0);
+                temp(i,j,1) = img(x1,y1,1);
+                temp(i,j,2) = img(x1,y1,2);
+            }
+        }
+    }
+    img = temp;
+}
+
 
 
 
