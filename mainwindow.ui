@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>RGBator</class>
+ <widget class="QMainWindow" name="RGBator">
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -25,8 +25,8 @@
   <property name="styleSheet">
    <string notr="true">
 #MainWindow QPushButton {
-	padding: 1px 5px;
-	border-radius: 5px;
+        padding: 1px 5px;
+        border-radius: 5px;
 }
 
 
@@ -87,44 +87,44 @@
     </property>
     <property name="styleSheet">
      <string notr="true">QWidget {
-	background-color: #252525;
-	color: #000;
-	border: 1px solid #000;
-	font: 9pt &quot;JetBrains Mono&quot;;
+        background-color: #252525;
+        color: #000;
+        border: 1px solid #000;
+        font: 9pt &quot;JetBrains Mono&quot;;
 }
 QPushButton{
-	
-	color: rgba(161, 161, 161,0.1);
-	border-bottom:  2px solid rgba(161, 161, 161,0.1);
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: 800;
-	border-radius: 0px;
+
+        color: rgba(161, 161, 161,0.1);
+        border-bottom:  2px solid rgba(161, 161, 161,0.1);
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        font-weight: 800;
+        border-radius: 0px;
 }
 
 QPushButton:Enabled:hover {
-	
-	background-color: #59FFA0;
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	color:  #222222;
-	
+
+        background-color: #59FFA0;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        color:  #222222;
+
 
 }
 QPushButton:Enabled:checked{
-	background-color: #59FFA0;
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
-	color:  #222222;
-	border-bottom:  2px solid #fff;
-	border-top: none;
-	border-right: none;
-	border-left: none;
+        background-color: #59FFA0;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        color:  #222222;
+        border-bottom:  2px solid #fff;
+        border-top: none;
+        border-right: none;
+        border-left: none;
 }
 QPushButton:Enabled{
-	color: rgba(255, 255, 255,1);
-	border-bottom:  2px solid rgba(161, 161, 161,1);
+        color: rgba(255, 255, 255,1);
+        border-bottom:  2px solid rgba(161, 161, 161,1);
 
 }</string>
     </property>
@@ -250,9 +250,9 @@ QPushButton:Enabled{
      </property>
      <property name="styleSheet">
       <string notr="true">QGroupBox{
-	color: #59FFA0;
-	border-radius: 10px;
-	border-color: #fff;
+        color: #59FFA0;
+        border-radius: 10px;
+        border-color: #fff;
 }</string>
      </property>
      <property name="title">
@@ -272,32 +272,32 @@ QPushButton:Enabled{
       </property>
       <property name="styleSheet">
        <string notr="true">QSlider{
-	border: none;
+        border: none;
 }
 
 QSlider::groove:horizontal{
-	border: 1px solid #000;
-	height: 5px;
+        border: 1px solid #000;
+        height: 5px;
 }
 QSlider::handle:horizontal{
-	background: #fff;
-	width: 12px;
-	height: 12px;
-	margin: -5px -1px;
-	border-radius: 6px;
+        background: #fff;
+        width: 12px;
+        height: 12px;
+        margin: -5px -1px;
+        border-radius: 6px;
 }
 
 QSlider::handle:horizontal:hover{
-	background: #fff;
-	border-color: #fff;
+        background: #fff;
+        border-color: #fff;
 }
 
 QSlider::add-page:horizontal{
-	background: qlineargradient(x1: 0, y1:0, x2: 1, y2:0, stop: 0 #fff, stop: 1 #000);
+        background: qlineargradient(x1: 0, y1:0, x2: 1, y2:0, stop: 0 #fff, stop: 1 #000);
 }
 
 QSlider::sub-page:horizontal{
-	background: #59FFA0;
+        background: #59FFA0;
 }
 
 </string>
@@ -324,7 +324,7 @@ QSlider::sub-page:horizontal{
        <enum>Qt::Horizontal</enum>
       </property>
       <property name="tickPosition">
-       <enum>QSlider::TicksBelow</enum>
+       <enum>QSlider::NoTicks</enum>
       </property>
       <property name="tickInterval">
        <number>5</number>
@@ -349,10 +349,10 @@ QSlider::sub-page:horizontal{
       </property>
       <property name="styleSheet">
        <string notr="true">QLabel{
-	border: none;
-	color: rgb(255, 255, 255);
-	font-weight: 500;
-	font-size: 24px;
+        border: none;
+        color: rgb(255, 255, 255);
+        font-weight: 500;
+        font-size: 24px;
 }</string>
       </property>
       <property name="text">
@@ -381,16 +381,13 @@ QSlider::sub-page:horizontal{
       </property>
       <property name="styleSheet">
        <string notr="true">QLabel{
-	color:  rgb(204,204,204);
-	border: none;
-	font-size: 20px;
+        color:  rgb(204,204,204);
+        border: none;
+        font-size: 20px;
 }</string>
       </property>
       <property name="text">
        <string>20</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
      <widget class="QPushButton" name="filterApply">
@@ -405,16 +402,16 @@ QSlider::sub-page:horizontal{
       <property name="styleSheet">
        <string notr="true">
 QPushButton{
-	color: #fff;
-	border: 1px solid #000;
-	border-radius: 15px;
-	border-color: #fff;
+        color: #fff;
+        border: 1px solid #000;
+        border-radius: 15px;
+        border-color: #fff;
 }
 
 QPushButton:hover{
-	background-color: #59FFA0;
-	border-color: rgb(0, 0, 0) ;
-	color: #353535;
+        background-color: #59FFA0;
+        border-color: rgb(0, 0, 0) ;
+        color: #353535;
 }</string>
       </property>
       <property name="text">
@@ -440,9 +437,9 @@ QPushButton:hover{
       </property>
       <property name="styleSheet">
        <string notr="true">QLabel{
-	border: none;
-	font-wight: 800;
-	color: #fff;
+        border: none;
+        font-wight: 800;
+        color: #fff;
 }</string>
       </property>
       <property name="text">
@@ -540,9 +537,9 @@ QPushButton:hover{
      </property>
      <property name="styleSheet">
       <string notr="true">QGroupBox{
-	color: 	#59FFA0;
-	border-radius: 10px;
-	border-color: #fff;
+        color: 	#59FFA0;
+        border-radius: 10px;
+        border-color: #fff;
 }</string>
      </property>
      <property name="title">
@@ -560,16 +557,16 @@ QPushButton:hover{
       <property name="styleSheet">
        <string notr="true">
 QPushButton{
-	color: #fff;
-	border: 1px solid #000;
-	border-radius: 15px;
-	border-color: #fff;
+        color: #fff;
+        border: 1px solid #000;
+        border-radius: 15px;
+        border-color: #fff;
 }
 
 QPushButton:hover{
-	background-color: #59FFA0;
-	border-color: rgb(0, 0, 0) ;
-	color: #353535;
+        background-color: #59FFA0;
+        border-color: rgb(0, 0, 0) ;
+        color: #353535;
 }</string>
       </property>
       <property name="text">
@@ -595,10 +592,10 @@ QPushButton:hover{
       </property>
       <property name="styleSheet">
        <string notr="true">QLabel{
-	font: 350 9pt &quot;Yu Gothic UI Semilight&quot;;
-	color: #fff;
-	border: none;
-	font-weight: 600;
+        font: 350 9pt &quot;Yu Gothic UI Semilight&quot;;
+        color: #fff;
+        border: none;
+        font-weight: 600;
 }</string>
       </property>
       <property name="text">
@@ -624,10 +621,10 @@ QPushButton:hover{
       </property>
       <property name="styleSheet">
        <string notr="true">QLabel{
-	font: 350 9pt &quot;Yu Gothic UI Semilight&quot;;
-	color: rgb(255, 255, 255);
-	border: none;
-	font-weight: 600;
+        font: 350 9pt &quot;Yu Gothic UI Semilight&quot;;
+        color: rgb(255, 255, 255);
+        border: none;
+        font-weight: 600;
 }</string>
       </property>
       <property name="text">
@@ -644,13 +641,13 @@ QPushButton:hover{
        </rect>
       </property>
       <property name="focusPolicy">
-       <enum>Qt::ClickFocus</enum>
+       <enum>Qt::NoFocus</enum>
       </property>
       <property name="styleSheet">
        <string notr="true">QLineEdit{
-	border-radius: 7px;
-	color: #fff;
-	border-color: #fff;
+        border-radius: 7px;
+        color: #fff;
+        border-color: #fff;
 }</string>
       </property>
       <property name="frame">
@@ -674,9 +671,9 @@ QPushButton:hover{
       </property>
       <property name="styleSheet">
        <string notr="true">QLineEdit{
-	border-radius: 7px;
-	color: #fff;
-	border-color: #fff;
+        border-radius: 7px;
+        color: #fff;
+        border-color: #fff;
 }</string>
       </property>
       <property name="frame">
@@ -719,7 +716,7 @@ QPushButton:hover{
       <string>Frame</string>
      </property>
      <property name="checkable">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="NeonFilter">
@@ -893,7 +890,6 @@ QPushButton:hover{
       <bool>true</bool>
      </property>
     </widget>
-<<<<<<< HEAD
     <widget class="QGroupBox" name="FrameGroup">
      <property name="geometry">
       <rect>
@@ -905,9 +901,9 @@ QPushButton:hover{
      </property>
      <property name="styleSheet">
       <string notr="true">QGroupBox{
-	color: 	#59FFA0;
-	border-radius: 10px;
-	border-color: #fff;
+        color: 	#59FFA0;
+        border-radius: 10px;
+        border-color: #fff;
 }</string>
      </property>
      <property name="title">
@@ -924,8 +920,8 @@ QPushButton:hover{
       </property>
       <property name="styleSheet">
        <string notr="true">QPushButton{
-	border: 2px solid rgb(161,161,161);
-	border-radius: 5px;
+        border: 2px solid rgb(161,161,161);
+        border-radius: 5px;
 }</string>
       </property>
       <property name="text">
@@ -943,8 +939,8 @@ QPushButton:hover{
       </property>
       <property name="styleSheet">
        <string notr="true">QPushButton{
-	border: 2px solid rgb(161,161,161);
-	border-radius: 5px;
+        border: 2px solid rgb(161,161,161);
+        border-radius: 5px;
 }</string>
       </property>
       <property name="text">
@@ -953,8 +949,6 @@ QPushButton:hover{
      </widget>
     </widget>
     <zorder>sliderGroup</zorder>
-=======
->>>>>>> a922668c1bff88e2c6027b05a72df0d9dd4d3838
     <zorder>invertFilter</zorder>
     <zorder>sunLightFilter</zorder>
     <zorder>purpleFilter</zorder>
@@ -976,12 +970,8 @@ QPushButton:hover{
     <zorder>MergeFilter</zorder>
     <zorder>empossFilter</zorder>
     <zorder>MergeCrop</zorder>
-<<<<<<< HEAD
     <zorder>FrameGroup</zorder>
-=======
     <zorder>swirlFilter</zorder>
-    <zorder>sliderGroup</zorder>
->>>>>>> a922668c1bff88e2c6027b05a72df0d9dd4d3838
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
@@ -994,11 +984,11 @@ QPushButton:hover{
     </property>
     <property name="styleSheet">
      <string notr="true">#widget_2{
-	background-color: #252525;
+        background-color: #252525;
 }
 QPushButton{
-	border: 2px solid rgb(161,161,161);
-	border-radius: 5px;
+        border: 2px solid rgb(161,161,161);
+        border-radius: 5px;
 }
 
 </string>
@@ -1014,19 +1004,19 @@ QPushButton{
      </property>
      <property name="styleSheet">
       <string notr="true">#clearImg{
-	color:#fff;
+        color:#fff;
 }
 #saveImgBtn{
-	color:#fff;
+        color:#fff;
 }
 #loadImgBtn{
-	color:#222222;
+        color:#222222;
 }
 #clearImg:Enabled{
-	color:#222222;
+        color:#222222;
 }
 #saveImgBtn:Enabled{
-	color:#222222;
+        color:#222222;
 }
 </string>
      </property>
@@ -1045,13 +1035,13 @@ QPushButton{
      </property>
      <property name="styleSheet">
       <string notr="true">#loadImgBtn{
-	color:#222222;
+        color:#222222;
 }
 #clearImg:Enabled{
-	color:#222222;
+        color:#222222;
 }
 #saveImgBtn:Enabled{
-	color:#222222;
+        color:#222222;
 }
 </string>
      </property>
@@ -1071,13 +1061,13 @@ QPushButton{
      <property name="styleSheet">
       <string notr="true">
 #loadImgBtn{
-	color:#222222;
+        color:#222222;
 }
 #clearImg:Enabled{
-	color:#222222;
+        color:#222222;
 }
 #saveImgBtn:Enabled{
-	color:#222222;
+        color:#222222;
 }
 </string>
      </property>
@@ -1096,7 +1086,7 @@ QPushButton{
      </property>
      <property name="styleSheet">
       <string notr="true">#undoBtn{
-	font: 12pt &quot;JetBrains Mono&quot;;
+        font: 12pt &quot;JetBrains Mono&quot;;
 }
 
 </string>
@@ -1130,7 +1120,7 @@ QPushButton{
      </property>
      <property name="styleSheet">
       <string notr="true">#redoBtn{
-	font: 12pt &quot;JetBrains Mono&quot;;
+        font: 12pt &quot;JetBrains Mono&quot;;
 }
 </string>
      </property>
@@ -1196,9 +1186,6 @@ border:none;
 ctrl+z for undo
 ctr+y for redo</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
      <property name="wordWrap">
       <bool>true</bool>
      </property>
@@ -1215,7 +1202,7 @@ ctr+y for redo</string>
     </property>
     <property name="styleSheet">
      <string notr="true">#widget_3{
-	background-color: #151515;
+        background-color: #151515;
 }</string>
     </property>
     <widget class="QPushButton" name="rotateLeft">
@@ -1235,13 +1222,13 @@ ctr+y for redo</string>
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton{
-	font-size: 50px;
-	border: none;
-	color:#fff;
+        font-size: 50px;
+        border: none;
+        color:#fff;
 }
 
 QPushButton:hover{
-	background: none;
+        background: none;
 }</string>
      </property>
      <property name="text">
@@ -1269,15 +1256,15 @@ QPushButton:hover{
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton{
-	color: #fff;
-	border: 1px solid #fff;
-	font-weight: 800;
+        color: #fff;
+        border: 1px solid #fff;
+        font-weight: 800;
 }
 
 QPushButton:hover {
-	
-	background-color: rgb(0, 0, 127);
-	border : 1px solid rgb(0, 0, 127);
+
+        background-color: rgb(0, 0, 127);
+        border : 1px solid rgb(0, 0, 127);
 
 }
 </string>
@@ -1299,13 +1286,13 @@ QPushButton:hover {
       </rect>
      </property>
      <property name="focusPolicy">
-      <enum>Qt::ClickFocus</enum>
+      <enum>Qt::NoFocus</enum>
      </property>
      <property name="styleSheet">
       <string notr="true">QLineEdit{
-	border-radius: 4px;
-	color: #fff;
-	border-color: #fff;
+        border-radius: 4px;
+        color: #fff;
+        border-color: #fff;
 }</string>
      </property>
      <property name="dragEnabled">
@@ -1334,10 +1321,10 @@ QPushButton:hover {
      </property>
      <property name="styleSheet">
       <string notr="true">QLabel{
-	font: 350 9pt &quot;Yu Gothic UI Semilight&quot;;
-	color: rgb(255, 255, 255);
-	border: none;
-	font-weight: 600;
+        font: 350 9pt &quot;Yu Gothic UI Semilight&quot;;
+        color: rgb(255, 255, 255);
+        border: none;
+        font-weight: 600;
 }</string>
      </property>
      <property name="text">
@@ -1355,9 +1342,9 @@ QPushButton:hover {
      </property>
      <property name="styleSheet">
       <string notr="true">QLineEdit{
-	border-radius: 5px;
-	color: #fff;
-	border-color: #fff;
+        border-radius: 5px;
+        color: #fff;
+        border-color: #fff;
 }</string>
      </property>
     </widget>
@@ -1380,10 +1367,10 @@ QPushButton:hover {
      </property>
      <property name="styleSheet">
       <string notr="true">QLabel{
-	font: 350 9pt &quot;Yu Gothic UI Semilight&quot;;
-	color: rgb(255, 255, 255);
-	border: none;
-	font-weight: 600;
+        font: 350 9pt &quot;Yu Gothic UI Semilight&quot;;
+        color: rgb(255, 255, 255);
+        border: none;
+        font-weight: 600;
 }</string>
      </property>
      <property name="text">
@@ -1407,7 +1394,7 @@ QPushButton:hover {
      </property>
      <property name="styleSheet">
       <string notr="true">QCheckBox{
-	color: #fff;
+        color: #fff;
 
 }</string>
      </property>
@@ -1421,7 +1408,7 @@ QPushButton:hover {
     <widget class="QLabel" name="inImg">
      <property name="geometry">
       <rect>
-       <x>61</x>
+       <x>60</x>
        <y>70</y>
        <width>700</width>
        <height>400</height>
@@ -1429,14 +1416,11 @@ QPushButton:hover {
      </property>
      <property name="styleSheet">
       <string notr="true">#inImg{
-	border: none;
+        border: none;
 }</string>
      </property>
      <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="text">
       <string>Source Preview</string>
@@ -1509,7 +1493,7 @@ QPushButton:hover {
       </item>
      </layout>
     </widget>
-    <widget class="QLabel" name="justFrame">
+    <widget class="CustomLabel" name="justFrame">
      <property name="geometry">
       <rect>
        <x>820</x>
@@ -1556,13 +1540,13 @@ border: 2px dashed #fff
      </property>
      <property name="styleSheet">
       <string notr="true">QPushButton{
-	font-size: 50px;
-	border: none;
-	color:#fff;
+        font-size: 50px;
+        border: none;
+        color:#fff;
 }
 
 QPushButton:hover{
-	background: none;
+        background: none;
 }</string>
      </property>
      <property name="text">
@@ -1579,81 +1563,135 @@ QPushButton:hover{
       </size>
      </property>
     </widget>
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="frameTabs">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>60</x>
        <y>30</y>
-       <width>561</width>
-       <height>461</height>
+       <width>577</width>
+       <height>450</height>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
-     <widget class="QWidget" name="Fancy1">
+     <widget class="QWidget" name="chessFrameTab">
       <attribute name="title">
-       <string>Fancy 1</string>
+       <string>Chess Frame</string>
       </attribute>
-      <widget class="QPushButton" name="applyBtn1">
+      <widget class="QPushButton" name="cheesFrameApply">
        <property name="geometry">
         <rect>
-         <x>11</x>
-         <y>363</y>
-         <width>531</width>
-         <height>51</height>
+         <x>40</x>
+         <y>360</y>
+         <width>500</width>
+         <height>50</height>
         </rect>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>500</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
-	border : 1px solid #fff; 
+        border : 1px solid #fff;
 }</string>
        </property>
        <property name="text">
         <string>Apply</string>
        </property>
       </widget>
-      <widget class="QWidget" name="FancyFrame1" native="true">
+      <widget class="QLabel" name="chessFrameLabel">
        <property name="geometry">
         <rect>
-         <x>9</x>
-         <y>10</y>
-         <width>541</width>
-         <height>351</height>
+         <x>130</x>
+         <y>30</y>
+         <width>300</width>
+         <height>300</height>
         </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </widget>
-     <widget class="QWidget" name="Fancy2">
+     <widget class="QWidget" name="innerFrameTab">
       <attribute name="title">
-       <string>Fancy 2</string>
+       <string>Inner Frame</string>
       </attribute>
-      <widget class="QPushButton" name="applyBtn_2">
+      <widget class="QPushButton" name="innerFrameApply">
        <property name="geometry">
         <rect>
-         <x>11</x>
-         <y>363</y>
-         <width>531</width>
-         <height>51</height>
+         <x>40</x>
+         <y>360</y>
+         <width>500</width>
+         <height>50</height>
         </rect>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
-	border : 1px solid #fff; 
+        border : 1px solid #fff;
 }</string>
        </property>
        <property name="text">
         <string>Apply</string>
        </property>
       </widget>
-      <widget class="QWidget" name="FancyFrame2" native="true">
+      <widget class="QLabel" name="innerFrameLabel">
        <property name="geometry">
         <rect>
-         <x>7</x>
-         <y>5</y>
-         <width>541</width>
-         <height>351</height>
+         <x>130</x>
+         <y>30</y>
+         <width>300</width>
+         <height>300</height>
         </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="coloredFramTab">
+      <attribute name="title">
+       <string>Colored Corners</string>
+      </attribute>
+      <widget class="QPushButton" name="coloredFrameApply">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>360</y>
+         <width>500</width>
+         <height>50</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+        border : 1px solid #fff;
+}</string>
+       </property>
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="coloredFrameLabel">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>30</y>
+         <width>300</width>
+         <height>300</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
        </property>
       </widget>
      </widget>

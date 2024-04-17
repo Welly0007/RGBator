@@ -1,30 +1,33 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QLabel>
-#include <QMouseEvent>
-#include <QColorDialog>>
 #include <QColor>
-#include <QPalette>
+#include <QColorDialog>>
 #include <QDebug>
+#include <QLabel>
+#include <QMainWindow>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPainterPath>
+#include <QPalette>
 #include <QPushButton>
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class RGBator;
 }
 QT_END_NAMESPACE
-class FancyButton : public QPushButton {
+class FancyButton : public QPushButton
+{
     Q_OBJECT
 
 public:
-    explicit FancyButton(QWidget* parent = nullptr)
-        : QPushButton(parent) {}
+    explicit FancyButton(QWidget *parent = nullptr)
+        : QPushButton(parent)
+    {}
 
 protected:
-    void paintEvent(QPaintEvent*) override {
+    void paintEvent(QPaintEvent *) override
+    {
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
 
@@ -37,8 +40,8 @@ protected:
         path.moveTo(5, 0);
         path.lineTo(width(), 0);
         path.lineTo(width(), 5);
-        path.lineTo(width(), height()-5);
-        path.lineTo(width()-5, height());
+        path.lineTo(width(), height() - 5);
+        path.lineTo(width() - 5, height());
         path.lineTo(5, height());
         path.lineTo(0, height());
         path.lineTo(0, 5);
@@ -55,21 +58,23 @@ protected:
     }
 };
 
-class CustomLabel : public QLabel {
+class CustomLabel : public QLabel
+{
     Q_OBJECT
 public:
-    explicit CustomLabel(QWidget* parent = nullptr);
-    void mouseMoveEvent(QMouseEvent* event) override;
+    explicit CustomLabel(QWidget *parent = nullptr);
+    void mouseMoveEvent(QMouseEvent *event) override;
+
 protected:
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
 private:
     bool isHolding = false;
 signals:
-    void mousePressed(const QPoint&);
-    void mouseHolding(const QPoint& pos);
+    void mousePressed(const QPoint &);
+    void mouseHolding(const QPoint &pos);
 };
-
 
 class MainWindow : public QMainWindow
 {
@@ -84,7 +89,7 @@ public:
     //s
 private slots:
     // customLabel slots
-    void handleMouseHolding(const QPoint& pos);
+    void handleMouseHolding(const QPoint &pos);
     //  End custom
 
     void on_loadImgBtn_clicked();
@@ -121,7 +126,6 @@ private slots:
 
     void on_B_W_Filter_clicked();
 
-
     void on_DetectFilter_clicked();
 
     void on_BrightFilter_clicked(bool checked);
@@ -136,12 +140,7 @@ private slots:
 
     void on_cropApply_clicked();
 
-<<<<<<< HEAD
-
-=======
->>>>>>> a922668c1bff88e2c6027b05a72df0d9dd4d3838
     void on_oldtvFilter_clicked();
-
 
     void on_NeonFilter_clicked();
 
@@ -167,9 +166,14 @@ private slots:
 
     void on_fancyBtn_clicked();
 
-    void on_applyBtn1_clicked();
+
+    void on_cheesFrameApply_clicked();
+
+    void on_innerFrameApply_clicked();
+
+    void on_coloredFrameApply_clicked();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::RGBator *ui;
 };
 #endif // MAINWINDOW_H

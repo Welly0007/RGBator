@@ -268,7 +268,6 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "on_cropHeight_textChanged",
     "on_cropApply_clicked",
     "on_oldtvFilter_clicked",
-    "on_FrameFilter_clicked",
     "on_NeonFilter_clicked",
     "on_HorizontalFlip_clicked",
     "on_VerticalFlip_clicked",
@@ -277,7 +276,13 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "on_MergeCrop_clicked",
     "on_empossFilter_clicked",
     "on_SkewFilter_clicked",
-    "on_swirlFilter_clicked"
+    "on_swirlFilter_clicked",
+    "on_FrameFilter_clicked",
+    "on_colorBtn_clicked",
+    "on_fancyBtn_clicked",
+    "on_cheesFrameApply_clicked",
+    "on_innerFrameApply_clicked",
+    "on_coloredFrameApply_clicked"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -290,7 +295,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      38,   14, // methods
+      43,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -298,44 +303,49 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,  242,    2, 0x08,    1 /* Private */,
-       4,    0,  245,    2, 0x08,    3 /* Private */,
-       5,    0,  246,    2, 0x08,    4 /* Private */,
-       6,    0,  247,    2, 0x08,    5 /* Private */,
-       7,    0,  248,    2, 0x08,    6 /* Private */,
-       8,    0,  249,    2, 0x08,    7 /* Private */,
-       9,    0,  250,    2, 0x08,    8 /* Private */,
-      10,    0,  251,    2, 0x08,    9 /* Private */,
-      11,    0,  252,    2, 0x08,   10 /* Private */,
-      12,    0,  253,    2, 0x08,   11 /* Private */,
-      13,    0,  254,    2, 0x08,   12 /* Private */,
-      14,    0,  255,    2, 0x08,   13 /* Private */,
-      15,    1,  256,    2, 0x08,   14 /* Private */,
-      17,    1,  259,    2, 0x08,   16 /* Private */,
-      19,    1,  262,    2, 0x08,   18 /* Private */,
-      20,    1,  265,    2, 0x08,   20 /* Private */,
-      21,    0,  268,    2, 0x08,   22 /* Private */,
-      22,    0,  269,    2, 0x08,   23 /* Private */,
-      23,    0,  270,    2, 0x08,   24 /* Private */,
-      24,    0,  271,    2, 0x08,   25 /* Private */,
-      25,    0,  272,    2, 0x08,   26 /* Private */,
-      26,    0,  273,    2, 0x08,   27 /* Private */,
-      27,    1,  274,    2, 0x08,   28 /* Private */,
-      28,    1,  277,    2, 0x08,   30 /* Private */,
-      29,    1,  280,    2, 0x08,   32 /* Private */,
-      31,    1,  283,    2, 0x08,   34 /* Private */,
-      32,    0,  286,    2, 0x08,   36 /* Private */,
-      33,    0,  287,    2, 0x08,   37 /* Private */,
-      34,    0,  288,    2, 0x08,   38 /* Private */,
-      35,    0,  289,    2, 0x08,   39 /* Private */,
-      36,    0,  290,    2, 0x08,   40 /* Private */,
-      37,    0,  291,    2, 0x08,   41 /* Private */,
-      38,    0,  292,    2, 0x08,   42 /* Private */,
-      39,    0,  293,    2, 0x08,   43 /* Private */,
-      40,    0,  294,    2, 0x08,   44 /* Private */,
-      41,    0,  295,    2, 0x08,   45 /* Private */,
-      42,    1,  296,    2, 0x08,   46 /* Private */,
-      43,    1,  299,    2, 0x08,   48 /* Private */,
+       1,    1,  272,    2, 0x08,    1 /* Private */,
+       4,    0,  275,    2, 0x08,    3 /* Private */,
+       5,    0,  276,    2, 0x08,    4 /* Private */,
+       6,    0,  277,    2, 0x08,    5 /* Private */,
+       7,    0,  278,    2, 0x08,    6 /* Private */,
+       8,    0,  279,    2, 0x08,    7 /* Private */,
+       9,    0,  280,    2, 0x08,    8 /* Private */,
+      10,    0,  281,    2, 0x08,    9 /* Private */,
+      11,    0,  282,    2, 0x08,   10 /* Private */,
+      12,    0,  283,    2, 0x08,   11 /* Private */,
+      13,    0,  284,    2, 0x08,   12 /* Private */,
+      14,    0,  285,    2, 0x08,   13 /* Private */,
+      15,    1,  286,    2, 0x08,   14 /* Private */,
+      17,    1,  289,    2, 0x08,   16 /* Private */,
+      19,    1,  292,    2, 0x08,   18 /* Private */,
+      20,    1,  295,    2, 0x08,   20 /* Private */,
+      21,    0,  298,    2, 0x08,   22 /* Private */,
+      22,    0,  299,    2, 0x08,   23 /* Private */,
+      23,    0,  300,    2, 0x08,   24 /* Private */,
+      24,    0,  301,    2, 0x08,   25 /* Private */,
+      25,    0,  302,    2, 0x08,   26 /* Private */,
+      26,    0,  303,    2, 0x08,   27 /* Private */,
+      27,    1,  304,    2, 0x08,   28 /* Private */,
+      28,    1,  307,    2, 0x08,   30 /* Private */,
+      29,    1,  310,    2, 0x08,   32 /* Private */,
+      31,    1,  313,    2, 0x08,   34 /* Private */,
+      32,    0,  316,    2, 0x08,   36 /* Private */,
+      33,    0,  317,    2, 0x08,   37 /* Private */,
+      34,    0,  318,    2, 0x08,   38 /* Private */,
+      35,    0,  319,    2, 0x08,   39 /* Private */,
+      36,    0,  320,    2, 0x08,   40 /* Private */,
+      37,    0,  321,    2, 0x08,   41 /* Private */,
+      38,    0,  322,    2, 0x08,   42 /* Private */,
+      39,    0,  323,    2, 0x08,   43 /* Private */,
+      40,    0,  324,    2, 0x08,   44 /* Private */,
+      41,    1,  325,    2, 0x08,   45 /* Private */,
+      42,    1,  328,    2, 0x08,   47 /* Private */,
+      43,    1,  331,    2, 0x08,   49 /* Private */,
+      44,    0,  334,    2, 0x08,   51 /* Private */,
+      45,    0,  335,    2, 0x08,   52 /* Private */,
+      46,    0,  336,    2, 0x08,   53 /* Private */,
+      47,    0,  337,    2, 0x08,   54 /* Private */,
+      48,    0,  338,    2, 0x08,   55 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QPoint,    3,
@@ -373,9 +383,14 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Bool,   16,
+    QMetaType::Void, QMetaType::Bool,   16,
+    QMetaType::Void, QMetaType::Bool,   16,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Bool,   16,
-    QMetaType::Void, QMetaType::Bool,   16,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -454,8 +469,6 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_oldtvFilter_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_FrameFilter_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_NeonFilter_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_HorizontalFlip_clicked'
@@ -475,7 +488,20 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<bool, std::false_type>,
         // method 'on_swirlFilter_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<bool, std::false_type>
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        // method 'on_FrameFilter_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        // method 'on_colorBtn_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_fancyBtn_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_cheesFrameApply_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_innerFrameApply_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_coloredFrameApply_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
@@ -514,16 +540,21 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 25: _t->on_cropHeight_textChanged((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 26: _t->on_cropApply_clicked(); break;
         case 27: _t->on_oldtvFilter_clicked(); break;
-        case 28: _t->on_FrameFilter_clicked(); break;
-        case 29: _t->on_NeonFilter_clicked(); break;
-        case 30: _t->on_HorizontalFlip_clicked(); break;
-        case 31: _t->on_VerticalFlip_clicked(); break;
-        case 32: _t->on_infraredFilter_clicked(); break;
-        case 33: _t->on_MergeFilter_clicked(); break;
-        case 34: _t->on_MergeCrop_clicked(); break;
-        case 35: _t->on_empossFilter_clicked(); break;
-        case 36: _t->on_SkewFilter_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
-        case 37: _t->on_swirlFilter_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 28: _t->on_NeonFilter_clicked(); break;
+        case 29: _t->on_HorizontalFlip_clicked(); break;
+        case 30: _t->on_VerticalFlip_clicked(); break;
+        case 31: _t->on_infraredFilter_clicked(); break;
+        case 32: _t->on_MergeFilter_clicked(); break;
+        case 33: _t->on_MergeCrop_clicked(); break;
+        case 34: _t->on_empossFilter_clicked(); break;
+        case 35: _t->on_SkewFilter_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 36: _t->on_swirlFilter_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 37: _t->on_FrameFilter_clicked((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1]))); break;
+        case 38: _t->on_colorBtn_clicked(); break;
+        case 39: _t->on_fancyBtn_clicked(); break;
+        case 40: _t->on_cheesFrameApply_clicked(); break;
+        case 41: _t->on_innerFrameApply_clicked(); break;
+        case 42: _t->on_coloredFrameApply_clicked(); break;
         default: ;
         }
     }
@@ -548,13 +579,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 38)
+        if (_id < 43)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 38;
+        _id -= 43;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 38)
+        if (_id < 43)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 38;
+        _id -= 43;
     }
     return _id;
 }

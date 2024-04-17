@@ -5,23 +5,23 @@
 #include <QPixmap>
 #include "Image_Class.h"
 #include "ui_mainwindow.h"
-#include <iostream>
-#include <stack>
 #include <cmath>
-#include <math.h>
+#include <iostream>
 #include <limits> // for std::numeric_limits<int>::max()
+#include <math.h>
+#include <stack>
 #define C_PI 3.141592653589793238462643383279502884197169399375
 #define NCHANNEL 3
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::RGBator)
 {
     ui->setupUi(this);
 
     connect(ui->outImg, &CustomLabel::mouseHolding, this, &MainWindow::handleMouseHolding);
-
+    // connect(ui->justFrame, &CustomLabel::mouseHolding, this, &MainWindow::handleMouseHolding);
 
     //  setting some widgets to be initially hidden
     show_cropWidgets(false);
@@ -30,6 +30,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->undoBtn->setIcon(QIcon("icons/undo_alt.png"));
     ui->redoBtn->setIcon(QIcon("icons/redo_alt.png"));
     ui->titleIcon->setIcon(QIcon("icons/RGB.png"));
+    QPixmap chessImg("icons/chess_frame_test.jpg");
+    ui->chessFrameLabel->setPixmap(chessImg.scaled(300, 300));
+    QPixmap cornerImg("icons/corners_frame_test.jpg");
+    ui->coloredFrameLabel->setPixmap(cornerImg.scaled(300, 300));
+    QPixmap innerImg("icons/inner_frame_test.jpg");
+    ui->innerFrameLabel->setPixmap(innerImg.scaled(300, 300));
+
     ui->sliderGroup->hide();
     ui->widthEditVal->hide();
     ui->heightEditVal->hide();
@@ -38,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->resizeFilterBtn->hide();
     ui->resizeRatio->hide();
     ui->FrameGroup->hide();
-    ui->tabWidget->hide();
+    ui->frameTabs->hide();
     // ui->rotateLeft->hide();
     // ui->rotateRight->hide();
 
@@ -97,9 +104,7 @@ void sunlight_filter(Image &image, int sunStrength);
 void blur_filter(Image &image, int blurStr);
 void Dark_and_Light(Image &imgage, int strength);
 void purple_filter(Image &image);
-void color_frame(Image &img, int r, int g, int b);
-void fancy_frame_1(Image& image, int R, int G, int B);
-void Skew(Image& image, int angle);
+void Skew(Image &image, int angle);
 void swirl(Image &img, int strength);
 void old_tv(Image &image1, double brightness_factor = 1, int noise_intensity = 30);
 void oilPainting_filter(Image &image, int strength);
@@ -110,11 +115,15 @@ void edgeDetection(Image &image);
 void flip_horizontally(Image &image1);
 void flip_vertically(Image &image1);
 void Merge(Image &img, Image &img2);
-void mergeWResize(Image& image1, Image& image2);
+void mergeWResize(Image &image1, Image &image2);
 Image sameSizeMerge(Image &img1, Image &img2, float alpha = 0.5);
 Image resizeForMerge(Image &image, int width, int height);
 void mergeWCrop(Image &image1, Image &image2);
 Image cropForMerge(Image &image, int x = 0, int y = 0, int width = 0, int height = 0);
+void basic_frame(Image& image, int R, int G, int B);
+void chess_frame(Image& image);
+void corners_frame(Image& image, int R, int G, int B);
+void inner_frame(Image& image, int R, int G, int B);
 
 //  other functions prototpyes
 void clear_undo_stack();
@@ -129,25 +138,27 @@ void show_cropWidgets(bool);
 //  File Events functions
 
 //  Load image
-void MainWindow::outImageDisplay(){
-    float aspectRatio = static_cast<float>(currImg.width)/currImg.height;
+void MainWindow::outImageDisplay()
+{
+    float aspectRatio = static_cast<float>(currImg.width) / currImg.height;
     labelHeight = 400;
-    labelWidth = labelHeight*aspectRatio;
-    if(labelWidth > 700){
-        labelWidth = min(currImg.width,700);
-        labelHeight = min(currImg.height,400);
+    labelWidth = labelHeight * aspectRatio;
+    if (labelWidth > 700) {
+        labelWidth = min(currImg.width, 700);
+        labelHeight = min(currImg.height, 400);
     }
     ui->outImg->setMaximumWidth(labelWidth);
     ui->outImg->setMaximumHeight(labelHeight);
     QPixmap currImageDis(QtempPath);
     ui->outImg->setPixmap(currImageDis.scaled(labelWidth, labelHeight));
-
 }
 void MainWindow::on_loadImgBtn_clicked()
 {
     //  Open File Dialoge to load Image, With specified Extensions
     QString filter = "(*.jpg *.png *.bmp *.tga) ;; (*.jpg) ;; (*.png) ;; (*.bmp) ;; (*.tga)";
     QString filePath = QFileDialog::getOpenFileName(this, "load", QDir::homePath(), filter);
+    QPixmap chessFrame("icons/chess_frame_test.jpg");
+    ui->chessFrameLabel->setPixmap(chessFrame.scaled(300, 300, Qt::KeepAspectRatio));
 
     //  Check if File is Checked or not
     if (filePath != "") {
@@ -169,10 +180,10 @@ void MainWindow::on_loadImgBtn_clicked()
         //Displaying the in and out Image;
         QPixmap img(filePath);
         labelHeight = 400;
+
         ui->inImg->setPixmap(img.scaled(700, labelHeight, Qt::KeepAspectRatio));
+
         outImageDisplay();
-
-
 
         ui->widthEditVal->setText(QString::number(orImg.width));
         ui->heightEditVal->setText(QString::number(orImg.height));
@@ -278,10 +289,9 @@ void MainWindow::on_redoBtn_clicked()
 
 //  Filters Events
 
-
 void MainWindow::on_MergeCrop_clicked()
 {
- //  Open File Dialoge to load Image, With specified Extensions
+    //  Open File Dialoge to load Image, With specified Extensions
     QString filter = "(*.jpg *.png *.bmp *.tga) ;; (*.jpg) ;; (*.png) ;; (*.bmp) ;; (*.tga)";
     QString filePath = QFileDialog::getOpenFileName(this, "load", QDir::homePath(), filter);
 
@@ -302,7 +312,6 @@ void MainWindow::on_MergeCrop_clicked()
         ui->widthEditVal->setText(QString::number(mergeImg.width));
         ui->heightEditVal->setText(QString::number(mergeImg.height));
 
-
         undoStack.push(currImg);
         // Merge(currImg,mergeImg);
         mergeWCrop(currImg, mergeImg);
@@ -312,9 +321,7 @@ void MainWindow::on_MergeCrop_clicked()
         ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
         hide_others();
     }
-
 }
-
 
 void MainWindow::on_NeonFilter_clicked()
 {
@@ -327,7 +334,6 @@ void MainWindow::on_NeonFilter_clicked()
     hide_others();
 }
 
-
 void MainWindow::on_HorizontalFlip_clicked()
 {
     undoStack.push(currImg);
@@ -338,7 +344,6 @@ void MainWindow::on_HorizontalFlip_clicked()
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
-
 
 void MainWindow::on_VerticalFlip_clicked()
 {
@@ -403,7 +408,6 @@ void MainWindow::on_grayFilter_clicked()
     hide_others();
 }
 
-
 void MainWindow::on_empossFilter_clicked()
 {
     undoStack.push(currImg);
@@ -414,8 +418,6 @@ void MainWindow::on_empossFilter_clicked()
     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
     hide_others();
 }
-
-
 
 void MainWindow::on_B_W_Filter_clicked()
 {
@@ -441,9 +443,6 @@ void MainWindow::on_DetectFilter_clicked()
     hide_others();
 }
 
-
-
-
 void MainWindow::on_oldtvFilter_clicked()
 {
     undoStack.push(currImg);
@@ -455,30 +454,15 @@ void MainWindow::on_oldtvFilter_clicked()
     hide_others();
 }
 
-
-// void MainWindow::on_FrameFilter_clicked()
-// {
-//     QColor ColorValue = QColorDialog::getColor(Qt::white, this, tr("Selcet Color"));
-//     int red = ColorValue.red();
-//     int green = ColorValue.green();
-//     int blue = ColorValue.blue();
-//     undoStack.push(currImg);
-//     Frame(currImg, red, green, blue);
-//     clear_redo_stack();
-//     currImg.saveImage(tempPath);
-//     QPixmap img = QPixmap(QtempPath);
-//     ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
-//     hide_others();
-
-// }
-
 void MainWindow::on_FrameFilter_clicked(bool checked)
 {
-    if(checked){
+    hide_others("FrameFilter");
+    if (checked) {
         ui->FrameGroup->show();
     } else {
         ui->FrameGroup->hide();
     }
+
 }
 
 void MainWindow::on_colorBtn_clicked()
@@ -488,7 +472,7 @@ void MainWindow::on_colorBtn_clicked()
     int green = ColorValue.green();
     int blue = ColorValue.blue();
     undoStack.push(currImg);
-    color_frame(currImg, red, green, blue);
+    basic_frame(currImg, red, green, blue);
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
@@ -496,52 +480,33 @@ void MainWindow::on_colorBtn_clicked()
     hide_others();
 }
 
-
 void MainWindow::on_fancyBtn_clicked()
 {
-    ui->tabWidget->show();
+    ui->frameTabs->show();
 }
-
-void MainWindow::on_applyBtn1_clicked()
-{
-    QColor ColorValue = QColorDialog::getColor(Qt::white, this, tr("Selcet Color"));
-    int red = ColorValue.red();
-    int green = ColorValue.green();
-    int blue = ColorValue.blue();
-    undoStack.push(currImg);
-    fancy_frame_1(currImg,red,green,blue);
-    clear_redo_stack();
-    currImg.saveImage(tempPath);
-    QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
-    hide_others();
-}
-
 
 void MainWindow::on_filterSlider_valueChanged(int value)
-{   //  special vals for brightness filter
-    if(ui->BrightFilter->isChecked()){
+{ //  special vals for brightness filter
+    if (ui->BrightFilter->isChecked()) {
         int brightVal = value - 50;
-        if(brightVal == 0){
+        if (brightVal == 0) {
             ui->sliderValue->setText("Normal Brightness");
-        }else{
+        } else {
             ui->sliderValue->setText(QString::number(brightVal));
         }
-    //  special condition for skew
-    }else if(ui->SkewFilter->isChecked()){
-        if(value==90){
+        //  special condition for skew
+    } else if (ui->SkewFilter->isChecked()) {
+        if (value == 90) {
             ui->sliderValue->setText("Normal Position");
-        }else{
+        } else {
             ui->sliderValue->setText(QString::number(value));
         }
     }
     //  normal Condition
-    else{
+    else {
         ui->sliderValue->setText(QString::number(value));
     }
 }
-
-
 
 void MainWindow::on_filterApply_clicked()
 {
@@ -594,12 +559,12 @@ void MainWindow::on_filterApply_clicked()
 
     else if (ui->BrightFilter->isChecked()) {
         //  +50 because we have manipulated the image
-        Dark_and_Light(currImg, strength+50);
+        Dark_and_Light(currImg, strength + 50);
     }
 
     else if (ui->SkewFilter->isChecked()) {
-            Skew(currImg,angle);
-    }else if(ui->swirlFilter->isChecked()){
+        Skew(currImg, angle);
+    } else if (ui->swirlFilter->isChecked()) {
         swirl(currImg, 100 - strength);
     }
 
@@ -650,8 +615,8 @@ void MainWindow::on_SkewFilter_clicked(bool checked)
 {
     hide_others("SkewFilter");
     ui->filterSlider->setValue(0);
-    ui->sliderText->resize(235,41);
-    ui->sliderValue->move(255,75);
+    ui->sliderText->resize(235, 41);
+    ui->sliderValue->move(255, 75);
     ui->sliderText->setText("Value in degrees:");
     ui->filterSlider->setMaximum(90);
     ui->sliderGroup->setTitle("Skew Filter");
@@ -665,7 +630,6 @@ void MainWindow::on_swirlFilter_clicked(bool checked)
     ui->sliderGroup->setTitle("Swirl Filter");
     show_sliderWidgets(checked);
 }
-
 
 void MainWindow::on_purpleFilter_clicked()
 {
@@ -738,7 +702,6 @@ void MainWindow::on_MergeFilter_clicked()
         ui->widthEditVal->setText(QString::number(mergeImg.width));
         ui->heightEditVal->setText(QString::number(mergeImg.height));
 
-
         undoStack.push(currImg);
         // Merge(currImg,mergeImg);
         mergeWResize(currImg, mergeImg);
@@ -748,11 +711,7 @@ void MainWindow::on_MergeFilter_clicked()
         ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
         hide_others();
     }
-
 }
-
-
-
 
 //  Other Functions Declaration
 void clear_undo_stack()
@@ -781,11 +740,16 @@ void MainWindow::hide_others(string curr)
     if (curr != "BrightFilter") {
         ui->BrightFilter->setChecked(false);
     }
-    if(curr != "SkewFilter") {
+    if (curr != "SkewFilter") {
         ui->SkewFilter->setChecked(false);
     }
-    if(curr != "swirlFilter") {
+    if (curr != "swirlFilter") {
         ui->swirlFilter->setChecked(false);
+    }
+    if(curr!="FrameFilter"){
+        ui->FrameGroup->hide();
+        ui->frameTabs->hide();
+        ui->FrameFilter->setChecked(false);
     }
     ui->sliderGroup->hide();
     show_cropWidgets(false);
@@ -797,8 +761,10 @@ void MainWindow::hide_others(string curr)
     ui->justFrame->hide();
     ui->filterSlider->setMaximum(100);
     ui->sliderText->setText("Value:");
-    ui->sliderText->resize(81,41);
-    ui->sliderValue->move(100,75);
+    ui->sliderText->resize(81, 41);
+    ui->sliderValue->move(100, 75);
+
+
     if (redoStack.empty()) {
         ui->redoBtn->setEnabled(false);
     } else {
@@ -820,22 +786,21 @@ void MainWindow::show_sliderWidgets(bool checked)
     }
     ui->progressLabel->hide();
 }
-void MainWindow::show_cropWidgets(bool checked){
-    if(checked){
+void MainWindow::show_cropWidgets(bool checked)
+{
+    if (checked) {
         ui->justFrame->show();
         ui->cropGroup->show();
-        ui->justFrame->move(ui->outImg->pos().x()+ ui->outFrame->pos().x(), ui->outImg->pos().y()+ui->outFrame->pos().y());
-        ui->justFrame->resize(labelWidth/2,labelHeight/2);
-        ui->cropWidth->setText(QString::number(labelWidth/2));
-        ui->cropHeight->setText(QString::number(labelHeight/2));
-    }else{
+        ui->justFrame->move(ui->outImg->pos().x() + ui->outFrame->pos().x(),
+                            ui->outImg->pos().y() + ui->outFrame->pos().y());
+        ui->justFrame->resize(labelWidth / 2, labelHeight / 2);
+        ui->cropWidth->setText(QString::number(labelWidth / 2));
+        ui->cropHeight->setText(QString::number(labelHeight / 2));
+    } else {
         ui->cropGroup->hide();
         ui->justFrame->hide();
     }
-
 }
-
-
 
 void grayScale(Image &image)
 {
@@ -854,15 +819,16 @@ void grayScale(Image &image)
     }
 }
 
-void emposs(Image& image){
-    for(int i=0; i < image.width-1 ; i++){
-        for(int j=0; j < image.height-1 ; j++){
-            int R = abs(image(i,j,0) - image(i+1,j+1,0) + 128);
-            int G = abs(image(i,j,1) - image(i+1,j+1,1) + 128);
-            int B = abs(image(i,j,2) - image(i+1,j+1,2) + 128);
-            image(i,j,0) = R > 255 ? 255 : R;
-            image(i,j,1) = B > 255 ? 255 : B;
-            image(i,j,2) = G > 255 ? 255 : G;
+void emposs(Image &image)
+{
+    for (int i = 0; i < image.width - 1; i++) {
+        for (int j = 0; j < image.height - 1; j++) {
+            int R = abs(image(i, j, 0) - image(i + 1, j + 1, 0) + 128);
+            int G = abs(image(i, j, 1) - image(i + 1, j + 1, 1) + 128);
+            int B = abs(image(i, j, 2) - image(i + 1, j + 1, 2) + 128);
+            image(i, j, 0) = R > 255 ? 255 : R;
+            image(i, j, 1) = B > 255 ? 255 : B;
+            image(i, j, 2) = G > 255 ? 255 : G;
         }
     }
 }
@@ -894,21 +860,18 @@ void rotateI90(Image &image)
 }
 void invert_color(Image &img)
 {
-
-    for(int i = 1; i < img.width; i++) {
-        for(int j = 1; j < img.height; j++) {
-            for(int k = 0; k<3;k++){
-                img(i, j, k) = 255 -img(i, j, k);
+    for (int i = 1; i < img.width; i++) {
+        for (int j = 1; j < img.height; j++) {
+            for (int k = 0; k < 3; k++) {
+                img(i, j, k) = 255 - img(i, j, k);
             }
         }
     }
 }
 void infrared_color(Image &img)
 {
-
-    for(int i = 1; i < img.width; i++) {
-        for(int j = 1; j < img.height; j++) {
-
+    for (int i = 1; i < img.width; i++) {
+        for (int j = 1; j < img.height; j++) {
             int red = img(i, j, 0);
             int green = img(i, j, 1);
             int blue = img(i, j, 2);
@@ -924,15 +887,16 @@ void infrared_color(Image &img)
     }
 }
 
-void purple_filter(Image& image){
+void purple_filter(Image &image)
+{
     Image newImage(image.width, image.height);
     int purpleStrength = 50;
     float R, G, B;
-    for(int i=0; i < image.width ; i++){
-        for(int j=0; j < image.height ; j++){
-            R = image(i, j ,0) +  purpleStrength * 0.927;
-            G = image(i, j, 1) -  purpleStrength * 0.570;
-            B = image(i, j, 2) +  purpleStrength * 0.941;
+    for (int i = 0; i < image.width; i++) {
+        for (int j = 0; j < image.height; j++) {
+            R = image(i, j, 0) + purpleStrength * 0.927;
+            G = image(i, j, 1) - purpleStrength * 0.570;
+            B = image(i, j, 2) + purpleStrength * 0.941;
 
             // Ensure R, G, B values are within the valid range [0, 255]
             R = (R > 255) ? 255 : (R < 0) ? 0 : R;
@@ -1058,29 +1022,29 @@ void blur_filter(Image &image, int blurStr)
 
 void Dark_and_Light(Image &image, int strength)
 {
-    if(strength >50){
-        float brightStrength = ((static_cast<float>(strength) -50.0)/50.0) * 255.0;
-        for(int i = 0;i<image.width; i++){
-            for(int j = 0; j < image.height; j++){
+    if (strength > 50) {
+        float brightStrength = ((static_cast<float>(strength) - 50.0) / 50.0) * 255.0;
+        for (int i = 0; i < image.width; i++) {
+            for (int j = 0; j < image.height; j++) {
                 for (int k = 0; k < 3; k++) {
                     int adjustedValue = brightStrength;
-                    if(image(i,j,k) +  adjustedValue>255){
-                        adjustedValue = 255 - image(i,j,k);
+                    if (image(i, j, k) + adjustedValue > 255) {
+                        adjustedValue = 255 - image(i, j, k);
                     }
-                    image(i,j,k) += adjustedValue;
+                    image(i, j, k) += adjustedValue;
                 }
             }
         }
-    }else if(strength<50){
-        float darkStrength = ((50.0 - static_cast<float>(strength))/50.0) * 255.0;
-        for(int i = 0;i<image.width; i++){
-            for(int j = 0; j < image.height; j++){
+    } else if (strength < 50) {
+        float darkStrength = ((50.0 - static_cast<float>(strength)) / 50.0) * 255.0;
+        for (int i = 0; i < image.width; i++) {
+            for (int j = 0; j < image.height; j++) {
                 for (int k = 0; k < 3; k++) {
                     int adjustedValue = darkStrength;
-                    if(image(i,j,k) -  adjustedValue < 0){
-                        adjustedValue = image(i,j,k);
+                    if (image(i, j, k) - adjustedValue < 0) {
+                        adjustedValue = image(i, j, k);
                     }
-                    image(i,j,k) -= adjustedValue;
+                    image(i, j, k) -= adjustedValue;
                 }
             }
         }
@@ -1157,21 +1121,13 @@ void Black_and_White(Image &img)
     }
 }
 
-
-void edgeDetection(Image &image) {
+void edgeDetection(Image &image)
+{
     Image imageout = image;
     // Sobel kernels for horizontal and vertical gradients
-    int sobel_kernel_x[3][3] = {
-        {-1, 0, 1},
-        {-2, 0, 2},
-        {-1, 0, 1}
-    };
+    int sobel_kernel_x[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
 
-    int sobel_kernel_y[3][3] = {
-        {-1, -2, -1},
-        {0, 0, 0},
-        {1, 2, 1}
-    };
+    int sobel_kernel_y[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
 
     int width = image.width;
     int height = image.height;
@@ -1205,12 +1161,9 @@ void edgeDetection(Image &image) {
     image = imageout;
 }
 
-
-
-void crop(Image &img, int x, int y, int width, int height) {
-
+void crop(Image &img, int x, int y, int width, int height)
+{
     Image newImage(width, height);
-
 
     for (int i = 0; i < width; ++i) {
         for (int j = 0; j < height; ++j) {
@@ -1229,64 +1182,68 @@ void MainWindow::on_cropFilter_clicked(bool checked)
     hide_others();
     ui->cropFilter->setChecked(checked);
     show_cropWidgets(checked);
-
 }
 void MainWindow::on_cropWidth_textEdited(const QString &arg1)
 {
-
-    if(arg1.toInt() > labelWidth){
+    if (arg1.toInt() > labelWidth) {
         ui->cropWidth->setText(QString::number(labelWidth));
     }
     int width = ui->cropWidth->text().toInt();
     int height = ui->cropHeight->text().toInt();
     ui->justFrame->resize(width, height);
-    ui->justFrame->move(ui->outImg->pos().x()+ ui->outFrame->pos().x(), ui->outImg->pos().y()+ui->outFrame->pos().y());
+    ui->justFrame->move(ui->outImg->pos().x() + ui->outFrame->pos().x(),
+                        ui->outImg->pos().y() + ui->outFrame->pos().y());
 }
-
 
 void MainWindow::on_cropHeight_textChanged(const QString &arg1)
 {
-
-    if(arg1.toInt() > labelHeight){
+    if (arg1.toInt() > labelHeight) {
         ui->cropHeight->setText(QString::number(labelHeight));
     }
     int width = ui->cropWidth->text().toInt();
     int height = ui->cropHeight->text().toInt();
     ui->justFrame->resize(width, height);
-    ui->justFrame->move(ui->outImg->pos().x()+ ui->outFrame->pos().x(), ui->outImg->pos().y()+ui->outFrame->pos().y());
+    ui->justFrame->move(ui->outImg->pos().x() + ui->outFrame->pos().x(),
+                        ui->outImg->pos().y() + ui->outFrame->pos().y());
 }
-CustomLabel::CustomLabel(QWidget* parent) : QLabel(parent), isHolding(false) {
+CustomLabel::CustomLabel(QWidget *parent)
+    : QLabel(parent)
+    , isHolding(false)
+{
     // constructor implementation (optional)
 }
-void CustomLabel::mousePressEvent(QMouseEvent* event) {
+void CustomLabel::mousePressEvent(QMouseEvent *event)
+{
     if (event->button() == Qt::LeftButton) {
         isHolding = true; // Flag to track hold state
         emit mousePressed(event->pos());
-    }else{
-        isHolding= false;
+    } else {
+        isHolding = false;
     }
 }
 
-void CustomLabel::mouseMoveEvent(QMouseEvent* event) {
+void CustomLabel::mouseMoveEvent(QMouseEvent *event)
+{
     if (isHolding) {
         emit mouseHolding(event->pos());
     }
 }
-void CustomLabel::mouseReleaseEvent(QMouseEvent* event) {
+void CustomLabel::mouseReleaseEvent(QMouseEvent *event)
+{
     if (event->button() == Qt::LeftButton) {
         isHolding = false; // Reset flag on left button release
     }
 }
 
-int clamp(int value, int min, int max) {
+int clamp(int value, int min, int max)
+{
     return std::min(std::max(value, min), max);
 }
 
-void MainWindow::handleMouseHolding(const QPoint& pos) {
-
-
+void MainWindow::handleMouseHolding(const QPoint &pos)
+{
     // Helper function to clamp a value within a range
-    if(ui->cropFilter->isChecked()){
+    if (ui->cropFilter->isChecked()) {
         int frameWidth = ui->justFrame->width();
         int frameHeight = ui->justFrame->height();
         int initialOffsetX = ui->outFrame->pos().x() + ui->outImg->pos().x();
@@ -1294,44 +1251,44 @@ void MainWindow::handleMouseHolding(const QPoint& pos) {
 
         // Calculate boundaries with descriptive variable names
         int rightBound = ui->outImg->width() - frameWidth + initialOffsetX;
-        int lowerBound = labelHeight - frameHeight +initialOffsetY;
+        int lowerBound = labelHeight - frameHeight + initialOffsetY;
 
         // Move the frame based on position and boundaries
         int clampedX = clamp(pos.x(), 0, rightBound - initialOffsetX);
         int clampedY = clamp(pos.y(), 0, lowerBound - initialOffsetY);
         ui->justFrame->move(clampedX + initialOffsetX, clampedY + initialOffsetY);
+        // qDebug() << "pos:" << pos;
     }
 }
 
-
 void MainWindow::on_cropApply_clicked()
 {
-    int startX =  ui->justFrame->pos().x() - ui->outFrame->pos().x() - ui->outImg->pos().x();
-    int startY =  ui->justFrame->pos().y() - ui->outFrame->pos().y() - ui->outImg->pos().y();
+    int startX = ui->justFrame->pos().x() - ui->outFrame->pos().x() - ui->outImg->pos().x();
+    int startY = ui->justFrame->pos().y() - ui->outFrame->pos().y() - ui->outImg->pos().y();
     int width = ui->justFrame->width(), height = ui->justFrame->height();
     float aspectRatioH = static_cast<float>(currImg.height) / labelHeight;
     float aspectRatioW = static_cast<float>(currImg.width) / labelWidth;
-    startX *=aspectRatioW;
-    startY *=aspectRatioH;
-    width*=aspectRatioW;
-    height*=aspectRatioH;
+    startX *= aspectRatioW;
+    startY *= aspectRatioH;
+    width *= aspectRatioW;
+    height *= aspectRatioH;
     undoStack.push(currImg);
-    crop(currImg, startX,startY,width,height);
+    crop(currImg, startX, startY, width, height);
     clear_redo_stack();
     currImg.saveImage(tempPath);
     outImageDisplay();
     hide_others();
 }
 
-
-
-void Skew(Image& image, int angle) {
+void Skew(Image &image, int angle)
+{
     double skew = tan(angle * M_PI / 180);
     int new_width = image.width + static_cast<int>(image.height * fabs(skew));
     int new_height = image.height;
     if (angle > 45) {
         new_width = image.width;
-        new_height = image.height + static_cast<int>(image.width * fabs(tan((90 - angle) * M_PI / 180)));
+        new_height = image.height
+                     + static_cast<int>(image.width * fabs(tan((90 - angle) * M_PI / 180)));
     }
     Image new_image(new_width, new_height);
     for (int i = 0; i < new_image.width; ++i) {
@@ -1342,7 +1299,9 @@ void Skew(Image& image, int angle) {
                 newj = j;
             } else {
                 newi = i;
-                newj = j - static_cast<int>((new_image.width - 1 - i) * tan((90 - angle) * M_PI / 180));
+                newj = j
+                       - static_cast<int>((new_image.width - 1 - i)
+                                          * tan((90 - angle) * M_PI / 180));
             }
             if (newi >= 0 && newi < image.width && newj >= 0 && newj < image.height) {
                 for (int k = 0; k < 3; ++k) {
@@ -1354,136 +1313,55 @@ void Skew(Image& image, int angle) {
     image = new_image;
 }
 
-
-
-void color_frame(Image &img, int r, int g, int b) {
-    Image newImage(img.width, img.height);
-    int border = img.width / 50; // Width of the frame
-    int innerBorder = img.width / 100; // Width of the inner frame
-    for (int i = 0; i < img.width; i++) {
-        for (int j = 0; j < img.height; j++) {
-            if (i < border || i >= img.width - border || j < border || j >= img.height - border) {
-                img(i, j, 0) = r;
-                img(i, j, 1) = g;
-                img(i, j, 2) = b;
+void flip_horizontally(Image &image1)
+{
+    for (int i = 0; i < image1.width / 2; i++) {
+        for (int j = 0; j < image1.height; j++) {
+            for (int k = 0; k < image1.channels; k++) {
+                swap(image1(i, j, k), image1(image1.width - i - 1, j, k));
             }
         }
-    }
-
-    for (int i = 0; i < img.width; ++i) {
-        for (int j = 0; j < img.height; ++j) {
-            for (int k = 0; k <3 ; ++k) {
-                newImage(i,j,k)=img(i,j,k);
-            }
-        }
-    }
-    img = newImage;
-
-}
-
-void fancy_frame_1(Image& image, int R, int G, int B) {
-    int frameWidth = min(image.width, image.height) / 20;
-    Image newImage(image.width, image.height);
-    //  Declare vars for CPP
-    for(int i=0; i < image.width; i++){
-        for(int j=0; j < image.height; j++){
-            if(i < frameWidth || i > image.width -frameWidth){
-
-                newImage(i,j,0) = R;
-                newImage(i,j,1) = G;
-                newImage(i,j,2) = B;
-            }
-            else if(j < frameWidth || j > image.height - frameWidth){
-                newImage(i,j,0) = R;
-                newImage(i,j,1) = G;
-                newImage(i,j,2) = B;
-            }
-            else{
-                newImage(i,j,0) = image(i,j,0);
-                newImage(i,j,1) = image(i,j,1);
-                newImage(i,j,2) = image(i,j,2);
-            }
-
-        }
-    }
-    for(int i=0; i < image.width ; i++){
-        for(int j=0; j < image.height ; j++){
-
-            if(i < frameWidth || i > image.width -frameWidth){
-                if(j< frameWidth*4 || j > image.height - (frameWidth*4)){
-                    newImage(i,j,0) = R;
-                    newImage(i,j,1) = G;
-                    newImage(i,j,2) = B;
-                }
-            }else if(j < frameWidth || j > image.height - frameWidth){
-                if(i< frameWidth*4  || i > image.width - (frameWidth*4)){
-                    newImage(i,j,0) = R;
-                    newImage(i,j,1) = G;
-                    newImage(i,j,2) = B;
-                }
-            }
-        }
-    }
-    image = newImage;
-}
-
-
-void flip_horizontally(Image &image1){
-    for (int i = 0; i < image1.width/2; i++)
-    {
-        for (int j = 0; j < image1.height; j++)
-        {
-            for (int k = 0; k < image1.channels; k++)
-            {
-                swap(image1(i,j,k), image1(image1.width-i-1,j,k));
-            }
-
-        }
-
     }
 }
 
-void flip_vertically(Image &image1){
-    for (int i = 0; i < image1.width; i++)
-    {
-        for (int j = 0; j < image1.height/2; j++)
-        {
-            for (int k = 0; k < image1.channels; k++)
-            {
-                swap(image1(i,j,k), image1(i,image1.height-j-1,k));
+void flip_vertically(Image &image1)
+{
+    for (int i = 0; i < image1.width; i++) {
+        for (int j = 0; j < image1.height / 2; j++) {
+            for (int k = 0; k < image1.channels; k++) {
+                swap(image1(i, j, k), image1(i, image1.height - j - 1, k));
             }
-
         }
-
     }
 }
 
-void Merge(Image &img, Image &img2) {
+void Merge(Image &img, Image &img2)
+{
     Image newImage;
     int max_w = max(img.width, img2.width);
     int max_h = max(img.height, img2.height);
-    Image Larger_img(max_w,max_h);
+    Image Larger_img(max_w, max_h);
 
     newImage = Image(Larger_img.width, Larger_img.height);
-    for(int i = 0; i < max_w; ++i) {
-        for(int j = 0; j < max_h; ++j) {
+    for (int i = 0; i < max_w; ++i) {
+        for (int j = 0; j < max_h; ++j) {
             int avg_w = i * img.width / img2.width;
             int avg_h = j * img.height / img2.height;
 
-            unsigned red_pixel = (img(avg_w,avg_h,0) + img2(i,j,0)) / 2;
-            unsigned green_pixel = (img(avg_w,avg_h,1) + img2(i,j,1)) / 2;
-            unsigned blue_pixel = (img(avg_w,avg_h,2) + img2(i,j,2)) / 2;
+            unsigned red_pixel = (img(avg_w, avg_h, 0) + img2(i, j, 0)) / 2;
+            unsigned green_pixel = (img(avg_w, avg_h, 1) + img2(i, j, 1)) / 2;
+            unsigned blue_pixel = (img(avg_w, avg_h, 2) + img2(i, j, 2)) / 2;
 
-            newImage.setPixel(i,j,0, red_pixel);
-            newImage.setPixel(i,j,1, green_pixel);
-            newImage.setPixel(i,j,2, blue_pixel);
+            newImage.setPixel(i, j, 0, red_pixel);
+            newImage.setPixel(i, j, 1, green_pixel);
+            newImage.setPixel(i, j, 2, blue_pixel);
         }
     }
     img = newImage;
 }
 
-
-void mergeWResize(Image& image1, Image& image2) {
+void mergeWResize(Image &image1, Image &image2)
+{
     int width, height;
     if (image1.width * image1.height > image2.width * image2.height) {
         width = image1.width;
@@ -1494,17 +1372,17 @@ void mergeWResize(Image& image1, Image& image2) {
         width = image2.width;
         height = image2.height;
         Image resizedImg = resizeForMerge(image1, width, height);
-        image1 = sameSizeMerge(resizedImg ,image2 );
+        image1 = sameSizeMerge(resizedImg, image2);
     }
 }
 
-
-Image sameSizeMerge(Image &img1, Image &img2, float alpha) {
+Image sameSizeMerge(Image &img1, Image &img2, float alpha)
+{
     Image result(img1.width, img1.height);
     for (int i = 0; i < img1.width; i++) {
         for (int j = 0; j < img1.height; j++) {
             for (int x = 0; x < NCHANNEL; x++) {
-                unsigned char pixel1 = img1 (i, j, x);
+                unsigned char pixel1 = img1(i, j, x);
                 unsigned char pixel2 = img2(i, j, x);
                 unsigned char merged = ((pixel1 * alpha) + (pixel2 * (1 - alpha)));
 
@@ -1515,14 +1393,12 @@ Image sameSizeMerge(Image &img1, Image &img2, float alpha) {
     return result;
 }
 
-
-Image resizeForMerge(Image &image, int width, int height) {
-    double Sw = (double)image.width / (double)width, Sh = (double)image.height / (double)height;
+Image resizeForMerge(Image &image, int width, int height)
+{
+    double Sw = (double) image.width / (double) width, Sh = (double) image.height / (double) height;
     Image newImage(width, height);
-    for (int i = 0; i < newImage.width; i++)
-    {
-        for (int j = 0; j < newImage.height; j++)
-        {
+    for (int i = 0; i < newImage.width; i++) {
+        for (int j = 0; j < newImage.height; j++) {
             int sourceX = round(i * Sw);
             int sourceY = round(j * Sh);
 
@@ -1537,27 +1413,26 @@ Image resizeForMerge(Image &image, int width, int height) {
     return newImage;
 }
 
-
-void mergeWCrop(Image& image1, Image& image2) {
+void mergeWCrop(Image &image1, Image &image2)
+{
     int width, height;
     if (image1.width * image1.height < image2.width * image2.height) {
-        width = min (image1.width, image2.width);
-        height = min(image1.height,image2.height);
-        Image croppedImg = cropForMerge(image2,0,0, width, height);
+        width = min(image1.width, image2.width);
+        height = min(image1.height, image2.height);
+        Image croppedImg = cropForMerge(image2, 0, 0, width, height);
         image1 = sameSizeMerge(image1, croppedImg);
     } else if (image1.width == image2.width && image1.height == image2.height) {
-        image1 = sameSizeMerge(image1 ,image2);
+        image1 = sameSizeMerge(image1, image2);
+    } else {
+        width = min(image1.width, image2.width);
+        height = min(image1.height, image2.height);
+        Image croppedImg = cropForMerge(image1, 0, 0, width, height);
+        image1 = sameSizeMerge(croppedImg, image2);
     }
-     else {
-        width = min (image1.width, image2.width);
-        height = min(image1.height,image2.height);
-        Image croppedImg = cropForMerge(image1,0,0, width, height);
-        image1 = sameSizeMerge(croppedImg ,image2);
-    }
-    
 }
 
-Image cropForMerge(Image &image, int x, int y, int width, int height) {
+Image cropForMerge(Image &image, int x, int y, int width, int height)
+{
     Image croppedImg(width, height);
     for (int i = x; i < width + x; i++) {
         for (int j = y; j < height + y; j++) {
@@ -1569,17 +1444,13 @@ Image cropForMerge(Image &image, int x, int y, int width, int height) {
     return croppedImg;
 }
 
-
-void old_tv(Image &image1, double brightness_factor, int noise_intensity){
-    for (int i = 0; i < image1.width; i++)
-    {
-        for (int j = 0; j < image1.height; j++)
-        {
-            if (j % 2 == 0)
-            {
+void old_tv(Image &image1, double brightness_factor, int noise_intensity)
+{
+    for (int i = 0; i < image1.width; i++) {
+        for (int j = 0; j < image1.height; j++) {
+            if (j % 2 == 0) {
                 double random = rand() % (2 * noise_intensity) - noise_intensity;
-                for (int k = 0; k < NCHANNEL; k++)
-                {
+                for (int k = 0; k < NCHANNEL; k++) {
                     if (image1(i, j, k) + random > 255) {
                         image1(i, j, k) = 255;
                     } else if (image1(i, j, k) + random < 0) {
@@ -1587,72 +1458,229 @@ void old_tv(Image &image1, double brightness_factor, int noise_intensity){
                     } else {
                         image1(i, j, k) += random;
                         image1(i, j, k) *= brightness_factor;
-                    }  
+                    }
                 }
             }
         }
     }
 }
 
-void swirl(Image &img, int strength){
-    float factor = (static_cast<double>(strength)/100.0f)*1.3f;
-    if(factor<0.3f){
-        factor=0.3;
+void swirl(Image &img, int strength)
+{
+    float factor = (static_cast<double>(strength) / 100.0f) * 1.3f;
+    if (factor < 0.3f) {
+        factor = 0.3;
     }
-    factor *=(static_cast<double>(img.height)/4.0f);
-    double x0 = img.width/2;
-    double y0 = img.height/2;
+    factor *= (static_cast<double>(img.height) / 4.0f);
+    double x0 = img.width / 2;
+    double y0 = img.height / 2;
     Image temp = img;
-    for(int i=0;i<img.width;i++){
-        for(int j=0;j<img.height;j++){
+    for (int i = 0; i < img.width; i++) {
+        for (int j = 0; j < img.height; j++) {
             double x = i - x0;
             double y = j - y0;
-            double r = sqrt(x*x + y*y);
+            double r = sqrt(x * x + y * y);
             double originalAngle;
-            if(x!=0){
-                originalAngle =atan(abs(y)/abs(x));
-                if(x>0 && y<0) originalAngle = C_PI*2.0f - originalAngle;
-                else if(x <= 0 && y>= 0) originalAngle = C_PI - originalAngle;
-                else if(x<0 && y<0) originalAngle += C_PI;
+            if (x != 0) {
+                originalAngle = atan(abs(y) / abs(x));
+                if (x > 0 && y < 0)
+                    originalAngle = C_PI * 2.0f - originalAngle;
+                else if (x <= 0 && y >= 0)
+                    originalAngle = C_PI - originalAngle;
+                else if (x < 0 && y < 0)
+                    originalAngle += C_PI;
+            } else {
+                if (y > 0)
+                    originalAngle = C_PI / 2.0f;
+                else
+                    originalAngle = C_PI * 3.0f / 2.0f;
             }
-            else{
-                if(y>0) originalAngle = C_PI/2.0f;
-                else originalAngle = C_PI*3.0f/2.0f;
-
-            }
-            double swirlFactor = abs(r-img.width)/factor;
+            double swirlFactor = abs(r - img.width) / factor;
             double angle = originalAngle + swirlFactor;
-            int x1 = (int) (floor(r*cos(angle)+0.5f))+x0;
-            int y1 = (int) (floor(r*sin(angle)+0.5f))+y0;
-            x1 = x1%img.width;
-            y1 = y1%img.height;
+            int x1 = (int) (floor(r * cos(angle) + 0.5f)) + x0;
+            int y1 = (int) (floor(r * sin(angle) + 0.5f)) + y0;
+            x1 = x1 % img.width;
+            y1 = y1 % img.height;
             x1 = img.width - x1;
             y1 = img.height - y1;
-            if(x1>=0 && x1<img.width && y1>=0 && y1<img.height){
-                temp(i,j,0) = img(x1,y1,0);
-                temp(i,j,1) = img(x1,y1,1);
-                temp(i,j,2) = img(x1,y1,2);
+            if (x1 >= 0 && x1 < img.width && y1 >= 0 && y1 < img.height) {
+                temp(i, j, 0) = img(x1, y1, 0);
+                temp(i, j, 1) = img(x1, y1, 1);
+                temp(i, j, 2) = img(x1, y1, 2);
             }
         }
     }
     img = temp;
 }
+void inner_frame(Image& image, int R, int G, int B){
+    float avg= (image.width + image.height)/2.0;
+    int frameWidth = avg/25;
+    int newFrame = frameWidth/8;
+    for(int i= frameWidth; i < image.width - frameWidth; i++){
+        for(int j= frameWidth; j < image.height - frameWidth ; j++){
+            if(i < frameWidth+ newFrame || i > image.width -(frameWidth +newFrame +1)){
+                image(i,j,0) = R;
+                image(i,j,1) = G;
+                image(i,j,2) = B;
+            }
+            if(j < frameWidth +newFrame || j > image.height - (frameWidth +newFrame+1)){
+                image(i,j,0) = R;
+                image(i,j,1) = G;
+                image(i,j,2) = B;
+            }
+        }
+    }
+    frameWidth+=20;
+    for(int i= frameWidth; i < image.width - (frameWidth); i++){
+        for(int j= frameWidth ; j < image.height - (frameWidth) ; j++){
+            if(i < frameWidth+ newFrame  || i > image.width -(frameWidth +newFrame +1)){
+                image(i,j,0) = R;
+                image(i,j,1) = G;
+                image(i,j,2) = B;
+            }
+            if(j < frameWidth +newFrame || j > image.height - (frameWidth + newFrame+1)){
+                image(i,j,0) = R;
+                image(i,j,1) = G;
+                image(i,j,2) = B;
+            }
+        }
+    }
+}
 
 
 
 
+void corners_frame(Image& image, int R, int G, int B){
+    float avg = (image.width+image.height)/2;
+    int frameWidth = avg/25;
+    int frameHeight = avg/25;
+    for(int i=0; i < image.width ; i++){
+        for(int j=0; j < image.height ; j++){
+
+            if(i < frameWidth || i > image.width -frameWidth){
+                if(j< frameHeight*3 || j > image.height - (frameHeight*3)){
+                    image(i,j,0) = R;
+                    image(i,j,1) = G;
+                    image(i,j,2) = B;
+                }
+            }
+            if(j < frameHeight || j > image.height - frameHeight){
+                if(i< frameWidth*3  || i > image.width - (frameWidth*3)){
+                    image(i,j,0) = R;
+                    image(i,j,1) = G;
+                    image(i,j,2) = B;
+                }
+            }
+        }
+    }
+}
 
 
 
+void basic_frame(Image& image, int R, int G, int B){
+    float avg = (image.width+image.height)/2;
+    int frameWidth = avg / 25;
+    int frameHeight = avg / 25;
+    for(int i=0; i < image.width; i++){
+        for(int j=0; j < image.height; j++){
+            if(i < frameWidth || i > image.width -frameWidth){
+
+                image(i,j,0) = R;
+                image(i,j,1) = G;
+                image(i,j,2) = B;
+            }
+            if(j < frameHeight || j > image.height - frameHeight){
+                image(i,j,0) = R;
+                image(i,j,1) = G;
+                image(i,j,2) = B;
+            }
+        }
+    }
+}
 
 
+void chess_frame(Image& image){
+    int frameWidth = image.width/ 20, frameHeight = image.height/ 20;
+
+    int startPosI = image.width-frameWidth, startPosJ = image.height-frameHeight;
+    //  is Black used as A flag
+    bool isBlack = true;
+    for(int i=0; i < image.width; i++){
+        // used to reset pos and bottom and left frames;
+        int value = (i < startPosI) ? i : (i - startPosI);
+
+        if (value % frameWidth == frameWidth / 2) {
+            isBlack = !isBlack;
+        }
+
+        for(int j=0; j < image.height; j++){
+
+            value = (j -startPosJ) < 0 ? j : (j-startPosJ);
+            if(value % frameHeight == frameHeight / 2){
+                isBlack = !isBlack;
+            }
+
+            if(i < frameWidth || i > image.width -(frameWidth*1.1)){
+                for(int k =0 ;k<3;k++){
+                    image(i, j, k) = isBlack ? 0 : 255;
+                }
+            }
+
+            if(j < frameHeight || j > image.height - (frameHeight*1.1)){
+                for(int k=0; k < 3; k++){
+                    image(i,j,k) = (isBlack) ? 0 : 255;
+                }
+            }
+
+        }
+    }
+}
+
+void MainWindow::on_cheesFrameApply_clicked()
+{
+    undoStack.push(currImg);
+    chess_frame(currImg);
+    clear_redo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
+    hide_others();
+}
 
 
+void MainWindow::on_innerFrameApply_clicked()
+{
+    QColor ColorValue = QColorDialog::getColor(Qt::white, this, tr("Selcet Color"));
+    int red = ColorValue.red();
+    int green = ColorValue.green();
+    int blue = ColorValue.blue();
+    undoStack.push(currImg);
+    inner_frame(currImg, red, green, blue);
+    clear_redo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
+    hide_others();
+}
 
 
-
-
-
-
-
+void MainWindow::on_coloredFrameApply_clicked()
+{
+    undoStack.push(currImg);
+    QColor ColorValue = QColorDialog::getColor(Qt::white, this, tr("Selcet Color for Basic Frame"));
+    int red = ColorValue.red();
+    int green = ColorValue.green();
+    int blue = ColorValue.blue();
+    basic_frame(currImg, red, green, blue);
+    QColor ColorValue2 = QColorDialog::getColor(Qt::white, this, ("Selcet Color for Corners"));
+    red = ColorValue2.red();
+    green = ColorValue2.green();
+    blue = ColorValue2.blue();
+    corners_frame(currImg, red, green, blue);
+    clear_redo_stack();
+    currImg.saveImage(tempPath);
+    QPixmap img = QPixmap(QtempPath);
+    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight));
+    hide_others();
+}
 
