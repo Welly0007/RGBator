@@ -154,6 +154,8 @@ private slots:
 
     void on_MergeFilter_clicked();
 
+    void on_MergeCrop_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

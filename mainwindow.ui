@@ -79,8 +79,8 @@
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>640</y>
+      <x>-3</x>
+      <y>634</y>
       <width>1621</width>
       <height>201</height>
      </rect>
@@ -820,7 +820,7 @@ QPushButton:hover{
       <rect>
        <x>635</x>
        <y>124</y>
-       <width>101</width>
+       <width>111</width>
        <height>50</height>
       </rect>
      </property>
@@ -828,7 +828,7 @@ QPushButton:hover{
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>Merge</string>
+      <string>MergeWResize</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -848,6 +848,25 @@ QPushButton:hover{
      </property>
      <property name="text">
       <string>Filter</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="MergeCrop">
+     <property name="geometry">
+      <rect>
+       <x>750</x>
+       <y>70</y>
+       <width>111</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>MergeWCrop</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -874,6 +893,7 @@ QPushButton:hover{
     <zorder>infraredFilter</zorder>
     <zorder>MergeFilter</zorder>
     <zorder>Fiter</zorder>
+    <zorder>MergeCrop</zorder>
    </widget>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">

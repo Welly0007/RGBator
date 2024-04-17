@@ -9,7 +9,7 @@
 #include <stack>
 #include <cmath>
 #include <math.h>
-#include <limits> // for std::numeric_limits<int>::max()
+#include <limits> // for std::numeric_limits<int>::max() 
 #define NCHANNEL 3
 using namespace std;
 
@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     //  Disabling Some pushButtons Before loading Image
     ui->invertFilter->setEnabled(false);
     ui->oilFilter->setEnabled(false);
+    ui->MergeCrop->setEnabled(false);
     ui->blurFilter->setEnabled(false);
     ui->rotateLeft->setEnabled(false);
     ui->grayFilter->setEnabled(false);
@@ -72,6 +73,7 @@ MainWindow::~MainWindow()
 
 // Some Globals;
 Image orImg;
+Image mergeImg;
 Image currImg;
 string tempPath;
 QString QtempPath;
@@ -100,6 +102,11 @@ void edgeDetection(Image &image);
 void flip_horizontally(Image &image1);
 void flip_vertically(Image &image1);
 void Merge(Image &img, Image &img2);
+void mergeWResize(Image& image1, Image& image2);
+Image sameSizeMerge(Image &img1, Image &img2, float alpha = 0.5);
+Image resizeForMerge(Image &image, int width, int height);
+void mergeWCrop(Image &image1, Image &image2);
+Image cropForMerge(Image &image, int x = 0, int y = 0, int width = 0, int height = 0);
 
 //  other functions prototpyes
 void clear_undo_stack();
@@ -170,6 +177,7 @@ void MainWindow::on_loadImgBtn_clicked()
         // ui->rotateRight->show();
         //Enabling Filters buttons
         ui->invertFilter->setEnabled(true);
+        ui->MergeCrop->setEnabled(true);
         ui->oilFilter->setEnabled(true);
         ui->grayFilter->setEnabled(true);
         ui->B_W_Filter->setEnabled(true);
@@ -258,6 +266,44 @@ void MainWindow::on_redoBtn_clicked()
 }
 
 //  Filters Events
+
+
+void MainWindow::on_MergeCrop_clicked()
+{
+ //  Open File Dialoge to load Image, With specified Extensions
+    QString filter = "(*.jpg *.png *.bmp *.tga) ;; (*.jpg) ;; (*.png) ;; (*.bmp) ;; (*.tga)";
+    QString filePath = QFileDialog::getOpenFileName(this, "load", QDir::homePath(), filter);
+
+    //  Check if File is Checked or not
+    if (filePath != "") {
+        //  Initializing the OrImage and CurrentImage for Image_class Libirary
+        string orImgPath = filePath.toStdString();
+        mergeImg.loadNewImage(orImgPath);
+        //  getting the absolute paths and saving the original in the app directory if needed
+        int lastSlash = orImgPath.find_last_of("/\\");
+        int dot = orImgPath.find_last_of('.');
+        tempPath = orImgPath.substr(lastSlash + 1, dot - (lastSlash + 1)) + ".jpg";
+        QtempPath = QString::fromStdString(tempPath);
+
+        mergeImg.saveImage("original" + tempPath);
+        mergeImg.loadNewImage("original" + tempPath);
+
+        ui->widthEditVal->setText(QString::number(mergeImg.width));
+        ui->heightEditVal->setText(QString::number(mergeImg.height));
+
+
+        undoStack.push(currImg);
+        // Merge(currImg,mergeImg);
+        mergeWCrop(currImg, mergeImg);
+        clear_redo_stack();
+        currImg.saveImage(tempPath);
+        QPixmap img = QPixmap(QtempPath);
+        ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
+        hide_others();
+    }
+
+}
+
 
 void MainWindow::on_NeonFilter_clicked()
 {
@@ -581,22 +627,23 @@ void MainWindow::on_MergeFilter_clicked()
     if (filePath != "") {
         //  Initializing the OrImage and CurrentImage for Image_class Libirary
         string orImgPath = filePath.toStdString();
-        orImg.loadNewImage(orImgPath);
+        mergeImg.loadNewImage(orImgPath);
         //  getting the absolute paths and saving the original in the app directory if needed
         int lastSlash = orImgPath.find_last_of("/\\");
         int dot = orImgPath.find_last_of('.');
         tempPath = orImgPath.substr(lastSlash + 1, dot - (lastSlash + 1)) + ".jpg";
         QtempPath = QString::fromStdString(tempPath);
 
-        orImg.saveImage("original" + tempPath);
-        orImg.loadNewImage("original" + tempPath);
+        mergeImg.saveImage("original" + tempPath);
+        mergeImg.loadNewImage("original" + tempPath);
 
-        ui->widthEditVal->setText(QString::number(orImg.width));
-        ui->heightEditVal->setText(QString::number(orImg.height));
+        ui->widthEditVal->setText(QString::number(mergeImg.width));
+        ui->heightEditVal->setText(QString::number(mergeImg.height));
 
 
         undoStack.push(currImg);
-        Merge(currImg,orImg);
+        // Merge(currImg,mergeImg);
+        mergeWResize(currImg, mergeImg);
         clear_redo_stack();
         currImg.saveImage(tempPath);
         QPixmap img = QPixmap(QtempPath);
@@ -1296,9 +1343,91 @@ void Merge(Image &img, Image &img2) {
 }
 
 
+void mergeWResize(Image& image1, Image& image2) {
+    int width, height;
+    if (image1.width * image1.height > image2.width * image2.height) {
+        width = image1.width;
+        height = image1.height;
+        Image resizedImg = resizeForMerge(image2, width, height);
+        image1 = sameSizeMerge(image1, resizedImg);
+    } else {
+        width = image2.width;
+        height = image2.height;
+        Image resizedImg = resizeForMerge(image1, width, height);
+        image1 = sameSizeMerge(resizedImg ,image2 );
+    }
+}
 
 
+Image sameSizeMerge(Image &img1, Image &img2, float alpha) {
+    Image result(img1.width, img1.height);
+    for (int i = 0; i < img1.width; i++) {
+        for (int j = 0; j < img1.height; j++) {
+            for (int x = 0; x < NCHANNEL; x++) {
+                unsigned char pixel1 = img1 (i, j, x);
+                unsigned char pixel2 = img2(i, j, x);
+                unsigned char merged = ((pixel1 * alpha) + (pixel2 * (1 - alpha)));
 
+                result(i, j, x) = merged;
+            }
+        }
+    }
+    return result;
+}
+
+
+Image resizeForMerge(Image &image, int width, int height) {
+    double Sw = (double)image.width / (double)width, Sh = (double)image.height / (double)height;
+    Image newImage(width, height);
+    for (int i = 0; i < newImage.width; i++)
+    {
+        for (int j = 0; j < newImage.height; j++)
+        {
+            int sourceX = round(i * Sw);
+            int sourceY = round(j * Sh);
+
+            sourceX = min(sourceX, image.width - 1);
+            sourceY = min(sourceY, image.height - 1);
+
+            newImage(i, j, 0) = image(sourceX, sourceY, 0);
+            newImage(i, j, 1) = image(sourceX, sourceY, 1);
+            newImage(i, j, 2) = image(sourceX, sourceY, 2);
+        }
+    }
+    return newImage;
+}
+
+
+void mergeWCrop(Image& image1, Image& image2) {
+    int width, height;
+    if (image1.width * image1.height < image2.width * image2.height) {
+        width = min (image1.width, image2.width);
+        height = min(image1.height,image2.height);
+        Image croppedImg = cropForMerge(image2,0,0, width, height);
+        image1 = sameSizeMerge(image1, croppedImg);
+    } else if (image1.width == image2.width && image1.height == image2.height) {
+        image1 = sameSizeMerge(image1 ,image2);
+    }
+     else {
+        width = min (image1.width, image2.width);
+        height = min(image1.height,image2.height);
+        Image croppedImg = cropForMerge(image1,0,0, width, height);
+        image1 = sameSizeMerge(croppedImg ,image2);
+    }
+    
+}
+
+Image cropForMerge(Image &image, int x, int y, int width, int height) {
+    Image croppedImg(width, height);
+    for (int i = x; i < width + x; i++) {
+        for (int j = y; j < height + y; j++) {
+            croppedImg(i, j, 0) = image(i, j, 0);
+            croppedImg(i, j, 1) = image(i, j, 1);
+            croppedImg(i, j, 2) = image(i, j, 2);
+        }
+    }
+    return croppedImg;
+}
 
 
 
