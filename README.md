@@ -46,7 +46,7 @@ Can use run shortcut **[Ctrl + r]**
 
 ## Demo
 
-Vedio Link
+Video Link
 
 ## Authors
 
