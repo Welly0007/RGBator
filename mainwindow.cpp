@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->frameTabs->hide();
     ui->rotateLeft->hide();
     ui->rotateRight->hide();
+    ui->resizeLabel->hide();
 
     //  Disabling Some pushButtons Before loading Image
     ui->invertFilter->setEnabled(false);
@@ -143,7 +144,9 @@ void MainWindow::outImageDisplay()
     labelWidth = labelHeight * aspectRatio;
     if (labelWidth > 700) {
         labelWidth = min(currImg.width, 700);
+        if(currImg.height>400){
         labelHeight = min(currImg.height, 400);
+        }
     }
     ui->outImg->setMaximumWidth(labelWidth);
     ui->outImg->setMaximumHeight(labelHeight);
@@ -193,6 +196,7 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->resizeRatio->show();
         ui->rotateLeft->show();
         ui->rotateRight->show();
+        ui->resizeLabel->show();
         //Enabling Filters buttons
         ui->invertFilter->setEnabled(true);
         ui->MergeCrop->setEnabled(true);
@@ -643,7 +647,6 @@ void MainWindow::on_resizeFilterBtn_clicked()
 void MainWindow::on_widthEditVal_textEdited()
 {
     ui->resizeFilterBtn->show();
-    ui->resizeRatio->show();
     if (ui->resizeRatio->isChecked()) {
         int width = ui->widthEditVal->text().toInt();
         float aspectRatio = static_cast<float>(currImg.height) / currImg.width;
@@ -655,7 +658,6 @@ void MainWindow::on_widthEditVal_textEdited()
 void MainWindow::on_heightEditVal_textEdited()
 {
     ui->resizeFilterBtn->show();
-    ui->resizeRatio->show();
     if (ui->resizeRatio->isChecked()) {
         int height = ui->heightEditVal->text().toInt();
         float aspectRatio = static_cast<float>(currImg.width) / currImg.height;

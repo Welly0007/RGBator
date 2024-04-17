@@ -81,7 +81,6 @@ public:
     QWidget *widget_3;
     QPushButton *rotateLeft;
     QPushButton *resizeFilterBtn;
-    QLineEdit *widthEditVal;
     QLabel *widthLabel;
     QLineEdit *heightEditVal;
     QLabel *heightLabel;
@@ -102,6 +101,8 @@ public:
     QWidget *coloredFramTab;
     QPushButton *coloredFrameApply;
     QLabel *coloredFrameLabel;
+    QLineEdit *widthEditVal;
+    QLabel *resizeLabel;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *RGBator)
@@ -643,17 +644,6 @@ public:
 "}\n"
 ""));
         resizeFilterBtn->setCheckable(true);
-        widthEditVal = new QLineEdit(widget_3);
-        widthEditVal->setObjectName("widthEditVal");
-        widthEditVal->setGeometry(QRect(890, 10, 60, 21));
-        widthEditVal->setFocusPolicy(Qt::NoFocus);
-        widthEditVal->setStyleSheet(QString::fromUtf8("QLineEdit{\n"
-"        border-radius: 4px;\n"
-"        color: #fff;\n"
-"        border-color: #fff;\n"
-"}"));
-        widthEditVal->setDragEnabled(false);
-        widthEditVal->setClearButtonEnabled(false);
         widthLabel = new QLabel(widget_3);
         widthLabel->setObjectName("widthLabel");
         widthLabel->setGeometry(QRect(830, 0, 50, 41));
@@ -684,7 +674,7 @@ public:
 "}"));
         resizeRatio = new QCheckBox(widget_3);
         resizeRatio->setObjectName("resizeRatio");
-        resizeRatio->setGeometry(QRect(970, 26, 151, 22));
+        resizeRatio->setGeometry(QRect(970, 40, 151, 22));
         QFont font5;
         font5.setFamilies({QString::fromUtf8("JetBrains Mono")});
         font5.setPointSize(9);
@@ -791,6 +781,24 @@ public:
         coloredFrameLabel->setObjectName("coloredFrameLabel");
         coloredFrameLabel->setGeometry(QRect(210, 30, 300, 300));
         frameTabs->addTab(coloredFramTab, QString());
+        widthEditVal = new QLineEdit(widget_3);
+        widthEditVal->setObjectName("widthEditVal");
+        widthEditVal->setGeometry(QRect(890, 10, 61, 21));
+        widthEditVal->setStyleSheet(QString::fromUtf8("QLineEdit{\n"
+"        border-radius: 5px;\n"
+"        color: #fff;\n"
+"        border-color: #fff;\n"
+"}"));
+        resizeLabel = new QLabel(widget_3);
+        resizeLabel->setObjectName("resizeLabel");
+        resizeLabel->setGeometry(QRect(970, 8, 141, 31));
+        resizeLabel->setFont(font3);
+        resizeLabel->setStyleSheet(QString::fromUtf8("QLabel{\n"
+"        font: 350 9pt \"Yu Gothic UI Semilight\";\n"
+"        color: rgb(255, 255, 255);\n"
+"        border: none;\n"
+"        font-weight: 600;\n"
+"}"));
         RGBator->setCentralWidget(centralwidget);
         widget_3->raise();
         widget->raise();
@@ -885,6 +893,7 @@ public:
         coloredFrameApply->setText(QCoreApplication::translate("RGBator", "Apply", nullptr));
         coloredFrameLabel->setText(QCoreApplication::translate("RGBator", "TextLabel", nullptr));
         frameTabs->setTabText(frameTabs->indexOf(coloredFramTab), QCoreApplication::translate("RGBator", "Colored Corners", nullptr));
+        resizeLabel->setText(QCoreApplication::translate("RGBator", "Edit to resize", nullptr));
     } // retranslateUi
 
 };
