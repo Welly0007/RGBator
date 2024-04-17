@@ -158,6 +158,10 @@ private slots:
 
     void on_empossFilter_clicked();
 
+    void on_SkewFilter_clicked(bool checked);
+
+    void on_filterSlider_rangeChanged(int min, int max);
+
 private:
     Ui::MainWindow *ui;
 };

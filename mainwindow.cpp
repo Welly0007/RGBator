@@ -93,9 +93,8 @@ void sunlight_filter(Image &image, int sunStrength);
 void blur_filter(Image &image, int blurStr);
 void Dark_and_Light(Image &imgage, int strength);
 void purple_filter(Image &image);
-void Skew(Image &image);
 void Frame(Image &img, int r, int g, int b);
-//void Old_Tv(Image &image);
+void Skew(Image& image, int angle);
 void old_tv(Image &image1, double brightness_factor = 1, int noise_intensity = 30);
 void oilPainting_filter(Image &image, int strength);
 void resize_image(Image &image, int newHeight);
@@ -434,16 +433,7 @@ void MainWindow::on_DetectFilter_clicked()
     hide_others();
 }
 
-void MainWindow::on_SkewFilter_clicked()
-{
-    undoStack.push(currImg);
-    Skew(currImg);
-    clear_redo_stack();
-    currImg.saveImage(tempPath);
-    QPixmap img = QPixmap(QtempPath);
-    ui->outImg->setPixmap(img.scaled(labelWidth, labelHeight, Qt::KeepAspectRatio));
-    hide_others();
-}
+
 
 
 void MainWindow::on_oldtvFilter_clicked()
@@ -487,8 +477,15 @@ void MainWindow::on_filterSlider_valueChanged(int value)
     }else{
         ui->sliderValue->setText(QString::number(value));
     }
-
+    if(ui->SkewFilter->isChecked()){
+        if(value == 90) {
+            ui->sliderValue->setText("Normal Position");
+        } else if(value > 90) {
+            ui->sliderValue->setText("Out of range");
+        }
+    }
 }
+
 
 
 void MainWindow::on_filterApply_clicked()
@@ -502,7 +499,7 @@ void MainWindow::on_filterApply_clicked()
 
     // getting the strength from the slider
     int strength = ui->sliderValue->text().toInt();
-
+    int angle = ui->sliderValue->text().toInt();
     // choosing the filter according to the button clicked;
 
     if (ui->sunLightFilter->isChecked()) {
@@ -545,6 +542,14 @@ void MainWindow::on_filterApply_clicked()
         Dark_and_Light(currImg, strength+50);
     }
 
+    else if (ui->SkewFilter->isChecked()) {
+        if(angle >= 0){
+            Skew(currImg,angle);
+        } else if (angle >= 100) {
+            Skew(currImg, angle - 10);
+        }
+    }
+
     //  Displaying the Image;
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
@@ -584,6 +589,14 @@ void MainWindow::on_oilFilter_clicked(bool checked)
     hide_others("oilFilter");
     ui->filterSlider->setValue(20);
     ui->sliderGroup->setTitle("Oil Painting Filter");
+    show_sliderWidgets(checked);
+}
+
+void MainWindow::on_SkewFilter_clicked(bool checked)
+{
+    hide_others("SkewFilter");
+    ui->filterSlider->setValue(0);
+    ui->sliderGroup->setTitle("Skew Filter");
     show_sliderWidgets(checked);
 }
 
@@ -702,6 +715,9 @@ void MainWindow::hide_others(string curr)
     if (curr != "BrightFilter") {
         ui->BrightFilter->setChecked(false);
     }
+    if(curr != "SkewFilter") {
+        ui->SkewFilter->setChecked(false);
+    }
     ui->sliderGroup->hide();
     show_cropWidgets(false);
     ui->cropFilter->setChecked(false);
@@ -747,19 +763,7 @@ void MainWindow::show_cropWidgets(bool checked){
 
 }
 
-// void Applay_Detect(Image &img)
-// {
-//     int img_h = img.height;
-//     int img_w = img.width;
-//     if (img_h >= 500 && img_w >= 500) {
-//         resize_image(img, 200,200);
-//     }
-//     Detect_Image(img);
-//     if (img_h >= 500 && img_w >= 500) {
-//         resize_image(img, img_h, img_w);
-//     }
-// }
-//  Filter Functions Declaration
+
 
 void grayScale(Image &image)
 {
@@ -1249,49 +1253,35 @@ void MainWindow::on_cropApply_clicked()
 
 
 
-void Skew(Image& image){
-    // int angle;
-    // cout << "Enter the skew angle in degrees: \n";
-    // while (true){
-    //     cin >> angle;
-    //     cin.ignore();
-    //     if (cin.fail() || angle >= 90 || angle < 0) {
-    //         cin.clear();
-    //         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    //         cout << "Invalid input. Please enter an angle less than 90 degrees.\n";
-    //     }
-    //     else {
-    //         break;
-    //     }
-    // }
-    double skew = tan(45 * M_PI / 180);
-    Image new_image(image.width + static_cast<int>(image.height * fabs(skew)), image.height);
-    for (int i = 0; i < image.width; ++i) {
-        for (int j = 0; j < image.height; ++j) {
-            int newi = i + static_cast<int>((image.height-1-j) * skew);
-            for (int k = 0; k < 3; ++k) {
-                new_image(newi, j, k) = image(i, j, k);
+void Skew(Image& image, int angle) {
+    double skew = tan(angle * M_PI / 180);
+    int new_width = image.width + static_cast<int>(image.height * fabs(skew));
+    int new_height = image.height;
+    if (angle > 45) {
+        new_width = image.width;
+        new_height = image.height + static_cast<int>(image.width * fabs(tan((90 - angle) * M_PI / 180)));
+    }
+    Image new_image(new_width, new_height);
+    for (int i = 0; i < new_image.width; ++i) {
+        for (int j = 0; j < new_image.height; ++j) {
+            int newi, newj;
+            if (angle <= 45) {
+                newi = i - static_cast<int>((new_image.height - 1 - j) * skew);
+                newj = j;
+            } else {
+                newi = i;
+                newj = j - static_cast<int>((new_image.width - 1 - i) * tan((90 - angle) * M_PI / 180));
+            }
+            if (newi >= 0 && newi < image.width && newj >= 0 && newj < image.height) {
+                for (int k = 0; k < 3; ++k) {
+                    new_image(i, j, k) = image(newi, newj, k);
+                }
             }
         }
     }
-
+    image = new_image;
 }
 
-
-// void Old_Tv(Image &image){
-//     srand(static_cast<unsigned int>(time(nullptr)));
-//     for (int i = 0; i < image.height; ++i) {
-//         for (int j = 0; j < image.width; ++j) {
-//             int random = rand() % 256 - 128;
-//             for (int k = 0; k < 3; ++k) {
-//                 int newValue = image(j, i, k) + random;
-//                 newValue = max(0, min(255, newValue));
-//                 image(j, i, k) = static_cast<unsigned char>(newValue);
-//             }
-//         }
-//     }
-
-// }
 
 
 void Frame(Image &img, int r, int g, int b) {
@@ -1485,6 +1475,11 @@ void old_tv(Image &image1, double brightness_factor, int noise_intensity){
         }
     }
 }
+
+
+
+
+
 
 
 

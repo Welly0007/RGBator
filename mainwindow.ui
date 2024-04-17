@@ -362,7 +362,7 @@ QSlider::sub-page:horizontal{
        <rect>
         <x>79</x>
         <y>77</y>
-        <width>40</width>
+        <width>251</width>
         <height>31</height>
        </rect>
       </property>
@@ -911,12 +911,14 @@ QPushButton:hover{
 QPushButton{
 	border: 2px solid rgb(161,161,161);
 	border-radius: 5px;
-}</string>
+}
+
+</string>
     </property>
     <widget class="FancyButton" name="loadImgBtn">
      <property name="geometry">
       <rect>
-       <x>930</x>
+       <x>810</x>
        <y>20</y>
        <width>110</width>
        <height>50</height>
@@ -932,7 +934,7 @@ QPushButton{
     <widget class="FancyButton" name="clearImg">
      <property name="geometry">
       <rect>
-       <x>1080</x>
+       <x>950</x>
        <y>20</y>
        <width>110</width>
        <height>50</height>
@@ -948,7 +950,7 @@ QPushButton{
     <widget class="FancyButton" name="saveImgBtn">
      <property name="geometry">
       <rect>
-       <x>1350</x>
+       <x>1180</x>
        <y>20</y>
        <width>110</width>
        <height>50</height>
@@ -964,7 +966,7 @@ QPushButton{
     <widget class="QPushButton" name="undoBtn">
      <property name="geometry">
       <rect>
-       <x>1510</x>
+       <x>1410</x>
        <y>50</y>
        <width>92</width>
        <height>32</height>
@@ -973,7 +975,9 @@ QPushButton{
      <property name="styleSheet">
       <string notr="true">#undoBtn{
 	font: 12pt &quot;JetBrains Mono&quot;;
-}</string>
+}
+
+</string>
      </property>
      <property name="text">
       <string> Undo</string>
@@ -996,7 +1000,7 @@ QPushButton{
     <widget class="QPushButton" name="redoBtn">
      <property name="geometry">
       <rect>
-       <x>1510</x>
+       <x>1410</x>
        <y>9</y>
        <width>92</width>
        <height>32</height>
