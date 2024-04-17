@@ -23,7 +23,7 @@ Welcome to the RGBator application
   git clone git@github.com:Welly0007/RGBator.git
 ```
 *** 
-**Onther way**
+**Another way**
 - Download ZIP file
 ![Zip_File](https://github.com/Welly0007/RGBator/assets/91737992/15d98524-b529-42d3-a08b-173db65234a1)
 
