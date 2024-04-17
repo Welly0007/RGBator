@@ -23,7 +23,7 @@
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
-
+#include "mainwindow.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -63,7 +63,8 @@ public:
     QPushButton *oldtvFilter;
     QPushButton *infraredFilter;
     QPushButton *MergeFilter;
-    QPushButton *Fiter;
+    QPushButton *empossFilter;
+    QPushButton *MergeCrop;
     QWidget *widget_2;
     FancyButton *loadImgBtn;
     FancyButton *clearImg;
@@ -118,7 +119,7 @@ public:
         centralwidget->setAutoFillBackground(true);
         widget = new QWidget(centralwidget);
         widget->setObjectName("widget");
-        widget->setGeometry(QRect(0, 640, 1621, 201));
+        widget->setGeometry(QRect(-3, 634, 1621, 201));
         widget->setStyleSheet(QString::fromUtf8("QWidget {\n"
 "	background-color: #252525;\n"
 "	color: #000;\n"
@@ -425,14 +426,19 @@ public:
         infraredFilter->setStyleSheet(QString::fromUtf8(""));
         MergeFilter = new QPushButton(widget);
         MergeFilter->setObjectName("MergeFilter");
-        MergeFilter->setGeometry(QRect(635, 124, 101, 50));
+        MergeFilter->setGeometry(QRect(635, 124, 111, 50));
         MergeFilter->setStyleSheet(QString::fromUtf8(""));
         MergeFilter->setCheckable(true);
-        Fiter = new QPushButton(widget);
-        Fiter->setObjectName("Fiter");
-        Fiter->setGeometry(QRect(750, 5, 101, 50));
-        Fiter->setStyleSheet(QString::fromUtf8(""));
-        Fiter->setCheckable(true);
+        empossFilter = new QPushButton(widget);
+        empossFilter->setObjectName("empossFilter");
+        empossFilter->setGeometry(QRect(750, 5, 101, 50));
+        empossFilter->setStyleSheet(QString::fromUtf8(""));
+        empossFilter->setCheckable(true);
+        MergeCrop = new QPushButton(widget);
+        MergeCrop->setObjectName("MergeCrop");
+        MergeCrop->setGeometry(QRect(750, 70, 111, 50));
+        MergeCrop->setStyleSheet(QString::fromUtf8(""));
+        MergeCrop->setCheckable(true);
         sliderGroup->raise();
         invertFilter->raise();
         sunLightFilter->raise();
@@ -453,7 +459,8 @@ public:
         oldtvFilter->raise();
         infraredFilter->raise();
         MergeFilter->raise();
-        Fiter->raise();
+        empossFilter->raise();
+        MergeCrop->raise();
         widget_2 = new QWidget(centralwidget);
         widget_2->setObjectName("widget_2");
         widget_2->setGeometry(QRect(-3, 0, 1621, 90));
@@ -703,8 +710,9 @@ public:
         VerticalFlip->setText(QCoreApplication::translate("MainWindow", "V Flip", nullptr));
         oldtvFilter->setText(QCoreApplication::translate("MainWindow", "Old TV", nullptr));
         infraredFilter->setText(QCoreApplication::translate("MainWindow", "Infrared", nullptr));
-        MergeFilter->setText(QCoreApplication::translate("MainWindow", "MergeFilter", nullptr));
-        Fiter->setText(QCoreApplication::translate("MainWindow", "Filter", nullptr));
+        MergeFilter->setText(QCoreApplication::translate("MainWindow", "MergeWResize", nullptr));
+        empossFilter->setText(QCoreApplication::translate("MainWindow", "Emposs", nullptr));
+        MergeCrop->setText(QCoreApplication::translate("MainWindow", "MergeWCrop", nullptr));
         loadImgBtn->setText(QCoreApplication::translate("MainWindow", "Load Image", nullptr));
         clearImg->setText(QCoreApplication::translate("MainWindow", "Reset Image", nullptr));
         saveImgBtn->setText(QCoreApplication::translate("MainWindow", "Save  \360\237\222\276", nullptr));
