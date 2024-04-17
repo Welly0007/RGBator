@@ -54,8 +54,8 @@ public:
     QPushButton *cropApply;
     QLabel *cropHeightLabel;
     QLabel *cropWidthLabel;
-    QLineEdit *cropWidth;
     QLineEdit *cropHeight;
+    QLineEdit *cropWidth;
     QPushButton *SkewFilter;
     QPushButton *FrameFilter;
     QPushButton *NeonFilter;
@@ -135,7 +135,7 @@ public:
         centralwidget->setAutoFillBackground(true);
         widget = new QWidget(centralwidget);
         widget->setObjectName("widget");
-        widget->setGeometry(QRect(-3, 634, 1621, 201));
+        widget->setGeometry(QRect(3, 634, 1621, 201));
         widget->setStyleSheet(QString::fromUtf8("QWidget {\n"
 "        background-color: #252525;\n"
 "        color: #000;\n"
@@ -185,12 +185,12 @@ public:
         invertFilter->setStyleSheet(QString::fromUtf8(""));
         sunLightFilter = new QPushButton(widget);
         sunLightFilter->setObjectName("sunLightFilter");
-        sunLightFilter->setGeometry(QRect(149, 6, 101, 50));
+        sunLightFilter->setGeometry(QRect(150, 5, 100, 50));
         sunLightFilter->setStyleSheet(QString::fromUtf8(""));
         sunLightFilter->setCheckable(true);
         purpleFilter = new QPushButton(widget);
         purpleFilter->setObjectName("purpleFilter");
-        purpleFilter->setGeometry(QRect(270, 5, 101, 50));
+        purpleFilter->setGeometry(QRect(270, 5, 100, 50));
         purpleFilter->setStyleSheet(QString::fromUtf8(""));
         oilFilter = new QPushButton(widget);
         oilFilter->setObjectName("oilFilter");
@@ -199,7 +199,7 @@ public:
         oilFilter->setCheckable(true);
         blurFilter = new QPushButton(widget);
         blurFilter->setObjectName("blurFilter");
-        blurFilter->setGeometry(QRect(510, 4, 101, 50));
+        blurFilter->setGeometry(QRect(510, 4, 100, 50));
         blurFilter->setStyleSheet(QString::fromUtf8(""));
         blurFilter->setCheckable(true);
         grayFilter = new QPushButton(widget);
@@ -318,7 +318,7 @@ public:
 "}"));
         B_W_Filter = new QPushButton(widget);
         B_W_Filter->setObjectName("B_W_Filter");
-        B_W_Filter->setGeometry(QRect(33, 124, 100, 50));
+        B_W_Filter->setGeometry(QRect(30, 124, 100, 50));
         B_W_Filter->setStyleSheet(QString::fromUtf8(""));
         B_W_Filter->setCheckable(false);
         DetectFilter = new QPushButton(widget);
@@ -329,12 +329,12 @@ public:
         DetectFilter->setCheckable(false);
         BrightFilter = new QPushButton(widget);
         BrightFilter->setObjectName("BrightFilter");
-        BrightFilter->setGeometry(QRect(31, 68, 100, 50));
+        BrightFilter->setGeometry(QRect(30, 68, 100, 50));
         BrightFilter->setStyleSheet(QString::fromUtf8(""));
         BrightFilter->setCheckable(true);
         cropFilter = new QPushButton(widget);
         cropFilter->setObjectName("cropFilter");
-        cropFilter->setGeometry(QRect(271, 68, 100, 50));
+        cropFilter->setGeometry(QRect(270, 68, 100, 50));
         cropFilter->setStyleSheet(QString::fromUtf8(""));
         cropFilter->setCheckable(true);
         cropGroup = new QGroupBox(widget);
@@ -386,80 +386,77 @@ public:
 "        border: none;\n"
 "        font-weight: 600;\n"
 "}"));
-        cropWidth = new QLineEdit(cropGroup);
-        cropWidth->setObjectName("cropWidth");
-        cropWidth->setGeometry(QRect(115, 37, 90, 30));
-        cropWidth->setFocusPolicy(Qt::NoFocus);
-        cropWidth->setStyleSheet(QString::fromUtf8("QLineEdit{\n"
-"        border-radius: 7px;\n"
-"        color: #fff;\n"
-"        border-color: #fff;\n"
-"}"));
-        cropWidth->setFrame(false);
-        cropWidth->setDragEnabled(false);
-        cropWidth->setClearButtonEnabled(false);
         cropHeight = new QLineEdit(cropGroup);
         cropHeight->setObjectName("cropHeight");
-        cropHeight->setGeometry(QRect(117, 87, 91, 30));
+        cropHeight->setGeometry(QRect(115, 87, 91, 30));
         cropHeight->setStyleSheet(QString::fromUtf8("QLineEdit{\n"
 "        border-radius: 7px;\n"
 "        color: #fff;\n"
 "        border-color: #fff;\n"
 "}"));
         cropHeight->setFrame(false);
+        cropWidth = new QLineEdit(cropGroup);
+        cropWidth->setObjectName("cropWidth");
+        cropWidth->setGeometry(QRect(115, 40, 91, 30));
+        cropWidth->setStyleSheet(QString::fromUtf8("QLineEdit{\n"
+"        border-radius: 7px;\n"
+"        color: #fff;\n"
+"        border-color: #fff;\n"
+"}"));
+        cropWidth->setFrame(false);
         SkewFilter = new QPushButton(widget);
         SkewFilter->setObjectName("SkewFilter");
-        SkewFilter->setGeometry(QRect(391, 67, 101, 50));
+        SkewFilter->setGeometry(QRect(390, 67, 100, 50));
         SkewFilter->setStyleSheet(QString::fromUtf8(""));
         SkewFilter->setCheckable(true);
         FrameFilter = new QPushButton(widget);
         FrameFilter->setObjectName("FrameFilter");
-        FrameFilter->setGeometry(QRect(634, 67, 101, 50));
+        FrameFilter->setGeometry(QRect(630, 67, 100, 50));
         FrameFilter->setStyleSheet(QString::fromUtf8(""));
         FrameFilter->setCheckable(true);
         NeonFilter = new QPushButton(widget);
         NeonFilter->setObjectName("NeonFilter");
-        NeonFilter->setGeometry(QRect(151, 124, 100, 50));
+        NeonFilter->setGeometry(QRect(150, 124, 100, 50));
         NeonFilter->setStyleSheet(QString::fromUtf8(""));
         NeonFilter->setCheckable(false);
         HorizontalFlip = new QPushButton(widget);
         HorizontalFlip->setObjectName("HorizontalFlip");
-        HorizontalFlip->setGeometry(QRect(269, 124, 100, 50));
+        HorizontalFlip->setGeometry(QRect(270, 124, 100, 50));
         HorizontalFlip->setStyleSheet(QString::fromUtf8(""));
         HorizontalFlip->setCheckable(false);
         VerticalFlip = new QPushButton(widget);
         VerticalFlip->setObjectName("VerticalFlip");
-        VerticalFlip->setGeometry(QRect(389, 124, 100, 50));
+        VerticalFlip->setGeometry(QRect(390, 124, 100, 50));
         VerticalFlip->setStyleSheet(QString::fromUtf8(""));
         VerticalFlip->setCheckable(false);
         oldtvFilter = new QPushButton(widget);
         oldtvFilter->setObjectName("oldtvFilter");
-        oldtvFilter->setGeometry(QRect(511, 67, 101, 50));
+        oldtvFilter->setGeometry(QRect(510, 67, 100, 50));
         oldtvFilter->setStyleSheet(QString::fromUtf8(""));
         oldtvFilter->setCheckable(false);
         infraredFilter = new QPushButton(widget);
         infraredFilter->setObjectName("infraredFilter");
         infraredFilter->setEnabled(true);
-        infraredFilter->setGeometry(QRect(509, 123, 101, 51));
+        infraredFilter->setGeometry(QRect(510, 123, 100, 51));
         infraredFilter->setStyleSheet(QString::fromUtf8(""));
         MergeFilter = new QPushButton(widget);
         MergeFilter->setObjectName("MergeFilter");
-        MergeFilter->setGeometry(QRect(635, 124, 111, 50));
+        MergeFilter->setGeometry(QRect(630, 124, 100, 50));
         MergeFilter->setStyleSheet(QString::fromUtf8(""));
         MergeFilter->setCheckable(false);
         empossFilter = new QPushButton(widget);
         empossFilter->setObjectName("empossFilter");
-        empossFilter->setGeometry(QRect(750, 5, 101, 50));
+        empossFilter->setGeometry(QRect(750, 5, 100, 50));
         empossFilter->setStyleSheet(QString::fromUtf8(""));
         empossFilter->setCheckable(false);
         MergeCrop = new QPushButton(widget);
         MergeCrop->setObjectName("MergeCrop");
-        MergeCrop->setGeometry(QRect(750, 70, 111, 50));
+        MergeCrop->setGeometry(QRect(750, 70, 100, 50));
         MergeCrop->setStyleSheet(QString::fromUtf8(""));
         MergeCrop->setCheckable(false);
         swirlFilter = new QPushButton(widget);
         swirlFilter->setObjectName("swirlFilter");
-        swirlFilter->setGeometry(QRect(760, 125, 111, 50));
+        swirlFilter->setGeometry(QRect(750, 125, 100, 50));
         swirlFilter->setStyleSheet(QString::fromUtf8(""));
         swirlFilter->setCheckable(true);
         FrameGroup = new QGroupBox(widget);
@@ -484,6 +481,7 @@ public:
 "        border: 2px solid rgb(161,161,161);\n"
 "        border-radius: 5px;\n"
 "}"));
+        FrameGroup->raise();
         sliderGroup->raise();
         invertFilter->raise();
         sunLightFilter->raise();
@@ -506,11 +504,10 @@ public:
         MergeFilter->raise();
         empossFilter->raise();
         MergeCrop->raise();
-        FrameGroup->raise();
         swirlFilter->raise();
         widget_2 = new QWidget(centralwidget);
         widget_2->setObjectName("widget_2");
-        widget_2->setGeometry(QRect(-3, 0, 1621, 90));
+        widget_2->setGeometry(QRect(3, 0, 1621, 90));
         widget_2->setStyleSheet(QString::fromUtf8("#widget_2{\n"
 "        background-color: #252525;\n"
 "}\n"
@@ -752,19 +749,21 @@ public:
         rotateRight->setIconSize(QSize(32, 32));
         frameTabs = new QTabWidget(widget_3);
         frameTabs->setObjectName("frameTabs");
-        frameTabs->setGeometry(QRect(60, 30, 577, 450));
+        frameTabs->setGeometry(QRect(50, 30, 720, 450));
+        frameTabs->setTabsClosable(false);
+        frameTabs->setTabBarAutoHide(false);
         chessFrameTab = new QWidget();
         chessFrameTab->setObjectName("chessFrameTab");
         cheesFrameApply = new QPushButton(chessFrameTab);
         cheesFrameApply->setObjectName("cheesFrameApply");
-        cheesFrameApply->setGeometry(QRect(40, 360, 500, 50));
+        cheesFrameApply->setGeometry(QRect(110, 360, 500, 50));
         cheesFrameApply->setMinimumSize(QSize(500, 0));
         cheesFrameApply->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "        border : 1px solid #fff;\n"
 "}"));
         chessFrameLabel = new QLabel(chessFrameTab);
         chessFrameLabel->setObjectName("chessFrameLabel");
-        chessFrameLabel->setGeometry(QRect(130, 30, 300, 300));
+        chessFrameLabel->setGeometry(QRect(210, 30, 300, 300));
         chessFrameLabel->setScaledContents(false);
         chessFrameLabel->setAlignment(Qt::AlignCenter);
         frameTabs->addTab(chessFrameTab, QString());
@@ -772,25 +771,25 @@ public:
         innerFrameTab->setObjectName("innerFrameTab");
         innerFrameApply = new QPushButton(innerFrameTab);
         innerFrameApply->setObjectName("innerFrameApply");
-        innerFrameApply->setGeometry(QRect(40, 360, 500, 50));
+        innerFrameApply->setGeometry(QRect(110, 360, 500, 50));
         innerFrameApply->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "        border : 1px solid #fff;\n"
 "}"));
         innerFrameLabel = new QLabel(innerFrameTab);
         innerFrameLabel->setObjectName("innerFrameLabel");
-        innerFrameLabel->setGeometry(QRect(130, 30, 300, 300));
+        innerFrameLabel->setGeometry(QRect(210, 30, 300, 300));
         frameTabs->addTab(innerFrameTab, QString());
         coloredFramTab = new QWidget();
         coloredFramTab->setObjectName("coloredFramTab");
         coloredFrameApply = new QPushButton(coloredFramTab);
         coloredFrameApply->setObjectName("coloredFrameApply");
-        coloredFrameApply->setGeometry(QRect(40, 360, 500, 50));
+        coloredFrameApply->setGeometry(QRect(110, 360, 500, 50));
         coloredFrameApply->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "        border : 1px solid #fff;\n"
 "}"));
         coloredFrameLabel = new QLabel(coloredFramTab);
         coloredFrameLabel->setObjectName("coloredFrameLabel");
-        coloredFrameLabel->setGeometry(QRect(130, 30, 300, 300));
+        coloredFrameLabel->setGeometry(QRect(210, 30, 300, 300));
         frameTabs->addTab(coloredFramTab, QString());
         RGBator->setCentralWidget(centralwidget);
         widget_3->raise();
@@ -875,7 +874,7 @@ public:
         resizeRatio->setText(QCoreApplication::translate("RGBator", "Keep Aspect Ratio", nullptr));
         inImg->setText(QCoreApplication::translate("RGBator", "Source Preview", nullptr));
         outImg->setText(QCoreApplication::translate("RGBator", "Load an Image to see changes", nullptr));
-        justFrame->setText(QCoreApplication::translate("RGBator", "Drag to Crop", nullptr));
+        justFrame->setText(QCoreApplication::translate("RGBator", "Drag from Outside to Crop", nullptr));
         rotateRight->setText(QString());
         cheesFrameApply->setText(QCoreApplication::translate("RGBator", "Apply", nullptr));
         chessFrameLabel->setText(QString());

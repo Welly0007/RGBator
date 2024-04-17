@@ -46,19 +46,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->resizeRatio->hide();
     ui->FrameGroup->hide();
     ui->frameTabs->hide();
-    // ui->rotateLeft->hide();
-    // ui->rotateRight->hide();
+    ui->rotateLeft->hide();
+    ui->rotateRight->hide();
 
     //  Disabling Some pushButtons Before loading Image
     ui->invertFilter->setEnabled(false);
     ui->oilFilter->setEnabled(false);
-    ui->MergeCrop->setEnabled(false);
     ui->blurFilter->setEnabled(false);
-    ui->rotateLeft->setEnabled(false);
+    ui->MergeCrop->setEnabled(false);
     ui->grayFilter->setEnabled(false);
     ui->B_W_Filter->setEnabled(false);
     ui->SkewFilter->setEnabled(false);
-    ui->rotateRight->setEnabled(false);
     ui->purpleFilter->setEnabled(false);
     ui->DetectFilter->setEnabled(false);
     ui->BrightFilter->setEnabled(false);
@@ -193,8 +191,8 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->heightLabel->show();
         ui->widthLabel->show();
         ui->resizeRatio->show();
-        // ui->rotateLeft->show();
-        // ui->rotateRight->show();
+        ui->rotateLeft->show();
+        ui->rotateRight->show();
         //Enabling Filters buttons
         ui->invertFilter->setEnabled(true);
         ui->MergeCrop->setEnabled(true);
@@ -202,10 +200,8 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->grayFilter->setEnabled(true);
         ui->B_W_Filter->setEnabled(true);
         ui->blurFilter->setEnabled(true);
-        ui->rotateLeft->setEnabled(true);
         ui->DetectFilter->setEnabled(true);
         ui->BrightFilter->setEnabled(true);
-        ui->rotateRight->setEnabled(true);
         ui->FrameFilter->setEnabled(true);
         ui->purpleFilter->setEnabled(true);
         ui->SkewFilter->setEnabled(true);
@@ -298,19 +294,9 @@ void MainWindow::on_MergeCrop_clicked()
     //  Check if File is Checked or not
     if (filePath != "") {
         //  Initializing the OrImage and CurrentImage for Image_class Libirary
-        string orImgPath = filePath.toStdString();
-        mergeImg.loadNewImage(orImgPath);
+        string path = filePath.toStdString();
+        mergeImg.loadNewImage(path);
         //  getting the absolute paths and saving the original in the app directory if needed
-        int lastSlash = orImgPath.find_last_of("/\\");
-        int dot = orImgPath.find_last_of('.');
-        tempPath = orImgPath.substr(lastSlash + 1, dot - (lastSlash + 1)) + ".jpg";
-        QtempPath = QString::fromStdString(tempPath);
-
-        mergeImg.saveImage("original" + tempPath);
-        mergeImg.loadNewImage("original" + tempPath);
-
-        ui->widthEditVal->setText(QString::number(mergeImg.width));
-        ui->heightEditVal->setText(QString::number(mergeImg.height));
 
         undoStack.push(currImg);
         // Merge(currImg,mergeImg);
@@ -1443,9 +1429,14 @@ Image cropForMerge(Image &image, int x, int y, int width, int height)
 
 void old_tv(Image &image1, double brightness_factor, int noise_intensity)
 {
+
     for (int i = 0; i < image1.width; i++) {
+        bool isNoise =true;
         for (int j = 0; j < image1.height; j++) {
-            if (j % 2 == 0) {
+            if (j % 30 == 0) {
+                isNoise = !isNoise;
+            }
+            if(isNoise){
                 double random = rand() % (2 * noise_intensity) - noise_intensity;
                 for (int k = 0; k < NCHANNEL; k++) {
                     if (image1(i, j, k) + random > 255) {
