@@ -426,6 +426,7 @@ void MainWindow::on_DetectFilter_clicked()
     undoStack.push(currImg);
     grayScale(currImg);
     edgeDetection(currImg);
+    invert_color(currImg);
     clear_redo_stack();
     currImg.saveImage(tempPath);
     QPixmap img = QPixmap(QtempPath);
