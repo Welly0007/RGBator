@@ -29,7 +29,7 @@ protected:
         painter.setRenderHint(QPainter::Antialiasing);
 
         // Set the color and font
-        painter.setPen(Qt::black);
+        // painter.setPen(QColor("#222222"));
         painter.setFont(QFont("JetBrains mono", 10, QFont::Bold));
 
         // Create the path for the fancy corners
@@ -136,13 +136,9 @@ private slots:
 
     void on_cropApply_clicked();
 
-    void on_SkewFilter_clicked();
-
     void on_oldtvFilter_clicked();
 
     void on_FrameFilter_clicked();
-
-    //void on_colors_clicked();
 
     void on_NeonFilter_clicked();
 
@@ -160,7 +156,7 @@ private slots:
 
     void on_SkewFilter_clicked(bool checked);
 
-    void on_filterSlider_rangeChanged(int min, int max);
+    void on_swirlFilter_clicked(bool checked);
 
 private:
     Ui::MainWindow *ui;
