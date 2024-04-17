@@ -1,5 +1,5 @@
 # RGBator
-Welcome to the RGBator appliction
+Welcome to the RGBator application
 
 ![GUI](https://github.com/Welly0007/RGBator/assets/91737992/acd6b1c8-424a-4aea-b155-1b3f5ef6c46c)
 
