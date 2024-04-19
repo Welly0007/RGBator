@@ -390,6 +390,7 @@ public:
         cropHeight = new QLineEdit(cropGroup);
         cropHeight->setObjectName("cropHeight");
         cropHeight->setGeometry(QRect(115, 87, 91, 30));
+        cropHeight->setFocusPolicy(Qt::ClickFocus);
         cropHeight->setStyleSheet(QString::fromUtf8("QLineEdit{\n"
 "        border-radius: 7px;\n"
 "        color: #fff;\n"
@@ -399,6 +400,7 @@ public:
         cropWidth = new QLineEdit(cropGroup);
         cropWidth->setObjectName("cropWidth");
         cropWidth->setGeometry(QRect(115, 40, 91, 30));
+        cropWidth->setFocusPolicy(Qt::ClickFocus);
         cropWidth->setStyleSheet(QString::fromUtf8("QLineEdit{\n"
 "        border-radius: 7px;\n"
 "        color: #fff;\n"
@@ -657,6 +659,8 @@ public:
         heightEditVal = new QLineEdit(widget_3);
         heightEditVal->setObjectName("heightEditVal");
         heightEditVal->setGeometry(QRect(890, 40, 61, 21));
+        heightEditVal->setMouseTracking(false);
+        heightEditVal->setFocusPolicy(Qt::ClickFocus);
         heightEditVal->setStyleSheet(QString::fromUtf8("QLineEdit{\n"
 "        border-radius: 5px;\n"
 "        color: #fff;\n"
@@ -784,11 +788,14 @@ public:
         widthEditVal = new QLineEdit(widget_3);
         widthEditVal->setObjectName("widthEditVal");
         widthEditVal->setGeometry(QRect(890, 10, 61, 21));
+        widthEditVal->setMouseTracking(false);
+        widthEditVal->setFocusPolicy(Qt::ClickFocus);
         widthEditVal->setStyleSheet(QString::fromUtf8("QLineEdit{\n"
 "        border-radius: 5px;\n"
 "        color: #fff;\n"
 "        border-color: #fff;\n"
 "}"));
+        widthEditVal->setFrame(true);
         resizeLabel = new QLabel(widget_3);
         resizeLabel->setObjectName("resizeLabel");
         resizeLabel->setGeometry(QRect(970, 8, 141, 31));

@@ -640,6 +640,9 @@ QPushButton:hover{
         <height>30</height>
        </rect>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
+      </property>
       <property name="styleSheet">
        <string notr="true">QLineEdit{
         border-radius: 7px;
@@ -659,6 +662,9 @@ QPushButton:hover{
         <width>91</width>
         <height>30</height>
        </rect>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
       </property>
       <property name="styleSheet">
        <string notr="true">QLineEdit{
@@ -1305,6 +1311,12 @@ QPushButton:hover {
        <height>21</height>
       </rect>
      </property>
+     <property name="mouseTracking">
+      <bool>false</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">QLineEdit{
         border-radius: 5px;
@@ -1676,12 +1688,21 @@ QPushButton:hover{
        <height>21</height>
       </rect>
      </property>
+     <property name="mouseTracking">
+      <bool>false</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">QLineEdit{
         border-radius: 5px;
         color: #fff;
         border-color: #fff;
 }</string>
+     </property>
+     <property name="frame">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QLabel" name="resizeLabel">

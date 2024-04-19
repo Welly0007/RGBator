@@ -742,8 +742,8 @@ void MainWindow::hide_others(string curr)
     ui->sliderGroup->hide();
     show_cropWidgets(false);
     ui->cropFilter->setChecked(false);
-    ui->heightEditVal->setText(QString::number(currImg.height));
     ui->widthEditVal->setText(QString::number(currImg.width));
+    ui->heightEditVal->setText(QString::number(currImg.height));
     ui->resizeFilterBtn->hide();
     ui->resizeRatio->setChecked(true);
     ui->justFrame->hide();
