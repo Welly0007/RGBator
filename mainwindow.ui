@@ -843,7 +843,7 @@ QPushButton:hover{
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>Emposs</string>
+      <string>Emboss</string>
      </property>
      <property name="checkable">
       <bool>false</bool>
@@ -1732,6 +1732,24 @@ QPushButton:hover{
      </property>
      <property name="text">
       <string>Edit to resize</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="filterUseLabel">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>500</y>
+       <width>271</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>JetBrains Mono</family>
+      </font>
+     </property>
+     <property name="text">
+      <string>Load An Image to use the filters :)</string>
      </property>
     </widget>
    </widget>

@@ -103,6 +103,7 @@ public:
     QLabel *coloredFrameLabel;
     QLineEdit *widthEditVal;
     QLabel *resizeLabel;
+    QLabel *filterUseLabel;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *RGBator)
@@ -806,6 +807,10 @@ public:
 "        border: none;\n"
 "        font-weight: 600;\n"
 "}"));
+        filterUseLabel = new QLabel(widget_3);
+        filterUseLabel->setObjectName("filterUseLabel");
+        filterUseLabel->setGeometry(QRect(20, 500, 271, 31));
+        filterUseLabel->setFont(font4);
         RGBator->setCentralWidget(centralwidget);
         widget_3->raise();
         widget->raise();
@@ -861,7 +866,7 @@ public:
         oldtvFilter->setText(QCoreApplication::translate("RGBator", "Old TV", nullptr));
         infraredFilter->setText(QCoreApplication::translate("RGBator", "Infrared", nullptr));
         MergeFilter->setText(QCoreApplication::translate("RGBator", "MergeWResize", nullptr));
-        empossFilter->setText(QCoreApplication::translate("RGBator", "Emposs", nullptr));
+        empossFilter->setText(QCoreApplication::translate("RGBator", "Emboss", nullptr));
         MergeCrop->setText(QCoreApplication::translate("RGBator", "MergeWCrop", nullptr));
         swirlFilter->setText(QCoreApplication::translate("RGBator", "Swirl", nullptr));
         FrameGroup->setTitle(QCoreApplication::translate("RGBator", "Frame Filter", nullptr));
@@ -901,6 +906,7 @@ public:
         coloredFrameLabel->setText(QCoreApplication::translate("RGBator", "TextLabel", nullptr));
         frameTabs->setTabText(frameTabs->indexOf(coloredFramTab), QCoreApplication::translate("RGBator", "Colored Corners", nullptr));
         resizeLabel->setText(QCoreApplication::translate("RGBator", "Edit to resize", nullptr));
+        filterUseLabel->setText(QCoreApplication::translate("RGBator", "Load An Image to use the filters :)", nullptr));
     } // retranslateUi
 
 };

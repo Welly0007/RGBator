@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->rotateRight->hide();
     ui->resizeLabel->hide();
 
+
     //  Disabling Some pushButtons Before loading Image
     ui->invertFilter->setEnabled(false);
     ui->oilFilter->setEnabled(false);
@@ -144,9 +145,7 @@ void MainWindow::outImageDisplay()
     labelWidth = labelHeight * aspectRatio;
     if (labelWidth > 700) {
         labelWidth = min(currImg.width, 700);
-        if(currImg.height>400){
         labelHeight = min(currImg.height, 400);
-        }
     }
     ui->outImg->setMaximumWidth(labelWidth);
     ui->outImg->setMaximumHeight(labelHeight);
@@ -170,11 +169,11 @@ void MainWindow::on_loadImgBtn_clicked()
         //  getting the absolute paths and saving the original in the app directory if needed
         int lastSlash = orImgPath.find_last_of("/\\");
         int dot = orImgPath.find_last_of('.');
-        tempPath = orImgPath.substr(lastSlash + 1, dot - (lastSlash + 1)) + ".jpg";
+        tempPath = "temp/" + orImgPath.substr(lastSlash + 1, dot - (lastSlash + 1)) + ".jpg";
         QtempPath = QString::fromStdString(tempPath);
 
-        orImg.saveImage("original" + tempPath);
-        orImg.loadNewImage("original" + tempPath);
+        orImg.saveImage(tempPath);
+        orImg.loadNewImage(tempPath);
         currImg = orImg;
         currImg.saveImage(tempPath);
 
@@ -197,6 +196,7 @@ void MainWindow::on_loadImgBtn_clicked()
         ui->rotateLeft->show();
         ui->rotateRight->show();
         ui->resizeLabel->show();
+        ui->filterUseLabel->hide();
         //Enabling Filters buttons
         ui->invertFilter->setEnabled(true);
         ui->MergeCrop->setEnabled(true);
