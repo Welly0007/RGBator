@@ -9,7 +9,9 @@ Welcome to the RGBator application
 - It contains over 20 wonderful filters and some features such as Undo, Redo Stack, and the ability to rotate right and left...
 
 ## Installation
-
+## For Just Exe
+### Download RGBatorExe.zip, Unzip, and just run the Exe
+##For QT
 ### 1) Get QT Framework
 - First, install the latest version of the Qt Framework.
 - Download Qt Online Installer for your host: Linux, macOS, or Windows.
